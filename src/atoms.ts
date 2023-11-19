@@ -100,7 +100,7 @@ export const journeyState = atom<IJourneys>({
 export const userState = atom<IUser>({
   key: "user",
   default: {
-    woody$gmail$com: { info: { name: "Woody", password: "qwer" }, trips: {} },
+    guest$gmail$com: { info: { name: "Guest", password: "1111" }, trips: {} },
   },
   effects: [
     ({ setSelf, onSet }: any) => {

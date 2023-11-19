@@ -1,9 +1,22 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { useRecoilState } from "recoil";
+import { playerState } from "../atoms";
 
 const Home = () => {
   const navigate = useNavigate();
+  const [player, setPlayer] = useRecoilState(playerState);
+  const goTemp = () => {
+    setPlayer({
+      email: "guest$gmail$com",
+      info: {
+        name: "Guest",
+        password: "1111",
+      },
+    });
+    navigate("/trip");
+  };
 
   const goNext = () => {
     navigate("/login");
@@ -11,7 +24,13 @@ const Home = () => {
 
   return (
     <Wrapper>
-      <Header>TravelGo</Header>
+      <Header>
+        TravelGo{" "}
+        <LoginButton variants={buttonVar} whileHover={"hover"} onClick={goNext}>
+          Log In
+        </LoginButton>
+      </Header>
+
       <Container>
         <SubTitle>Build your own journey</SubTitle>
         <Title>Make your travel plans.</Title>
@@ -21,7 +40,7 @@ const Home = () => {
           every moment of your journey. Create the trip you've always wanted,
           wherever in the world you want to go.
         </Detail>
-        <Button variants={buttonVar} whileHover={"hover"} onClick={goNext}>
+        <Button variants={buttonVar} whileHover={"hover"} onClick={goTemp}>
           Get Start
         </Button>
       </Container>
@@ -44,6 +63,18 @@ const Header = styled.div`
   padding: 60px 100px;
   font-size: 28px;
   font-weight: 900;
+  display: flex;
+  align-items: center;
+`;
+
+const LoginButton = styled(motion.button)`
+  margin-left: auto;
+  font-size: 18px;
+  font-weight: 600;
+  color: white;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
 `;
 
 const Container = styled.div`
