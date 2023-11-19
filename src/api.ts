@@ -2,6 +2,9 @@ import axios from "axios";
 
 const API_KEY = process.env.REACT_APP_GOOGLE_MAP_API_KEY;
 
+const google_proxy =
+  window.location.hostname === "localhost" ? "" : "/google_proxy";
+
 export interface IGetPlaceResult {
   candidates: IPlaceDetail[];
   status: string;
@@ -50,7 +53,7 @@ export interface IGeAutoCompletePlacesResult {
 export const getPlaceResult = async (keyword: string | undefined) => {
   return await axios
     .get(
-      `/maps/api/place/findplacefromtext/json?input=${keyword}&inputtype=textquery&fields=formatted_address%2Cplace_id%2Cphotos%2Cname%2Crating%2Cgeometry&key=${API_KEY}`
+      `${google_proxy}/maps/api/place/findplacefromtext/json?input=${keyword}&inputtype=textquery&fields=formatted_address%2Cplace_id%2Cphotos%2Cname%2Crating%2Cgeometry&key=${API_KEY}`
     )
     .then((res) => res.data);
 };
@@ -62,7 +65,7 @@ export const getAutoCompletePlacesResult = async (
 ) => {
   return await axios
     .get(
-      `/maps/api/place/autocomplete/json?input=${keyword}&location=${location}&radius=${radius}&key=${API_KEY}`
+      `${google_proxy}/maps/api/place/autocomplete/json?input=${keyword}&location=${location}&radius=${radius}&key=${API_KEY}`
     )
     .then((res) => res.data);
 };
@@ -70,7 +73,7 @@ export const getAutoCompletePlacesResult = async (
 export const getPlaceDetailResult = async (id: string | undefined) => {
   return await axios
     .get(
-      `/maps/api/place/details/json?fields=name%2Crating%2Creviews%2Cinternational_phone_number%2Cformatted_address%2Ceditorial_summary%2Cgeometry%2Cphotos&language=ko&place_id=${id}&key=${API_KEY}`
+      `${google_proxy}/maps/api/place/details/json?fields=name%2Crating%2Creviews%2Cinternational_phone_number%2Cformatted_address%2Ceditorial_summary%2Cgeometry%2Cphotos&language=ko&place_id=${id}&key=${API_KEY}`
     )
     .then((res) => res.data);
 };

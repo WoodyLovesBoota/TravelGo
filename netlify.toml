@@ -1,0 +1,6 @@
+[[redirects]]
+from = '/google_proxy/*'
+to = 'https://maps.googleapis.com/:splat'
+status = 200
+force = true
+
