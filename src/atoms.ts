@@ -1,5 +1,5 @@
 import { atom } from "recoil";
-import { IGetPlaceResult, IPlaceDetail } from "./api";
+import { IPlaceDetail } from "./api";
 
 export enum STATUS {
   "DEFAULT",
