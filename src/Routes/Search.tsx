@@ -45,8 +45,6 @@ const Search = () => {
       { enabled: !!destinationData }
     );
 
-  const destinationDetail = destinationData?.candidates[0];
-
   const onYesClicked = () => {};
 
   const onNoClicked = () => {
@@ -147,10 +145,14 @@ const Search = () => {
               </Column>
               <Column>
                 <DestinationInfo>
-                  <CardTitle>{destinationDetail?.name}</CardTitle>
-                  <Content>{destinationDetail?.formatted_address}</Content>
+                  <CardTitle>{destinationData?.candidates[0]?.name}</CardTitle>
+                  <Content>
+                    {destinationData?.candidates[0]?.formatted_address}
+                  </Content>
                   <GoogleMap
-                    destination={destinationDetail?.formatted_address}
+                    destination={
+                      destinationData?.candidates[0]?.formatted_address
+                    }
                     width="100%"
                     height="15vw"
                     zoom={8}
@@ -197,7 +199,8 @@ const Search = () => {
                       >
                         <span>Yes</span>
                         <span>
-                          add {destinationDetail?.name} to destination
+                          add {destinationData?.candidates[0]?.name} to
+                          destination
                         </span>
                       </Button>
                     </Buttons>
