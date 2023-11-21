@@ -4,3 +4,7 @@ to = 'https://maps.googleapis.com/:splat'
 status = 200
 force = true
 
+[[redirects]]
+from = "/*"
+to = "/index.html"
+status = 200
