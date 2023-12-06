@@ -47,7 +47,7 @@ const Wrapper = styled.div``;
 
 const ReviewCard = styled.div`
   width: 100%;
-  margin-bottom: 20px;
+  margin-bottom: 1.25rem;
 `;
 
 const Row = styled.div`
@@ -67,29 +67,29 @@ const Column = styled.div`
 `;
 
 const Name = styled.div`
-  font-size: 18px;
+  font-size: 1.125rem;
   font-weight: 600;
 `;
 
 const Content = styled.div`
   line-height: 1.5;
-  word-spacing: 1px;
+  word-spacing: 0.0625rem;
   font-weight: 600;
-  font-size: 14px;
+  font-size: 0.875rem;
 `;
 
 const Rating = styled.div`
-  margin: 5px 0;
+  margin: 0.3125rem 0;
 `;
 
 const Date = styled.div`
   color: gray;
-  font-size: 14px;
+  font-size: 0.875rem;
 `;
 
 const Button = styled.div`
-  width: 40px;
-  font-size: 20px;
+  width: 2.5rem;
+  font-size: 1.25rem;
   display: flex;
   justify-content: center;
   align-items: center;

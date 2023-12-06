@@ -36,20 +36,14 @@ const City = () => {
         <Header>
           <Column>
             <Title>
-              <Button
-                variants={buttonVar}
-                whileHover={"hover"}
-                onClick={onOverlayClicked}
-              >
+              <Button variants={buttonVar} whileHover={"hover"} onClick={onOverlayClicked}>
                 <FontAwesomeIcon icon={faLeftLong}></FontAwesomeIcon>
               </Button>
               {currentTrip}
             </Title>
             <SubTitle>
-              Please add a destination (ex. city, region ...). You can click the
-              card to add detail for the destination.
+              Please add a destination (ex. city, region ...). You can click the card to add detail for the destination.
             </SubTitle>
-
             <Form onSubmit={handleSubmit(onValid)}>
               <Input
                 {...rest}
@@ -67,18 +61,13 @@ const City = () => {
               <SubmitButton type="submit">Add a destination</SubmitButton>
             </Form>
           </Column>
-          {users[player.email].trips[currentTrip] &&
-          users[player.email].trips[currentTrip]?.length ? (
-            <SmallCalender
-              destinations={users[player.email].trips[currentTrip]}
-            />
+          {users[player.email].trips[currentTrip] && users[player.email].trips[currentTrip]?.length ? (
+            <SmallCalender destinations={users[player.email].trips[currentTrip]} />
           ) : null}
         </Header>
         <Main>
           {users[player.email].trips[currentTrip].length === 0 ? (
-            <Loader>
-              There is no destination. Please add your destination
-            </Loader>
+            <Loader>There is no destination. Please add your destination</Loader>
           ) : (
             <Cards>
               {users[player.email].trips[currentTrip].map((element) => (
@@ -103,7 +92,7 @@ const Wrapper = styled(motion.div)`
   width: 100vw;
   z-index: 99;
   color: ${(props) => props.theme.main.word};
-  padding: 100px 0;
+  padding: 8% 0;
   padding-bottom: 0;
   display: flex;
   flex-direction: column;
@@ -111,106 +100,99 @@ const Wrapper = styled(motion.div)`
 `;
 
 const Header = styled.div`
-  background-color: white;
-  padding: 150px 15%;
+  padding: 8% 8%;
   display: flex;
   justify-content: space-between;
-  height: 75vh;
+  @media screen and (max-width: 1199px) {
+    flex-direction: column;
+  }
 `;
 
 const Column = styled.div`
-  width: 50%;
+  width: 70%;
+  @media screen and (max-width: 1199px) {
+    width: 100%;
+  }
 `;
 
 const Button = styled(motion.button)`
   border: none;
   background-color: ${(props) => props.theme.main.accent};
-  color: white;
-  border-radius: 25px;
-  width: 50px;
-  height: 50px;
-  font-size: 20px;
+  color: ${(props) => props.theme.main.word};
+  border-radius: 1.5625rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  font-size: 1rem;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-right: 20px;
+  margin-right: 1.25rem;
   cursor: pointer;
 `;
 
 const Title = styled.div`
-  font-size: 64px;
+  font-size: 3rem;
   font-weight: 800;
-  margin-bottom: 50px;
+  margin-bottom: 3.125rem;
   display: flex;
   align-items: center;
 `;
 
 const SubTitle = styled.h2`
-  font-size: 18px;
+  font-size: 1rem;
   font-weight: 500;
-  width: 80%;
 `;
 
 const Main = styled.div`
-  background-color: ${(props) => props.theme.main.bg};
-
-  padding: 100px 12%;
-  padding-bottom: 200px;
+  background-color: ${(props) => props.theme.main.accent};
+  padding: 8%;
 `;
 
 const Cards = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  grid-gap: 30px;
+  grid-template-columns: repeat(auto-fill, minmax(15.625rem, 1fr));
+  grid-gap: 1.875rem;
 `;
 
 const Loader = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100px;
-  font-size: 16px;
+  height: 6.25rem;
+  font-size: 1rem;
   font-weight: 500;
 `;
 
 const Form = styled(motion.form)`
   display: flex;
-  margin: 70px 0;
+  margin: 4.375rem 0;
+  width: 100%;
 `;
 
 const Input = styled(motion.input)`
-  width: 60%;
-  height: 66px;
-  padding: 20px;
-  padding-bottom: 10px;
-  font-size: 16px;
+  width: 25rem;
+  height: 4.125rem;
+  padding: 1.25rem;
+  font-size: 1rem;
   border: none;
-  box-shadow: 1px 2px 2px 2px lightgray;
-  border-radius: 7px;
+  box-shadow: 0.0625rem 0.125rem 0.125rem 0.125rem lightgray;
+  border-radius: 0.4375rem;
   font-weight: 600;
-  &::placeholder {
-    position: absolute;
-    top: 25px;
-  }
   &:focus {
     outline: none;
-    box-shadow: 1px 2px 2px 2px ${(props) => props.theme.main.accent};
-    &::placeholder {
-      position: absolute;
-      top: 5px;
-    }
+    box-shadow: 0.0625rem 0.125rem 0.125rem 0.125rem ${(props) => props.theme.main.accent};
   }
 `;
 
 const SubmitButton = styled.button`
-  margin-left: 40px;
+  margin-left: 2.5rem;
   border: none;
   background-color: ${(props) => props.theme.main.accent};
-  color: white;
-  padding: 10px 25px;
-  font-size: 16px;
-  border-radius: 50px;
-  font-weight: 700;
+  color: ${(props) => props.theme.main.word};
+  padding: 1.25rem 1.875rem;
+  font-size: 1rem;
+  border-radius: 3.125rem;
+  font-weight: 600;
   cursor: pointer;
   &:hover {
     background-color: ${(props) => props.theme.main.accent + "aa"};

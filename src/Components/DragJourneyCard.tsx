@@ -3,11 +3,7 @@ import { useState } from "react";
 import { Draggable } from "react-beautiful-dnd";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faTrashCan,
-  faPaintBrush,
-  faSearch,
-} from "@fortawesome/free-solid-svg-icons";
+import { faTrashCan, faPaintBrush, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { useRecoilValue, useRecoilState } from "recoil";
 import { destinationState, userState, playerState, tripState } from "../atoms";
 import { useNavigate } from "react-router-dom";
@@ -29,15 +25,13 @@ const DragJourneyCard = ({
   const navigate = useNavigate();
   const destinationData = useRecoilValue(destinationState);
   const destination = destinationData?.name;
-  const [currentDestination, setCurrentDestination] =
-    useRecoilState(destinationState);
+  const [currentDestination, setCurrentDestination] = useRecoilState(destinationState);
   const [userInfo, setUserInfo] = useRecoilState(userState);
   const [player, setPlayer] = useRecoilState(playerState);
   const [currentTrip, setCurrentTrip] = useRecoilState(tripState);
 
-  const { data, isLoading } = useQuery<IGetPlaceDetailResult>(
-    ["getPlaceDetail", placeId],
-    () => getPlaceDetailResult(placeId)
+  const { data, isLoading } = useQuery<IGetPlaceDetailResult>(["getPlaceDetail", placeId], () =>
+    getPlaceDetailResult(placeId)
   );
 
   const changeColor = (color: Colors) => {
@@ -54,9 +48,7 @@ const DragJourneyCard = ({
         const userCopy = { ...current[player.email] };
         const copy = { ...current[player.email].trips };
         const target = [...copy[currentTrip]];
-        const index = target.findIndex(
-          (e) => e.destination?.name === currentDestination?.name
-        );
+        const index = target.findIndex((e) => e.destination?.name === currentDestination?.name);
         const arrayCopy = { ...target[index] };
         const detailCopy = { ...target[index].detail };
         const temp = {
@@ -65,25 +57,17 @@ const DragJourneyCard = ({
         const newArr = [
           ...temp[boardId].slice(
             0,
-            temp[boardId].findIndex(
-              (e) => e && e.timestamp === Number(journeyId)
-            )
+            temp[boardId].findIndex((e) => e && e.timestamp === Number(journeyId))
           ),
           ...temp[boardId].slice(
-            temp[boardId].findIndex(
-              (e) => e && e.timestamp === Number(journeyId)
-            ) + 1,
+            temp[boardId].findIndex((e) => e && e.timestamp === Number(journeyId)) + 1,
             temp[boardId].length
           ),
         ];
         const newBoard = { ...temp, [boardId]: newArr };
         const newOne = { ...detailCopy, ["attractions"]: newBoard };
         const newDestination = { ...arrayCopy, ["detail"]: newOne };
-        const newTarget = [
-          ...target.slice(0, index),
-          newDestination,
-          ...target.slice(index + 1),
-        ];
+        const newTarget = [...target.slice(0, index), newDestination, ...target.slice(index + 1)];
         const newTrip = { ...copy, [currentTrip]: newTarget };
         const newUser = { ...userCopy, ["trips"]: newTrip };
 
@@ -120,18 +104,12 @@ const DragJourneyCard = ({
                   <HeaderButtons>
                     <Detail onClick={onDetailClick}>
                       <Icon>
-                        <FontAwesomeIcon
-                          icon={faSearch}
-                          style={{ color: "rgba(0,0,0,0.8)" }}
-                        />
+                        <FontAwesomeIcon icon={faSearch} style={{ color: "rgba(0,0,0,0.8)" }} />
                       </Icon>
                     </Detail>
                     <Delete onClick={deleteJourney}>
                       <Icon>
-                        <FontAwesomeIcon
-                          icon={faTrashCan}
-                          style={{ color: "rgba(0,0,0,0.8)" }}
-                        />
+                        <FontAwesomeIcon icon={faTrashCan} style={{ color: "rgba(0,0,0,0.8)" }} />
                       </Icon>
                     </Delete>
                     <Color
@@ -140,10 +118,7 @@ const DragJourneyCard = ({
                       }}
                     >
                       <Icon>
-                        <FontAwesomeIcon
-                          icon={faPaintBrush}
-                          style={{ color: "rgba(0,0,0,0.8)" }}
-                        />
+                        <FontAwesomeIcon icon={faPaintBrush} style={{ color: "rgba(0,0,0,0.8)" }} />
                       </Icon>
                     </Color>
                   </HeaderButtons>
@@ -151,12 +126,7 @@ const DragJourneyCard = ({
                 <Name>{journeyName}</Name>
                 <Address>{journeyAddress}</Address>
                 {isToggleOpen ? (
-                  <ToggleBox
-                    variants={toggleVar}
-                    initial="initial"
-                    animate="animate"
-                    exit="exit"
-                  >
+                  <ToggleBox variants={toggleVar} initial="initial" animate="animate" exit="exit">
                     <ToggleButton
                       onClick={() => {
                         changeColor(Colors.RED);
@@ -211,12 +181,7 @@ const DragJourneyCard = ({
               </Card>
             )}
           </Draggable>
-          <BigPlaceCard
-            key={journeyId}
-            place={data}
-            placeId={placeId}
-            isHotel={false}
-          />
+          <BigPlaceCard key={journeyId} place={data} placeId={placeId} isHotel={false} />
         </>
       ) : null}
     </AnimatePresence>
@@ -230,10 +195,10 @@ const Card = styled.div<{
   mainColor: string;
   bgPhoto: string;
 }>`
-  border-radius: 5px;
-  padding: 10px;
-  padding-top: 5px;
-  margin-bottom: 15px;
+  border-radius: 0.3125rem;
+  padding: 0.625rem;
+  padding-top: 0.3125rem;
+  margin-bottom: 0.9375rem;
   color: black;
   position: relative;
   background-image: linear-gradient(
@@ -254,8 +219,8 @@ const Header = styled.div`
 `;
 
 const Color = styled.div`
-  width: 25px;
-  height: 25px;
+  width: 1.5625rem;
+  height: 1.5625rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -263,8 +228,8 @@ const Color = styled.div`
 `;
 
 const Detail = styled.div`
-  width: 25px;
-  height: 25px;
+  width: 1.5625rem;
+  height: 1.5625rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -272,8 +237,8 @@ const Detail = styled.div`
 `;
 
 const Delete = styled.div`
-  width: 25px;
-  height: 25px;
+  width: 1.5625rem;
+  height: 1.5625rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -286,54 +251,54 @@ const HeaderButtons = styled.div`
 
 const Bar = styled.div<{ isDragging: boolean; mainColor: string }>`
   width: 15%;
-  height: 8px;
+  height: 0.5rem;
   background-color: ${(props) => {
     const mainC = props.mainColor;
     return props.theme[mainC].accent;
   }};
   opacity: ${(props) => (props.isDragging ? 1 : 0.4)};
-  margin-top: 5px;
-  margin-bottom: 7px;
-  border-radius: 5px;
+  margin-top: 0.3125rem;
+  margin-bottom: 0.4375rem;
+  border-radius: 0.3125rem;
 `;
 
 const Name = styled.h2`
-  font-size: 15px;
+  font-size: 0.9375rem;
   font-weight: 700;
-  margin-bottom: 7px;
+  margin-bottom: 0.4375rem;
 `;
 
 const Address = styled.h3`
-  font-size: 12px;
+  font-size: 0.75rem;
   font-weight: 600;
 `;
 
 const Icon = styled.span`
-  font-size: 13px;
+  font-size: 0.8125rem;
 `;
 
 const ToggleBox = styled(motion.div)`
   position: absolute;
-  top: 20px;
-  right: 10px;
+  top: 1.25rem;
+  right: 0.625rem;
   display: flex;
   transform-origin: top right;
-  border-radius: 5px;
+  border-radius: 0.3125rem;
   z-index: 2;
 `;
 
 const ToggleButton = styled.div`
-  height: 25px;
+  height: 1.5625rem;
   font-weight: 500;
   cursor: pointer;
   span {
-    font-size: 12px;
+    font-size: 0.75rem;
   }
 `;
 
 const ColorBox = styled.div<{ bgColor: string }>`
-  height: 20px;
-  width: 20px;
+  height: 1.25rem;
+  width: 1.25rem;
   background-color: ${(props) => props.bgColor};
 `;
 

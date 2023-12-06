@@ -1,10 +1,5 @@
 import { useQuery } from "react-query";
-import {
-  IGetPlaceResult,
-  getPlaceResult,
-  IGetPlaceDetailResult,
-  getPlaceDetailResult,
-} from "../api";
+import { IGetPlaceResult, getPlaceResult, IGetPlaceDetailResult, getPlaceDetailResult } from "../api";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import { makeImagePath } from "../utils";
@@ -12,13 +7,7 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { playerState, userState, tripState } from "../atoms";
 import GoogleMap from "../Components/GoogleMap";
 import { useState } from "react";
-import {
-  useLocation,
-  Link,
-  PathMatch,
-  useMatch,
-  useNavigate,
-} from "react-router-dom";
+import { useLocation, Link, PathMatch, useMatch, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
 const Search = () => {
@@ -33,17 +22,16 @@ const Search = () => {
 
   const destinationMatch: PathMatch<string> | null = useMatch("/search/:title");
 
-  const { data: destinationData, isLoading: isDestinationLoading } =
-    useQuery<IGetPlaceResult>(["getDestination", destination], () =>
-      getPlaceResult(destination || "")
-    );
+  const { data: destinationData, isLoading: isDestinationLoading } = useQuery<IGetPlaceResult>(
+    ["getDestination", destination],
+    () => getPlaceResult(destination || "")
+  );
 
-  const { data: detailData, isLoading: isDetailLoading } =
-    useQuery<IGetPlaceDetailResult>(
-      ["getPlaceDetail", destinationData],
-      () => getPlaceDetailResult(destinationData?.candidates[0].place_id),
-      { enabled: !!destinationData }
-    );
+  const { data: detailData, isLoading: isDetailLoading } = useQuery<IGetPlaceDetailResult>(
+    ["getPlaceDetail", destinationData],
+    () => getPlaceDetailResult(destinationData?.candidates[0].place_id),
+    { enabled: !!destinationData }
+  );
 
   const onYesClicked = () => {};
 
@@ -135,8 +123,7 @@ const Search = () => {
                           <Image
                             bgPhoto={makeImagePath(img.photo_reference, 500)}
                             onClick={() => {
-                              img.photo_reference &&
-                                setClickedImage(img.photo_reference);
+                              img.photo_reference && setClickedImage(img.photo_reference);
                             }}
                           />
                         )
@@ -146,15 +133,11 @@ const Search = () => {
               <Column>
                 <DestinationInfo>
                   <CardTitle>{destinationData?.candidates[0]?.name}</CardTitle>
-                  <Content>
-                    {destinationData?.candidates[0]?.formatted_address}
-                  </Content>
+                  <Content>{destinationData?.candidates[0]?.formatted_address}</Content>
                   <GoogleMap
-                    destination={
-                      destinationData?.candidates[0]?.formatted_address
-                    }
+                    destination={destinationData?.candidates[0]?.formatted_address}
                     width="100%"
-                    height="15vw"
+                    height="16.875rem"
                     zoom={8}
                   />
                 </DestinationInfo>
@@ -183,25 +166,13 @@ const Search = () => {
                   <Selection>
                     <Question>Is this the place for you to Travel?</Question>
                     <Buttons>
-                      <Button
-                        variants={buttonVar}
-                        whileHover={"hover"}
-                        onClick={onNoClicked}
-                      >
+                      <Button variants={buttonVar} whileHover={"hover"} onClick={onNoClicked}>
                         <span>No</span>
                         <span>search destination</span>
                       </Button>
-                      <Button
-                        variants={buttonVar}
-                        whileHover={"hover"}
-                        type="submit"
-                        onClick={onYesClicked}
-                      >
+                      <Button variants={buttonVar} whileHover={"hover"} type="submit" onClick={onYesClicked}>
                         <span>Yes</span>
-                        <span>
-                          add {destinationData?.candidates[0]?.name} to
-                          destination
-                        </span>
+                        <span>add {destinationData?.candidates[0]?.name} to destination</span>
                       </Button>
                     </Buttons>
                   </Selection>
@@ -231,7 +202,7 @@ const Loader = styled.div`
   justify-content: center;
   align-items: center;
   height: 100vh;
-  font-size: 24px;
+  font-size: 1.125rem;
   font-weight: 500;
 `;
 
@@ -253,14 +224,14 @@ const DateBox = styled.div`
 const Divider = styled.h2`
   font-weight: 600;
   color: gray;
-  margin-top: 20px;
+  margin-top: 1.25rem;
 `;
 
 const DateInput = styled.input`
   background-color: lightgray;
   border: none;
-  padding: 15px 8px;
-  border-radius: 5px;
+  padding: 0.9375rem 0.5rem;
+  border-radius: 0.3125rem;
   font-weight: 600;
   color: gray;
   width: 100%;
@@ -279,7 +250,7 @@ const Background = styled.div<{ bgPhoto: string }>`
   background-image: url(${(props) => props.bgPhoto});
   background-position: center center;
   background-size: cover;
-  filter: blur(7px);
+  filter: blur(0.4375rem);
 `;
 
 const Container = styled(motion.div)<{ bgPhoto: string }>`
@@ -293,13 +264,18 @@ const Container = styled(motion.div)<{ bgPhoto: string }>`
 
 const Column = styled.div`
   &:last-child {
-    padding: 1.875rem 3.125rem;
-    background-color: rgba(255, 255, 255, 0.8);
-    height: 36vw;
-    width: 31.5vw;
+    padding: 3.125rem 3.125rem;
+    background-color: rgba(255, 255, 255, 0.6);
+    height: 45rem;
+    width: 39.375rem;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    border-radius: 0.9375rem;
+    @media screen and (max-width: 1199px) {
+      height: 51.875rem;
+      width: 39.375rem;
+    }
   }
 `;
 
@@ -311,37 +287,43 @@ const Image = styled(motion.div)<{ bgPhoto: string }>`
   background-image: url(${(props) => props.bgPhoto});
   background-position: center center;
   background-size: cover;
-  width: 4.5vw;
-  height: 4.5vw;
+  width: 5.625rem;
+  height: 5.625rem;
   cursor: pointer;
+  @media screen and (max-width: 1199px) {
+    display: none;
+  }
 `;
 
 const Card = styled(motion.div)<{ bgPhoto: string }>`
-  width: 36vw;
-  height: 31.5vw;
+  width: 45rem;
+  height: 39.375rem;
   background-image: url(${(props) => props.bgPhoto});
   background-size: cover;
   background-position: center;
   cursor: pointer;
-  margin-right: 15px;
+  margin-right: 0.9375rem;
+  @media screen and (max-width: 1199px) {
+    display: none;
+  }
 `;
 
 const CardTitle = styled(motion.h2)`
-  font-size: 36px;
+  font-size: 2.25rem;
   font-weight: 600;
 `;
 
 const Content = styled.h2`
-  font-size: 16px;
-  margin-left: 8px;
-  margin-bottom: 30px;
+  font-size: 1rem;
+  margin-left: 0.5rem;
+  margin-bottom: 1.875rem;
   font-weight: 500;
 `;
 
 const DestinationInfo = styled.div`
   display: flex;
   flex-direction: column;
-  margin-bottom: 30px;
+  margin-bottom: 1.875rem;
 `;
 
 const Selection = styled.div`
@@ -354,26 +336,29 @@ const Selection = styled.div`
 const Buttons = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-top: 0px;
+  margin-top: 0rem;
 `;
 
 const Button = styled(motion.button)`
   width: 45%;
   cursor: pointer;
-  padding: 15px 8px;
-  border-radius: 5px;
-  font-weight: 600;
+  padding: 0.9375rem 0.5rem;
+  border-radius: 0.3125rem;
   color: ${(props) => props.theme.white.normal};
-  font-size: 14px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
   border: none;
-  margin: 0 10px;
+  margin: 0 0.625rem;
   span {
     &:first-child {
-      font-size: 18px;
+      font-size: 1.125rem;
+      font-weight: 600;
+    }
+    &:last-child {
+      font-size: 0.875rem;
+      font-weight: 500;
     }
   }
   &:first-child {
@@ -385,8 +370,8 @@ const Button = styled(motion.button)`
 `;
 
 const Question = styled.h2`
-  margin: 10px auto;
-  margin-top: 35px;
+  margin: 0.625rem auto;
+  margin-top: 2.1875rem;
   font-size: 1.125rem;
   font-weight: 700;
 `;

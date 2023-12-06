@@ -10,8 +10,7 @@ import { destinationState, playerState, tripState, userState } from "../atoms";
 
 const DestinationCard = ({ title, destination }: IBigTripCardProps) => {
   const navigate = useNavigate();
-  const [currentDestination, setCurrentDestination] =
-    useRecoilState(destinationState);
+  const [currentDestination, setCurrentDestination] = useRecoilState(destinationState);
 
   const onDestinationClicked = () => {
     navigate(`/travel/${title}/${destination?.name}`);
@@ -27,9 +26,7 @@ const DestinationCard = ({ title, destination }: IBigTripCardProps) => {
       const userCopy = { ...current[player.email] };
       const copy = { ...current[player.email].trips };
       const target = [...copy[currentTrip]];
-      const index = target.findIndex(
-        (e) => e.destination?.name === destination?.name
-      );
+      const index = target.findIndex((e) => e.destination?.name === destination?.name);
       const newTarget = [...target.slice(0, index), ...target.slice(index + 1)];
       const newTrip = { ...copy, [currentTrip]: newTarget };
       const newUser = { ...userCopy, ["trips"]: newTrip };
@@ -43,19 +40,10 @@ const DestinationCard = ({ title, destination }: IBigTripCardProps) => {
         {destination && (
           <Container>
             <Destination
-              bgPhoto={`url(${makeImagePath(
-                destination?.photos
-                  ? destination?.photos[0].photo_reference
-                  : "",
-                500
-              )})`}
+              bgPhoto={`url(${makeImagePath(destination?.photos ? destination?.photos[0].photo_reference : "", 500)})`}
             >
               <Header>
-                <Arrow
-                  onClick={onDestinationClicked}
-                  variants={buttonVar}
-                  whileHover={"hover"}
-                >
+                <Arrow onClick={onDestinationClicked} variants={buttonVar} whileHover={"hover"}>
                   <FontAwesomeIcon icon={faRightLong} />
                 </Arrow>
                 <Button
@@ -70,9 +58,7 @@ const DestinationCard = ({ title, destination }: IBigTripCardProps) => {
               </Header>
             </Destination>
             <DestinationTitle>{destination?.name}</DestinationTitle>
-            <DestinationSubTitle>
-              {destination?.formatted_address.split(" ")[0]}
-            </DestinationSubTitle>
+            <DestinationSubTitle>{destination?.formatted_address.split(" ")[0]}</DestinationSubTitle>
           </Container>
         )}
       </Wrapper>
@@ -83,11 +69,11 @@ const DestinationCard = ({ title, destination }: IBigTripCardProps) => {
 export default DestinationCard;
 
 const Wrapper = styled(motion.div)`
-  padding: 15px;
+  padding: 0.9375rem;
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: 2px 2px 4px 2px lightgray;
+  box-shadow: 0.125rem 0.125rem 0.25rem 0.125rem lightgray;
   cursor: pointer;
   width: 100%;
   background-color: white;
@@ -106,14 +92,13 @@ const Header = styled.div`
 `;
 
 const Arrow = styled(motion.h2)`
-  font-size: 18px;
-  color: black;
+  font-size: 1.125rem;
   background-color: white;
-  padding: 10px;
+  padding: 0.625rem;
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 40px;
+  border-radius: 2.5rem;
 `;
 
 const Destination = styled.div<{ bgPhoto: string }>`
@@ -121,37 +106,34 @@ const Destination = styled.div<{ bgPhoto: string }>`
   background-size: cover;
   background-position: center center;
   width: 100%;
-  height: 200px;
+  height: 12.5rem;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  padding: 15px;
-  padding-bottom: 15px;
+  padding: 0.9375rem;
+  padding-bottom: 0.9375rem;
   cursor: pointer;
 `;
 
 const DestinationTitle = styled.h2`
-  font-size: 18px;
+  font-size: 1.125rem;
   font-weight: 600;
-  color: black;
-  margin: 7px auto;
+  margin: 0.4375rem auto;
 `;
 
 const DestinationSubTitle = styled.h2`
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: 500;
-  color: black;
   margin: 0 auto;
 `;
 
 const Button = styled(motion.button)`
   border: none;
-  width: 60px;
-  height: 30px;
+  width: 3.75rem;
+  height: 1.875rem;
   cursor: pointer;
-  color: black;
-  font-size: 12px;
-  border-radius: 5px;
+  font-size: 0.75rem;
+  border-radius: 0.3125rem;
   background-color: white;
   font-weight: 600;
   margin-top: auto;
@@ -163,7 +145,7 @@ const buttonVar = {
 };
 
 const shadowVar = {
-  hover: { boxShadow: "2px 2px 4px 4px #686868b9" },
+  hover: { boxShadow: "0 0 30px 0 #686868" },
 };
 
 interface IBigTripCardProps {

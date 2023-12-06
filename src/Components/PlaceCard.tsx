@@ -1,9 +1,5 @@
 import styled from "styled-components";
-import {
-  IAutoCompletePlaceDetail,
-  getPlaceDetailResult,
-  IGetPlaceDetailResult,
-} from "../api";
+import { IAutoCompletePlaceDetail, getPlaceDetailResult, IGetPlaceDetailResult } from "../api";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { destinationState, tripState } from "../atoms";
 import { makeImagePath } from "../utils";
@@ -18,9 +14,8 @@ const PlaceCard = ({ place, isHotel }: IPlaceCardProps) => {
   const [currentTrip, setCurrentTrip] = useRecoilState(tripState);
   const destination = useRecoilValue(destinationState);
 
-  const { data, isLoading } = useQuery<IGetPlaceDetailResult>(
-    ["getPlaceDetail", place?.place_id],
-    () => getPlaceDetailResult(place?.place_id)
+  const { data, isLoading } = useQuery<IGetPlaceDetailResult>(["getPlaceDetail", place?.place_id], () =>
+    getPlaceDetailResult(place?.place_id)
   );
 
   const handleCardClicked = (placeId: string | undefined) => {
@@ -62,13 +57,8 @@ const PlaceCard = ({ place, isHotel }: IPlaceCardProps) => {
                 />
                 <Description>
                   <Name> {data.result ? data?.result.name : ""}</Name>
-                  <StarRate
-                    dataRating={data.result ? data?.result.rating : 0}
-                    size="14"
-                  />
-                  <Address>
-                    {data.result ? data?.result.formatted_address : ""}
-                  </Address>
+                  <StarRate dataRating={data.result ? data?.result.rating : 0} size="14" />
+                  <Address>{data.result ? data?.result.formatted_address : ""}</Address>
                 </Description>
               </Container>
               <BigPlaceCard
@@ -98,7 +88,7 @@ const Loader = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 18px;
+  font-size: 1rem;
   font-weight: 600;
 `;
 
@@ -106,14 +96,10 @@ const Container = styled(motion.div)<{ bgPhoto: string }>`
   display: flex;
   cursor: pointer;
   transform-origin: center left;
-  padding: 15px;
+  padding: 0.9375rem;
   width: 100%;
-  margin-bottom: 10px;
-  background-image: linear-gradient(
-      rgba(255, 255, 255, 0.5),
-      rgba(255, 255, 255, 0.5)
-    ),
-    ${(props) => props.bgPhoto};
+  margin-bottom: 0.625rem;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), ${(props) => props.bgPhoto};
   background-position: center center;
   background-size: cover;
 `;
@@ -124,20 +110,20 @@ const Description = styled.div`
 `;
 const Photo = styled(motion.div)<{ bgPhoto: string }>`
   width: 20%;
-  height: 70px;
+  height: 4.375rem;
   background-image: ${(props) => props.bgPhoto};
   background-position: center center;
   background-size: cover;
-  margin-right: 20px;
+  margin-right: 1.25rem;
 `;
 
 const Name = styled.h2`
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: 600;
 `;
 
 const Address = styled.h2`
-  font-size: 12px;
+  font-size: 0.75rem;
   font-weight: 400;
   margin: auto 0;
 `;
@@ -145,10 +131,10 @@ const Address = styled.h2`
 const boxVariants = {
   initial: { opacity: 1 },
   hover: {
-    boxShadow: "0px 0px 4px 2px #5646C0",
+    boxShadow: "0rem 0rem .25rem .125rem #FECA44",
   },
   hoverHotel: {
-    boxShadow: "0px 0px 4px 2px #ED5744",
+    boxShadow: "0rem 0rem .25rem .125rem #ED5744",
   },
 };
 

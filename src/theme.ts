@@ -21,12 +21,12 @@ export const theme: DefaultTheme = {
   gray: { accent: "#7CC56E", normal: "#D0F0C1" },
 
   main: {
-    accent: "#775EEF",
-    normal: "#af85d8",
-    blur: "#e6cef8",
-    bg: "#F4F4FA",
-    hlbg: "#EBEBFF",
-    word: "#0C0B31",
-    point: "#5646C0",
+    accent: "#FECA44",
+    normal: "#FED745",
+    blur: "#FFEC41",
+    bg: "#FEFFE7",
+    hlbg: "#FED745",
+    word: "#373e3f",
+    point: "#80461B",
   },
 };

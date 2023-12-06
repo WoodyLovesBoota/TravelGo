@@ -43,18 +43,18 @@ const BoardNoName = ({ journey, boardId }: IJourneyBoardProps) => {
 export default BoardNoName;
 
 const Wrapper = styled.div`
-  border-radius: 8px;
+  border-radius: 0.5rem;
   width: 100%;
-  padding: 20px 25px;
+  padding: 1.25rem 1.5625rem;
   color: ${(props) => props.theme.main.word};
   background-color: ${(props) => props.theme.main.hlbg};
-  min-height: 100px;
+  min-height: 6.25rem;
 `;
 
 const Empty = styled.h2`
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: 600;
-  margin-top: 20px;
+  margin-top: 1.25rem;
 `;
 
 const Area = styled.div<IDragging>`
@@ -62,7 +62,13 @@ const Area = styled.div<IDragging>`
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   justify-content: space-between;
-  grid-gap: 10px;
+  grid-gap: 0.625rem;
+  @media screen and (max-width: 1199px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  @media screen and (max-width: 899px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
 `;
 
 interface IJourneyBoardProps {

@@ -1,14 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
-import {
-  playerState,
-  destinationState,
-  userState,
-  tripState,
-  navState,
-  STATUS,
-} from "../atoms";
+import { playerState, destinationState, userState, tripState, navState, STATUS } from "../atoms";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
@@ -19,8 +12,7 @@ const NavigationBar = () => {
   const navigate = useNavigate();
   const [player, setPlayer] = useRecoilState(playerState);
   const [isUserInfoOpen, setIsUserInfoOpen] = useState(false);
-  const [currentDestination, setCurrentDestination] =
-    useRecoilState(destinationState);
+  const [currentDestination, setCurrentDestination] = useRecoilState(destinationState);
   const [userInfo, setUserInfo] = useRecoilState(userState);
   const [currentTrip, setCurrentTrip] = useRecoilState(tripState);
   const [openJourney, setOpenJourney] = useRecoilState(navState);
@@ -36,9 +28,7 @@ const NavigationBar = () => {
   };
 
   const onJourneyClicked = () => {
-    setOpenJourney((current) =>
-      current === STATUS.JOURNEYS ? STATUS.DEFAULT : STATUS.JOURNEYS
-    );
+    setOpenJourney((current) => (current === STATUS.JOURNEYS ? STATUS.DEFAULT : STATUS.JOURNEYS));
   };
 
   const onSingleJourneyClicked = (data: string) => {
@@ -75,19 +65,18 @@ const NavigationBar = () => {
     });
     setCurrentTrip("");
     setPlayer({ email: "", info: { name: "", password: "" } });
-    navigate("/login");
+    navigate("/");
   };
 
   return (
     <AnimatePresence>
       <Wrapper>
         <Container>
-          <Title onClick={handleHomeClicked}>TravelGo</Title>
+          <Title onClick={handleHomeClicked}>
+            <Capital>B</Capital>EEE
+          </Title>
           <Right>
-            <Journey
-              onClick={onJourneyClicked}
-              isJourney={openJourney === STATUS.JOURNEYS}
-            >
+            <Journey onClick={onJourneyClicked} isJourney={openJourney === STATUS.JOURNEYS}>
               Journeys
             </Journey>
             <UserCard>
@@ -95,28 +84,14 @@ const NavigationBar = () => {
               <Name onClick={openUserInfo}>{player.info.name}</Name>
               <FontAwesomeIcon icon={faCaretDown} onClick={openUserInfo} />
               {isUserInfoOpen && (
-                <UserInfoCard
-                  variants={barVar}
-                  initial="initial"
-                  animate="animate"
-                >
+                <UserInfoCard variants={barVar} initial="initial" animate="animate">
                   <InfoTitle>User Name</InfoTitle>
                   <Info>{player.info.name}</Info>
                   <InfoTitle>Email</InfoTitle>
                   <Info>
-                    {player.email.split("$")[0] +
-                      "@" +
-                      player.email.split("$")[1] +
-                      "." +
-                      player.email.split("$")[2]}
+                    {player.email.split("$")[0] + "@" + player.email.split("$")[1] + "." + player.email.split("$")[2]}
                   </Info>
-                  <LogOut
-                    onClick={onLogOutClicked}
-                    variants={logoutVar}
-                    whileHover={"hover"}
-                  >
-                    LOGOUT
-                  </LogOut>
+                  <LogOut onClick={onLogOutClicked}>LOGOUT</LogOut>
                 </UserInfoCard>
               )}
             </UserCard>
@@ -157,9 +132,7 @@ const NavigationBar = () => {
                   </JourneyTitle>
                 ))
               ) : (
-                <Loader>
-                  There is no journey... Please create your journey.
-                </Loader>
+                <Loader>There is no journey... Please create your journey.</Loader>
               )}
             </Journeys>
             <SingleJourney>
@@ -178,8 +151,7 @@ const NavigationBar = () => {
                           whileHover={"hover"}
                           exit={"exit"}
                         >
-                          {trip.destination?.name ===
-                          currentDestination?.name ? (
+                          {trip.destination?.name === currentDestination?.name ? (
                             <BlackSpan
                               variants={tabVar}
                               initial="initial"
@@ -219,8 +191,9 @@ const Wrapper = styled.div`
   position: fixed;
   top: 0;
   width: 100vw;
-  height: 100px;
+  height: 6.25rem;
   z-index: 50;
+  background-color: #feffe7;
 `;
 
 const Loader = styled.h2``;
@@ -228,9 +201,8 @@ const Loader = styled.h2``;
 const Container = styled.div`
   display: flex;
   align-items: center;
-  padding: 0 15%;
-  border: 1px solid lightgray;
-  background-color: rgba(255, 255, 255, 0.9);
+  padding: 0 12%;
+  border-bottom: 0.125rem solid ${(props) => props.theme.main.point};
 `;
 
 const Right = styled.div`
@@ -242,35 +214,41 @@ const Right = styled.div`
 
 const Title = styled.h2`
   font-weight: 900;
-  font-size: 28px;
+  font-size: 1.3125rem;
   cursor: pointer;
-  padding: 30px 0;
+  padding: 1.875rem 0;
+`;
+
+const Capital = styled.span`
+  color: ${(props) => props.theme.main.accent};
+  font-weight: 900;
+  font-size: 1.3125rem;
+  cursor: pointer;
+  padding: 1.875rem 0;
 `;
 
 const SecondBar = styled(motion.div)`
-  background-color: ${(props) => props.theme.main.bg + "bb"};
-  padding: 30px 12%;
-  border-bottom: 1px solid lightgray;
+  padding: 1.875rem 12%;
+  border-bottom: 0.125rem solid ${(props) => props.theme.main.point};
   transform-origin: top center;
 `;
 
 const Journey = styled.div<{ isJourney: boolean }>`
-  font-weight: 700;
-  font-size: 18px;
-  margin-right: 80px;
+  font-weight: 600;
+  font-size: 1rem;
+  margin-right: 5rem;
   cursor: pointer;
-  border-left: 1px solid lightgray;
-  border-right: 1px solid lightgray;
+  color: ${(props) => props.theme.main.point};
+  border-left: 0.125rem solid ${(props) => props.theme.main.point};
+  border-right: 0.125rem solid ${(props) => props.theme.main.point};
   height: 100%;
-  padding: 30px;
-  box-shadow: inset 0 -4px 4px -4px
-    ${(props) => (props.isJourney ? props.theme.main.accent : "transparent")};
+  padding: 1.875rem;
 `;
 
 const Journeys = styled.div`
   display: flex;
   width: 100%;
-  margin-bottom: 20px;
+  margin-bottom: 1.25rem;
 `;
 
 const SingleJourney = styled.div`
@@ -282,78 +260,87 @@ const JourneyDetailBox = styled.div`
 `;
 
 const BlackSpan = styled(motion.h2)`
-  color: black;
+  color: ${(props) => props.theme.main.word};
+  font-weight: 500;
 `;
 
 const GraySpan = styled(motion.h2)`
   color: gray;
+  font-weight: 400;
 `;
 
 const JourneyDetail = styled(motion.h2)<{ isNow: boolean }>`
   cursor: pointer;
-  margin-right: 30px;
-  font-size: 15px;
+  margin-right: 1.875rem;
+  font-size: 1rem;
   font-weight: 500;
-  color: ${(props) => (props.isNow ? "black" : "gray")};
+  color: ${(props) => (props.isNow ? props.theme.main.word : "gray")};
 `;
 
 const JourneyTitle = styled(motion.h2)<{ isNow: boolean }>`
   cursor: pointer;
-  margin-right: 30px;
-  font-size: 15px;
+  margin-right: 1.875rem;
+  font-size: 1rem;
   font-weight: 500;
-  color: ${(props) => (props.isNow ? "#ffffff" : "gray")};
+  color: ${(props) => (props.isNow ? props.theme.main.word : "gray")};
 `;
 
 const UserCard = styled.div`
   height: 100%;
-  font-size: 18px;
+  font-size: 1rem;
   font-weight: 600;
   display: flex;
   align-items: center;
   cursor: pointer;
   z-index: 51;
   position: relative;
+  color: ${(props) => props.theme.main.point};
 `;
 
 const Name = styled.h2`
-  font-size: 20px;
-  margin: 0 15px;
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0.9375rem;
+  color: ${(props) => props.theme.main.point};
 `;
 
 const InfoTitle = styled.h2`
-  margin-bottom: 5px;
-  color: black;
+  margin-bottom: 0.3125rem;
+  font-weight: 400;
+  color: ${(props) => props.theme.main.point};
 `;
 
 const Info = styled.h2`
-  font-size: 18px;
-  margin-bottom: 20px;
+  font-size: 1rem;
+  margin-bottom: 1.25rem;
   font-weight: 600;
+  color: ${(props) => props.theme.main.point};
 `;
 
 const UserInfoCard = styled(motion.div)`
   position: absolute;
   right: 0;
-  top: 40px;
-  width: 300px;
-  height: 500px;
+  top: 2.5rem;
+  width: 18.75rem;
+  height: 31.25rem;
   z-index: 200;
-  padding: 20px;
-  background-color: ${(props) => props.theme.main.bg};
-  box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.5);
+  padding: 1.25rem;
+  box-shadow: 0.0625rem 0.125rem 0.25rem rgba(0, 0, 0, 0.5);
   cursor: default;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   padding-bottom: 0;
+  color: ${(props) => props.theme.main.point};
+  background-color: ${(props) => props.theme.main.bg};
 `;
 
 const LogOut = styled(motion.div)`
   margin-top: auto;
   text-align: center;
-  border-top: 1px solid lightgray;
-  padding: 20px;
+  border-top: 0.125rem solid ${(props) => props.theme.main.point};
+  color: ${(props) => props.theme.main.point};
+  padding: 1.25rem;
   font-weight: 600;
   cursor: pointer;
 `;
@@ -379,10 +366,4 @@ const barVar = {
     },
   },
   exit: { y: 0 },
-};
-
-const logoutVar = {
-  hover: {
-    background: "linear-gradient(to right, transparent, #EBEBFF, transparent)",
-  },
 };

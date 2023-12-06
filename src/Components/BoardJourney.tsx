@@ -1,28 +1,17 @@
 import styled from "styled-components";
-import {
-  IJourney,
-  destinationState,
-  userState,
-  playerState,
-  tripState,
-} from "../atoms";
+import { IJourney, destinationState, userState, playerState, tripState } from "../atoms";
 import { Droppable } from "react-beautiful-dnd";
 import DragJourneyCard from "./DragJourneyCard";
 import { useRecoilState } from "recoil";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faEllipsis,
-  faPen,
-  faTrashCan,
-} from "@fortawesome/free-solid-svg-icons";
+import { faEllipsis, faPen, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { useRef, useState } from "react";
 import { motion } from "framer-motion";
 
 const BoardJourney = ({ journey, boardId }: IJourneyBoardProps) => {
   const [isToggleOpen, setIsToggleOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const [currentDestination, setCurrentDestination] =
-    useRecoilState(destinationState);
+  const [currentDestination, setCurrentDestination] = useRecoilState(destinationState);
   const [userInfo, setUserInfo] = useRecoilState(userState);
   const [player, setPlayer] = useRecoilState(playerState);
   const [currentTrip, setCurrentTrip] = useRecoilState(tripState);
@@ -32,9 +21,7 @@ const BoardJourney = ({ journey, boardId }: IJourneyBoardProps) => {
       const userCopy = { ...current[player.email] };
       const copy = { ...current[player.email].trips };
       const target = [...copy[currentTrip]];
-      const index = target.findIndex(
-        (e) => e.destination?.name === currentDestination?.name
-      );
+      const index = target.findIndex((e) => e.destination?.name === currentDestination?.name);
       const arrayCopy = { ...target[index] };
       const detailCopy = { ...target[index].detail };
 
@@ -45,11 +32,7 @@ const BoardJourney = ({ journey, boardId }: IJourneyBoardProps) => {
 
       const newOne = { ...detailCopy, ["attractions"]: temp };
       const newDestination = { ...arrayCopy, ["detail"]: newOne };
-      const newTarget = [
-        ...target.slice(0, index),
-        newDestination,
-        ...target.slice(index + 1),
-      ];
+      const newTarget = [...target.slice(0, index), newDestination, ...target.slice(index + 1)];
       const newTrip = { ...copy, [currentTrip]: newTarget };
       const newUser = { ...userCopy, ["trips"]: newTrip };
 
@@ -64,9 +47,7 @@ const BoardJourney = ({ journey, boardId }: IJourneyBoardProps) => {
         const userCopy = { ...current[player.email] };
         const copy = { ...current[player.email].trips };
         const target = [...copy[currentTrip]];
-        const index = target.findIndex(
-          (e) => e.destination?.name === currentDestination?.name
-        );
+        const index = target.findIndex((e) => e.destination?.name === currentDestination?.name);
         const arrayCopy = { ...target[index] };
         const detailCopy = { ...target[index].detail };
         const temp = {
@@ -77,11 +58,7 @@ const BoardJourney = ({ journey, boardId }: IJourneyBoardProps) => {
         const newBoard = { ...temp, [newName]: newData };
         const newOne = { ...detailCopy, ["attractions"]: newBoard };
         const newDestination = { ...arrayCopy, ["detail"]: newOne };
-        const newTarget = [
-          ...target.slice(0, index),
-          newDestination,
-          ...target.slice(index + 1),
-        ];
+        const newTarget = [...target.slice(0, index), newDestination, ...target.slice(index + 1)];
         const newTrip = { ...copy, [currentTrip]: newTarget };
         const newUser = { ...userCopy, ["trips"]: newTrip };
 
@@ -98,9 +75,7 @@ const BoardJourney = ({ journey, boardId }: IJourneyBoardProps) => {
       >
         <Title>{boardId}</Title>
         <Button onClick={() => setIsToggleOpen(true)}>
-          {boardId !== "NoName" && (
-            <FontAwesomeIcon icon={faEllipsis} style={{ color: "gray" }} />
-          )}
+          {boardId !== "NoName" && <FontAwesomeIcon icon={faEllipsis} style={{ color: "gray" }} />}
         </Button>
       </Header>
       <Droppable droppableId={boardId}>
@@ -131,19 +106,9 @@ const BoardJourney = ({ journey, boardId }: IJourneyBoardProps) => {
         )}
       </Droppable>
       {isToggleOpen ? (
-        <ToggleBox
-          variants={toggleVar}
-          initial="initial"
-          animate="animate"
-          exit="exit"
-        >
+        <ToggleBox variants={toggleVar} initial="initial" animate="animate" exit="exit">
           <RenameForm>
-            <input
-              placeholder={boardId}
-              ref={inputRef}
-              required
-              autoComplete="off"
-            />
+            <input placeholder={boardId} ref={inputRef} required autoComplete="off" />
             <ToggleButton onClick={renameBoard}>
               <span>
                 <FontAwesomeIcon icon={faPen} style={{ color: "white" }} />
@@ -163,15 +128,15 @@ const BoardJourney = ({ journey, boardId }: IJourneyBoardProps) => {
 export default BoardJourney;
 
 const Wrapper = styled.div`
-  border-radius: 4px;
-  width: 330px;
-  min-height: 180px;
-  margin-right: 10px;
-  padding: 20px 25px;
-  padding-bottom: 10px;
+  border-radius: 0.25rem;
+  width: 20.625rem;
+  min-height: 11.25rem;
+  margin-right: 0.625rem;
+  padding: 1.25rem 1.5625rem;
+  padding-bottom: 0.625rem;
   display: flex;
   flex-direction: column;
-  margin-left: 5px;
+  margin-left: 0.3125rem;
   position: relative;
   color: ${(props) => props.theme.main.word};
   background-color: white;
@@ -182,14 +147,14 @@ const Header = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
-  margin-left: 5px;
+  margin-bottom: 1.25rem;
+  margin-left: 0.3125rem;
 `;
 
 const Title = styled.h2`
   text-align: center;
   font-weight: 800;
-  font-size: 20px;
+  font-size: 1.25rem;
 `;
 
 const Area = styled.div<IDragging>`
@@ -205,23 +170,23 @@ const Button = styled.button`
 
 const ToggleBox = styled(motion.div)`
   position: absolute;
-  width: 200px;
-  height: 170px;
-  top: 10px;
-  right: 10px;
+  width: 12.5rem;
+  height: 10.625rem;
+  top: 0.625rem;
+  right: 0.625rem;
   background-color: ${(props) => props.theme.main.accent + "dd"};
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   transform-origin: top right;
-  padding: 10px 15px;
-  border-radius: 5px;
+  padding: 0.625rem 0.9375rem;
+  border-radius: 0.3125rem;
   z-index: 3;
 `;
 
 const RenameForm = styled.form`
-  height: 40px;
-  margin-bottom: 10px;
+  height: 2.5rem;
+  margin-bottom: 0.625rem;
   width: 90%;
   display: flex;
   justify-content: space-between;
@@ -231,9 +196,9 @@ const RenameForm = styled.form`
     width: 100%;
     background-color: transparent;
     border: none;
-    border-bottom: 1.5px solid white;
-    padding-left: 5px;
-    font-size: 16px;
+    border-bottom: 0.0938rem solid white;
+    padding-left: 0.3125rem;
+    font-size: 1rem;
     &:focus {
       outline: none;
     }
@@ -245,8 +210,8 @@ const RenameForm = styled.form`
 `;
 
 const ToggleButton = styled.div`
-  height: 25px;
-  margin-left: 5px;
+  height: 1.5625rem;
+  margin-left: 0.3125rem;
   font-weight: 500;
   cursor: pointer;
   display: flex;
@@ -256,12 +221,12 @@ const ToggleButton = styled.div`
     align-items: center;
   }
   p {
-    margin-left: 10px;
-    font-size: 16px;
+    margin-left: 0.625rem;
+    font-size: 1rem;
     color: white;
   }
   span {
-    font-size: 16px;
+    font-size: 1rem;
   }
 `;
 

@@ -4,12 +4,7 @@ import { useRecoilValue, useRecoilState } from "recoil";
 import styled from "styled-components";
 import { destinationState, userState, playerState, tripState } from "../atoms";
 import GoogleRouteMap from "./GoogleRouteMap";
-import {
-  DragDropContext,
-  Draggable,
-  DropResult,
-  Droppable,
-} from "react-beautiful-dnd";
+import { DragDropContext, Draggable, DropResult, Droppable } from "react-beautiful-dnd";
 import { makeImagePath } from "../utils";
 import HotelPathCard from "./HotelPathCard";
 import { useState } from "react";
@@ -25,14 +20,10 @@ const BigPath = ({ boardName }: IBigPathProps) => {
 
   const attractionList =
     userInfo[player.email].trips[currentTrip][
-      userInfo[player.email].trips[currentTrip].findIndex(
-        (e) => e.destination?.name === currentDestination?.name
-      )
+      userInfo[player.email].trips[currentTrip].findIndex((e) => e.destination?.name === currentDestination?.name)
     ].detail.attractions[boardName];
 
-  const bigPathMatch: PathMatch<string> | null = useMatch(
-    "/path/:title/:destination/:boardName"
-  );
+  const bigPathMatch: PathMatch<string> | null = useMatch("/path/:title/:destination/:boardName");
 
   const handleOverlayClicked = () => {
     navigate(`/path/${currentTrip}/${destination}`);
@@ -43,15 +34,11 @@ const BigPath = ({ boardName }: IBigPathProps) => {
     if (!destination) return;
     else {
       setUserInfo((current) => {
-        const index = [
-          ...{ ...current[player.email].trips }[currentTrip],
-        ].findIndex((e) => e.destination?.name === currentDestination?.name);
+        const index = [...{ ...current[player.email].trips }[currentTrip]].findIndex(
+          (e) => e.destination?.name === currentDestination?.name
+        );
 
-        const newCopy = [
-          ...current[player.email].trips[currentTrip][index].detail.attractions[
-            source.droppableId
-          ],
-        ];
+        const newCopy = [...current[player.email].trips[currentTrip][index].detail.attractions[source.droppableId]];
         const newBoard = newCopy[source.index];
         newCopy.splice(source.index, 1);
         newCopy.splice(destination.index, 0, newBoard);
@@ -69,8 +56,7 @@ const BigPath = ({ boardName }: IBigPathProps) => {
                   ["detail"]: {
                     ...current[player.email].trips[currentTrip][index].detail,
                     ["attractions"]: {
-                      ...current[player.email].trips[currentTrip][index].detail
-                        .attractions,
+                      ...current[player.email].trips[currentTrip][index].detail.attractions,
                       [source.droppableId]: newCopy,
                     },
                   },
@@ -103,12 +89,9 @@ const BigPath = ({ boardName }: IBigPathProps) => {
                     attractionList.length > 2 ? (
                       <GoogleRouteMap
                         origin={`place_id:${attractionList[0]?.placeId}`}
-                        destination={`place_id:${
-                          attractionList[attractionList.length - 1]?.placeId
-                        }`}
+                        destination={`place_id:${attractionList[attractionList.length - 1]?.placeId}`}
                         waypoints={attractionList.map((e, i) => {
-                          if (e && i > 0 && i < attractionList.length - 1)
-                            return e.placeId;
+                          if (e && i > 0 && i < attractionList.length - 1) return e.placeId;
                           else return;
                         })}
                         width="100%"
@@ -118,9 +101,7 @@ const BigPath = ({ boardName }: IBigPathProps) => {
                     ) : (
                       <GoogleRouteMap
                         origin={`place_id:${attractionList[0]?.placeId}`}
-                        destination={`place_id:${
-                          attractionList[attractionList.length - 1]?.placeId
-                        }`}
+                        destination={`place_id:${attractionList[attractionList.length - 1]?.placeId}`}
                         waypoints={[]}
                         width="100%"
                         height="100%"
@@ -150,9 +131,7 @@ const BigPath = ({ boardName }: IBigPathProps) => {
                       {(provided, snapshot) => (
                         <Area
                           isDraggingOver={snapshot.isDraggingOver}
-                          isDraggingFromThis={Boolean(
-                            snapshot.draggingFromThisWith
-                          )}
+                          isDraggingFromThis={Boolean(snapshot.draggingFromThisWith)}
                           ref={provided.innerRef}
                           {...provided.droppableProps}
                         >
@@ -161,9 +140,7 @@ const BigPath = ({ boardName }: IBigPathProps) => {
                               place && (
                                 <Draggable
                                   key={place.placeId}
-                                  draggableId={
-                                    place.placeId ? place.placeId : ""
-                                  }
+                                  draggableId={place.placeId ? place.placeId : ""}
                                   index={index}
                                 >
                                   {(provided, snapshot) => (
@@ -172,8 +149,7 @@ const BigPath = ({ boardName }: IBigPathProps) => {
                                         place.image.length !== 1
                                           ? place.image[0]
                                           : currentDestination
-                                          ? currentDestination.photos[0]
-                                              .photo_reference
+                                          ? currentDestination.photos[0].photo_reference
                                           : "",
                                         800
                                       )})`}
@@ -238,20 +214,19 @@ const Overlay = styled.div`
 const Hidden = styled.div``;
 
 const HiddenTitle = styled.h2`
-  font-size: 22px;
-  font-weight: 700;
-  margin-bottom: 20px;
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 1.25rem;
 `;
 
 const HotelList = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
-  grid-gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(16.875rem, 1fr));
+  grid-gap: 0.625rem;
 `;
 
 const HiddenHotel = styled.div`
-  padding: 30px 10%;
-
+  padding: 1.875rem 10%;
   position: fixed;
   top: 10vh;
   left: 0;
@@ -277,9 +252,8 @@ const Card = styled(motion.div)`
   height: 90vh;
   top: 5vh;
   left: 0vh;
-  background-color: white;
+  background-color: ${(props) => props.theme.main.accent};
   z-index: 99;
-  color: ${(props) => props.theme.main.word};
   padding: 0 12%;
 `;
 
@@ -288,6 +262,9 @@ const Main = styled.div`
   height: 85%;
   display: flex;
   align-items: flex-start;
+  @media screen and (max-width: 74.9375rem) {
+    flex-direction: column;
+  }
 `;
 
 const Column = styled.div`
@@ -299,57 +276,61 @@ const Column = styled.div`
     margin-left: 2vw;
     width: 25%;
   }
+  @media screen and (max-width: 74.9375rem) {
+    &:first-child {
+      width: 100%;
+    }
+    &:last-child {
+      margin: 0;
+      width: 100%;
+      margin-top: 1.875rem;
+    }
+  }
 `;
 
 const Vortex = styled.h2`
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: 500;
-  margin-right: 12px;
+  margin-right: 0.75rem;
   color: gray;
 `;
 
 const SubTitle = styled.div`
   display: flex;
-  margin-bottom: 20px;
+  margin-bottom: 1.25rem;
 `;
 
 const Header = styled.div`
-  font-size: 20px;
+  font-size: 1.125rem;
   font-weight: 700;
-  margin: 20px 0;
+  margin: 1.25rem 0;
 `;
 
 const Title = styled.div`
-  font-size: 24px;
+  font-size: 1.3125rem;
   font-weight: 700;
-  margin: 20px 0;
+  margin: 1.25rem 0;
 `;
 
 const DragColumn = styled.div`
-  padding: 30px;
+  padding: 1.875rem;
   height: 100%;
-  padding-top: 10px;
+  padding-top: 0.625rem;
   width: 100%;
   background-color: ${(props) => props.theme.main.bg};
-  border-radius: 10px;
+  border-radius: 0.625rem;
 `;
 
 const DragCard = styled.div<{ isDragging: boolean; bgPhoto: string }>`
-  padding: 20px 15px;
+  padding: 1.25rem 0.9375rem;
   font-weight: 600;
-  font-size: 14px;
+  font-size: 0.875rem;
   display: flex;
   align-items: center;
-  border-radius: 5px;
-  margin-bottom: 7px;
+  border-radius: 0.3125rem;
+  margin-bottom: 0.4375rem;
   color: ${(props) => props.theme.white.normal};
-  background-image: linear-gradient(
-      to right,
-      rgba(0, 0, 0, 0.7),
-      rgba(0, 0, 0, 0.3),
-      transparent,
-      transparent
-    ),
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.3), transparent, transparent),
     ${(props) => props.bgPhoto};
   background-position: center center;
   background-size: cover;
@@ -364,7 +345,7 @@ const Loader = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 18px;
+  font-size: 1.125rem;
   width: 100%;
   height: 100%;
   font-weight: 600;

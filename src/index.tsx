@@ -4,6 +4,7 @@ import { ThemeProvider, createGlobalStyle } from "styled-components";
 import { theme } from "./theme";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { RecoilRoot } from "recoil";
+import "./assets/fonts/font.css";
 
 const GlobalStyle = createGlobalStyle`
   @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400&display=swap');
@@ -12,21 +13,23 @@ const GlobalStyle = createGlobalStyle`
   a, abbr, acronym, address, big, cite, code,
   del, dfn, em, img, ins, kbd, q, s, samp,
   small, strike, strong, sub, sup, tt, var,
-  b, u, i, center,
+  b, u, i, center, input, textarea,
   dl, dt, dd, menu, ol, ul, li,
   fieldset, form, label, legend,
   table, caption, tbody, tfoot, thead, tr, th, td,
   article, aside, canvas, details, embed,
   figure, figcaption, footer, header, hgroup,
   main, menu, nav, output, ruby, section, summary,
-  time, mark, audio, video {
+  time, mark, audio, video,button {
     margin: 0;
     padding: 0;
     border: 0;
     font-size: 16px;
-    font: inherit;
+    font-weight: 300;
+    line-height: 1.2;
     vertical-align: baseline;
-
+    font-family: "Noto sans KR", sans-serif;
+    color: #373e3f;
     @media screen and (max-width: 1799px) {
       font-size: 14px;
     }
@@ -51,9 +54,7 @@ const GlobalStyle = createGlobalStyle`
     display: none;
   }
   body {
-    line-height: 1;
-    color: ${(props) => props.theme.main.word};
-    background-color: white;
+    background-color: #FEFFE7;
   }
   menu, ol, ul {
     list-style: none;
@@ -79,7 +80,6 @@ const GlobalStyle = createGlobalStyle`
   body {
     font-weight: 300;
     font-family: 'Source Sans Pro', sans-serif;
-    line-height: 1.2;
   }
 
   a {
@@ -104,9 +104,7 @@ const GlobalStyle = createGlobalStyle`
 `;
 const queryClient = new QueryClient();
 
-const root = ReactDOM.createRoot(
-  document.getElementById("root") as HTMLElement
-);
+const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 
 root.render(
   <QueryClientProvider client={queryClient}>

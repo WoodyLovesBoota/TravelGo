@@ -13,55 +13,68 @@ const TripCard = ({ title, number }: ITripCardProps) => {
   };
 
   return (
-    <Wrapper variants={cardVar} whileHover={"wordHover"}>
-      <Container
-        variants={cardVar}
-        whileHover={"hover"}
-        onClick={handleTripCardClicked}
-      >
-        {number}
-      </Container>
-      <Title>{title}</Title>
-    </Wrapper>
+    <Hex onClick={handleTripCardClicked}>
+      <HexInner>
+        <Content>
+          <p>{title}</p>
+        </Content>
+      </HexInner>
+    </Hex>
   );
+
+  {
+    /* <Container onClick={handleTripCardClicked}>{number}</Container>
+      <Title>{title}</Title> */
+  }
 };
 
 export default TripCard;
 
-const Wrapper = styled(motion.div)`
-  width: 100px;
-  height: 100px;
-`;
-
-const Container = styled(motion.div)`
-  width: 100%;
-  height: 90%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 28px;
-  font-weight: 700;
+const Hex = styled(motion.div)`
+  width: 25%;
+  margin-bottom: 1.8%;
+  position: relative;
+  visibility: hidden;
   cursor: pointer;
-  border-radius: 30px;
-  color: black;
-  box-shadow: 2px 2px 4px 2px gray;
+  &:nth-of-type(7n + 5) {
+    margin-left: 12.5%;
+  }
+  &:after {
+    content: "";
+    display: block;
+    padding-bottom: 80%;
+  }
 `;
-
-const Title = styled.div`
+const HexInner = styled(motion.div)`
+  position: absolute;
+  width: 99%;
+  padding-bottom: 114.6%;
+  overflow: hidden;
+  visibility: hidden;
+  transform: rotate3d(0, 0, 1, -60deg) skewY(30deg);
+  * {
+    position: absolute;
+    visibility: visible;
+  }
+`;
+const Content = styled.div`
   display: flex;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  transform: skewY(-30deg) rotate3d(0, 0, 1, 60deg);
+  background: ${(props) => props.theme.main.point};
+
   justify-content: center;
   align-items: center;
-  font-size: 14px;
-  font-weight: 700;
-  text-align: center;
-  width: 100%;
-  margin-top: 15px;
-`;
 
-const cardVar = {
-  hover: { scale: 1.1, boxShadow: "2px 2px 4px 2px #775EEF", color: "#775EEF" },
-  wordHover: { color: "#775EEF" },
-};
+  p {
+    font-size: 1.3125rem;
+    font-weight: 500;
+    text-align: center;
+    color: #fff;
+  }
+`;
 
 interface ITripCardProps {
   title: string;

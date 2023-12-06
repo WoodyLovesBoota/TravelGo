@@ -25,20 +25,18 @@ const Home = () => {
   return (
     <Wrapper>
       <Header>
-        TravelGo{" "}
+        <Capital>B</Capital>EEE
         <LoginButton variants={buttonVar} whileHover={"hover"} onClick={goNext}>
           Log In
         </LoginButton>
       </Header>
 
       <Container>
-        <SubTitle>Build your own journey</SubTitle>
-        <Title>Make your travel plans.</Title>
+        <SubTitle>Build your journey</SubTitle>
+        <Title>Make your travel plans</Title>
         <Detail>
-          Start planning your travel adventures with TravelGo. Explore favorite
-          spots in the city, and enjoy the pleasure of planning and recording
-          every moment of your journey. Create the trip you've always wanted,
-          wherever in the world you want to go.
+          Start planning your travel adventures with BEEE. Create the trip you've always wanted, wherever in the world
+          you want to go.
         </Detail>
         <Button variants={buttonVar} whileHover={"hover"} onClick={goTemp}>
           Get Start
@@ -55,23 +53,32 @@ const Wrapper = styled.div`
   flex-direction: column;
   width: 100vw;
   height: 100vh;
-  background-color: ${(props) => props.theme.main.accent};
-  color: white;
+  color: #373e3f;
+  background: url("./bee-bg.jpeg");
+  background-size: cover;
+  background-position: center center;
 `;
 
 const Header = styled.div`
-  padding: 60px 100px;
-  font-size: 28px;
-  font-weight: 900;
+  padding: 4%;
+  font-size: 1.3125rem;
+  font-weight: 700;
   display: flex;
   align-items: center;
 `;
 
+const Capital = styled.span`
+  color: ${(props) => props.theme.main.accent};
+  font-weight: 700;
+  font-size: 1.3125rem;
+  cursor: pointer;
+`;
+
 const LoginButton = styled(motion.button)`
   margin-left: auto;
-  font-size: 18px;
+  font-size: 1.125rem;
   font-weight: 600;
-  color: white;
+  color: #373e3f;
   border: none;
   background-color: transparent;
   cursor: pointer;
@@ -79,45 +86,51 @@ const LoginButton = styled(motion.button)`
 
 const Container = styled.div`
   width: 100%;
-  height: 80%;
-  padding: 5% 10%;
+  height: 60%;
+  padding: 3% 8%;
   display: flex;
   flex-direction: column;
+  justify-content: center;
 `;
 
 const SubTitle = styled.h2`
-  font-size: 28px;
+  font-size: 1.125rem;
   font-weight: 600;
-  margin-bottom: 30px;
+  margin-bottom: 1.875rem;
 `;
 
 const Title = styled.h2`
-  font-size: 80px;
-  font-weight: 900;
-  margin-bottom: 40px;
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 2.5rem;
 `;
 
 const Detail = styled.h2`
-  font-size: 22px;
+  font-size: 1.125rem;
   font-weight: 500;
-  margin-bottom: 60px;
-  width: 60%;
-  line-height: 1.5;
+  margin-bottom: 3.75rem;
+  width: 50%;
+  line-height: 2;
+  @media screen and (max-width: 1199px) {
+    width: 70%;
+  }
+  @media screen and (max-width: 899px) {
+    display: none;
+  }
 `;
 
 const Button = styled(motion.button)`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 80px;
-  width: 190px;
+  height: 4.375rem;
+  width: 9.375rem;
   cursor: pointer;
-  border-radius: 35px;
+  border-radius: 2.1875rem;
   font-weight: 600;
-  color: ${(props) => props.theme.main.accent};
-  font-size: 24px;
+  font-size: 1.125rem;
   border: none;
-  background-color: white;
+  background-color: #fed745;
 `;
 
 const buttonVar = {

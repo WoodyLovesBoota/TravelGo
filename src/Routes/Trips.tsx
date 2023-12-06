@@ -14,8 +14,7 @@ const Trip = () => {
   const [player, setPlayer] = useRecoilState(playerState);
 
   const onValid = (data: IForm) => {
-    if (users[player.email].trips[data.title])
-      alert("동일한 이름의 여행이 존재합니다");
+    if (users[player.email].trips[data.title]) alert("동일한 이름의 여행이 존재합니다");
     else {
       setUsers((current) => {
         const copy = { ...current[player.email].trips };
@@ -31,37 +30,29 @@ const Trip = () => {
   return (
     <Wrapper variants={loadingVar} initial="initial" animate="animate">
       <NavigationBar />
-      <Header>
-        <Title>
-          Choose the journey <br />
-          or Create a new <br />
-          journey
-        </Title>
-        <SubTitle>
-          Choose the journey you want and fill out the contents of the trip. Or
-          you can create a new journey.
-        </SubTitle>
-        <Form onSubmit={handleSubmit(onValid)}>
-          <Input
-            {...register("title", { required: true })}
-            autoComplete="off"
-            placeholder="Enter a name of Trip"
-          />
-          <SubmitButton type="submit">Create a journey</SubmitButton>
-        </Form>
-      </Header>
-      <Main>
-        <MainTitle>Your journeys are</MainTitle>
-        {Object.entries(users[player.email].trips).length === 0 ? (
-          <Loader>There is no trips... Please create a new trip.</Loader>
-        ) : (
-          <TripCards>
-            {Object.entries(users[player.email].trips).map(([title, trip]) => (
-              <TripCard key={title} title={title} number={trip.length} />
-            ))}
-          </TripCards>
-        )}
-      </Main>
+      <Container>
+        <Header>
+          <Title>Create your journey</Title>
+          <SubTitle>
+            Choose the journey you want and fill out the contents of the trip. Or you can create a new journey.
+          </SubTitle>
+          <Form onSubmit={handleSubmit(onValid)}>
+            <Input {...register("title", { required: true })} autoComplete="off" placeholder="Enter a name of Trip" />
+            <SubmitButton type="submit">Create a journey</SubmitButton>
+          </Form>
+        </Header>
+        <Main>
+          {Object.entries(users[player.email].trips).length === 0 ? (
+            <Loader>There is no trips... Please create a new trip.</Loader>
+          ) : (
+            <TripCards>
+              {Object.entries(users[player.email].trips).map(([title, trip]) => (
+                <TripCard key={title} title={title} number={trip.length} />
+              ))}
+            </TripCards>
+          )}
+        </Main>
+      </Container>
     </Wrapper>
   );
 };
@@ -73,84 +64,97 @@ const Wrapper = styled(motion.div)`
   height: 100vh;
 `;
 
+const Container = styled.div`
+  display: flex;
+  width: 100%;
+  height: 100%;
+  @media screen and (max-width: 1100px) {
+    flex-direction: column;
+    align-items: center;
+  }
+`;
+
 const Header = styled.div`
-  margin-bottom: 150px;
-  padding: 0 20%;
-  padding-top: 250px;
+  padding: 12% 8%;
+  width: 50%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  @media screen and (max-width: 1100px) {
+    width: 70%;
+    height: inherit;
+    padding-bottom: 0;
+  }
 `;
 
 const Main = styled.div`
-  background-color: ${(props) => props.theme.main.hlbg};
-  padding: 50px 15%;
-  padding-bottom: 200px;
+  padding: 10%;
+  width: 50%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  @media screen and (max-width: 1100px) {
+    width: 60%;
+    height: inherit;
+    padding-top: 0;
+  }
 `;
 
 const Title = styled.h2`
-  font-size: 64px;
-  font-weight: 700;
-  margin-bottom: 50px;
+  font-size: 3rem;
+  font-weight: 600;
+  margin-bottom: 3.125rem;
   width: 100%;
 `;
 
 const SubTitle = styled.h2`
-  font-size: 18px;
+  font-size: 1rem;
   font-weight: 500;
-  margin-bottom: 50px;
-`;
-
-const MainTitle = styled.h2`
-  font-size: 24px;
-  font-weight: 700;
-  margin-bottom: 50px;
+  margin-bottom: 3.125rem;
 `;
 
 const TripCards = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-  grid-row-gap: 20px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
 `;
 
 const Loader = styled.div`
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: 500;
 `;
+
 const Form = styled.form`
   display: flex;
   align-items: center;
 `;
 
 const Input = styled.input`
-  width: 400px;
-  height: 66px;
-  padding: 20px;
-  padding-bottom: 10px;
-  font-size: 16px;
+  width: 25rem;
+  height: 4.125rem;
+  padding: 1.25rem;
+  font-size: 1rem;
   border: none;
-  box-shadow: 1px 2px 2px 2px lightgray;
-  border-radius: 7px;
+  box-shadow: 0.0625rem 0.125rem 0.125rem 0.125rem lightgray;
+  border-radius: 0.4375rem;
   font-weight: 600;
-  &::placeholder {
-    position: absolute;
-    top: 25px;
-  }
   &:focus {
     outline: none;
-    box-shadow: 1px 2px 2px 2px ${(props) => props.theme.main.accent};
-    &::placeholder {
-      position: absolute;
-      top: 5px;
-    }
+    box-shadow: 0.0625rem 0.125rem 0.125rem 0.125rem ${(props) => props.theme.main.accent};
   }
 `;
 
 const SubmitButton = styled.button`
-  margin-left: 40px;
+  margin-left: 2.5rem;
   border: none;
   background-color: ${(props) => props.theme.main.accent};
-  color: white;
-  padding: 20px 25px;
-  font-size: 18px;
-  border-radius: 50px;
+  color: ${(props) => props.theme.main.word};
+  padding: 1.25rem 1.875rem;
+  font-size: 1rem;
+  border-radius: 1.25rem;
   font-weight: 700;
   cursor: pointer;
   &:hover {

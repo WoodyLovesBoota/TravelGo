@@ -1,10 +1,7 @@
 import { useRecoilState } from "recoil";
 import { destinationState, userState, playerState, tripState } from "../atoms";
 import styled from "styled-components";
-import {
-  IGeAutoCompletePlacesResult,
-  getAutoCompletePlacesResult,
-} from "../api";
+import { IGeAutoCompletePlacesResult, getAutoCompletePlacesResult } from "../api";
 import { useQuery } from "react-query";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -19,8 +16,7 @@ import { faFortAwesome } from "@fortawesome/free-brands-svg-icons";
 import HotelCard from "../Components/HotelCard";
 
 const Place = () => {
-  const [currentDestination, setCurrentDestination] =
-    useRecoilState(destinationState);
+  const [currentDestination, setCurrentDestination] = useRecoilState(destinationState);
   const [userInfo, setUserInfo] = useRecoilState(userState);
   const [player, setPlayer] = useRecoilState(playerState);
   const [currentTrip, setCurrentTrip] = useRecoilState(tripState);
@@ -28,17 +24,13 @@ const Place = () => {
 
   const currentTarget =
     userInfo[player.email].trips[currentTrip][
-      userInfo[player.email].trips[currentTrip].findIndex(
-        (e) => e.destination?.name === currentDestination?.name
-      )
+      userInfo[player.email].trips[currentTrip].findIndex((e) => e.destination?.name === currentDestination?.name)
     ];
 
   const attractionList = currentTarget.detail.attractions;
   const hotelList = currentTarget.detail.hotels;
 
-  const destinationMatch: PathMatch<string> | null = useMatch(
-    "/travel/:title/:destination"
-  );
+  const destinationMatch: PathMatch<string> | null = useMatch("/travel/:title/:destination");
 
   const [value, setValue] = useState("");
   const { register, handleSubmit, setValue: setInputValue } = useForm<IForm>();
@@ -50,9 +42,7 @@ const Place = () => {
       getAutoCompletePlacesResult(
         value,
         currentDestination
-          ? currentDestination.geometry.location.lat +
-              "%2C" +
-              currentDestination.geometry.location.lng
+          ? currentDestination.geometry.location.lat + "%2C" + currentDestination.geometry.location.lng
           : "37.579617%2C126.977041",
         500
       ),
@@ -64,9 +54,7 @@ const Place = () => {
   };
 
   const goForward = () => {
-    navigate(
-      `/journey/${destinationMatch?.params.title}/${destinationMatch?.params.destination}`
-    );
+    navigate(`/journey/${destinationMatch?.params.title}/${destinationMatch?.params.destination}`);
   };
 
   const onValid = (data: IForm) => {
@@ -85,12 +73,7 @@ const Place = () => {
         <Container>
           <Main>
             <Header>
-              <Title
-                isHotel={isHotel}
-                variants={titleVar}
-                initial="initial"
-                animate="animate"
-              >
+              <Title isHotel={isHotel} variants={titleVar} initial="initial" animate="animate">
                 <p>
                   Find <span>{isHotel ? `Hotels` : `Attractions`}</span>
                 </p>
@@ -103,10 +86,7 @@ const Place = () => {
                     ")"}
                 </DateInfo>
               </Title>
-              <Content>
-                You can search for the desired place and check the details such
-                as reviews, locations, and phone numbers accordingly.
-              </Content>
+
               <Toggle isHotel={isHotel} onClick={onToggleClicked}>
                 <Blank>
                   {isHotel && (
@@ -146,11 +126,7 @@ const Place = () => {
                     </ResultTitle>
                     <ResultList>
                       {data.predictions.map((place) => (
-                        <PlaceCard
-                          key={place.place_id + "card"}
-                          place={place}
-                          isHotel={isHotel}
-                        />
+                        <PlaceCard key={place.place_id + "card"} place={place} isHotel={isHotel} />
                       ))}
                     </ResultList>
                   </div>
@@ -161,17 +137,12 @@ const Place = () => {
 
           <Column>
             <SubTitle>
-              {currentDestination?.name} (
-              {attractionList["NoName"].length + hotelList.length})
+              {currentDestination?.name} ({attractionList["NoName"].length + hotelList.length})
             </SubTitle>
             <Row>
-              <RowTitle>
-                Attractions ({attractionList["NoName"].length})
-              </RowTitle>
+              <RowTitle>Attractions ({attractionList["NoName"].length})</RowTitle>
               {attractionList["NoName"].length === 0 ? (
-                <Loader>
-                  There is no selected place.. Please add your places.
-                </Loader>
+                <Loader>There is no selected place.. Please add your places.</Loader>
               ) : (
                 <Selected>
                   {attractionList["NoName"].map(
@@ -191,9 +162,7 @@ const Place = () => {
             <Row>
               <RowTitle>Hotels ({hotelList.length})</RowTitle>
               {hotelList.length === 0 ? (
-                <Loader>
-                  There is no selected place.. Please add your places.
-                </Loader>
+                <Loader>There is no selected place.. Please add your places.</Loader>
               ) : (
                 <Selected>
                   {hotelList.map(
@@ -211,19 +180,13 @@ const Place = () => {
               )}
             </Row>
           </Column>
-          <Question>
-            Have you added all the attractions in {currentDestination?.name}?
-          </Question>
+          <Question>Have you added all the attractions in {currentDestination?.name}?</Question>
           <Buttons>
             <Button variants={buttonVar} whileHover={"hover"} onClick={goBack}>
               <span>No</span>
               <span>Change my Destination</span>
             </Button>
-            <Button
-              variants={buttonVar}
-              whileHover={"hover"}
-              onClick={goForward}
-            >
+            <Button variants={buttonVar} whileHover={"hover"} onClick={goForward}>
               <span>Yes</span>
               <span>Move to Next Step</span>
             </Button>
@@ -240,75 +203,76 @@ const Wrapper = styled(motion.div)`
   overflow-x: auto;
   height: 100vh;
   width: 100vw;
-  padding-bottom: 50px;
+  padding-bottom: 3.125rem;
 `;
 
 const DateInfo = styled.span`
   color: lightgray;
   font-weight: 550;
-  margin-left: 10px;
+  margin-left: 0.625rem;
 `;
 
 const Header = styled.div`
   width: 55%;
-`;
-
-const Main = styled.div`
-  padding: 100px 15%;
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-`;
-
-const Title = styled(motion.h2)<{ isHotel: boolean }>`
-  font-size: 24px;
-  font-weight: 800;
-  margin-bottom: 50px;
-
-  & p {
-    font-size: 64px;
-    & span {
-      margin-left: 20px;
-      font-size: 64px;
-      color: ${(props) =>
-        props.isHotel ? props.theme.red.normal : props.theme.main.normal};
-    }
+  @media screen and (max-width: 899px) {
+    width: 100%;
   }
 `;
 
-const Content = styled.h2`
-  font-size: 18px;
-  font-weight: 500;
-  margin-bottom: 80px;
+const Main = styled.div`
+  padding: 6.25rem 15%;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  @media screen and (max-width: 899px) {
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+`;
+
+const Title = styled(motion.h2)<{ isHotel: boolean }>`
+  font-size: 1.3125rem;
+  font-weight: 600;
+  margin-bottom: 3.125rem;
+  & p {
+    font-size: 3rem;
+    font-weight: 600;
+    & span {
+      margin-left: 1.25rem;
+      font-size: 3rem;
+      font-weight: 600;
+      color: ${(props) => (props.isHotel ? props.theme.red.normal : props.theme.main.normal)};
+    }
+  }
 `;
 
 const Loader = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: 500;
 `;
 
 const SubTitle = styled.h2`
-  font-size: 24px;
+  font-size: 1.3125rem;
   font-weight: 700;
-  margin-bottom: 30px;
+  margin-bottom: 1.875rem;
   padding: 0 12%;
 `;
 
 const Container = styled.div`
-  padding-top: 150px;
+  padding-top: 8%;
   width: 100%;
   display: flex;
   flex-direction: column;
 `;
 
 const Column = styled.div`
-  padding: 50px 0%;
+  padding: 3.125rem 0%;
   width: 100%;
-  padding-bottom: 100px;
-  background-color: ${(props) => props.theme.main.bg};
+  padding-bottom: 6.25rem;
+  background-color: ${(props) => props.theme.main.accent};
 `;
 
 const Circle = styled(motion.div)`
@@ -319,7 +283,7 @@ const Circle = styled(motion.div)`
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 20px;
+  font-size: 1.25rem;
 `;
 
 const Blank = styled.div`
@@ -328,9 +292,9 @@ const Blank = styled.div`
 `;
 
 const Question = styled.h2`
-  margin: 50px auto;
-  margin-top: 100px;
-  font-size: 18px;
+  margin: 3.125rem auto;
+  margin-top: 6.25rem;
+  font-size: 1.125rem;
   font-weight: 700;
 `;
 
@@ -338,15 +302,13 @@ const Toggle = styled(motion.div)<{ isHotel: boolean }>`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-radius: 25px;
-  width: 100px;
-  height: 50px;
-  padding: 5px 10px;
-  color: ${(props) =>
-    props.isHotel ? props.theme.red.normal : props.theme.main.normal};
+  border-radius: 1.5625rem;
+  width: 6.25rem;
+  height: 3.125rem;
+  padding: 0.3125rem 0.625rem;
+  color: ${(props) => (props.isHotel ? props.theme.red.normal : props.theme.main.normal)};
   cursor: pointer;
-  background-color: ${(props) =>
-    props.isHotel ? props.theme.red.normal : props.theme.main.normal};
+  background-color: ${(props) => (props.isHotel ? props.theme.red.normal : props.theme.main.normal)};
 `;
 
 const Buttons = styled.div`
@@ -358,21 +320,29 @@ const Buttons = styled.div`
 const Button = styled(motion.button)`
   cursor: pointer;
   width: 15%;
-  padding: 15px 10px;
-  border-radius: 5px;
+  padding: 0.9375rem 0.625rem;
+  border-radius: 0.3125rem;
   font-weight: 600;
   color: ${(props) => props.theme.white.normal};
-  font-size: 14px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
   border: none;
-  margin: 0 10px;
+  margin: 0 0.625rem;
+  @media screen and (max-width: 899px) {
+    width: 35%;
+  }
   span {
     &:first-child {
-      font-size: 24px;
-      margin-bottom: 10px;
+      font-size: 1.5rem;
+      margin-bottom: 0.625rem;
+      font-weight: 600;
+    }
+    &:last-child {
+      font-size: 0.875rem;
+      margin-bottom: 0.625rem;
+      font-weight: 600;
     }
   }
   &:first-child {
@@ -382,6 +352,7 @@ const Button = styled(motion.button)`
     background-color: ${(props) => props.theme.green.accent};
   }
 `;
+
 const ResultList = styled.div`
   display: flex;
   flex-direction: column;
@@ -390,105 +361,81 @@ const ResultList = styled.div`
 `;
 
 const ResultTitle = styled.h2<{ isHotel: boolean }>`
-  font-size: 14px;
+  font-size: 0.875rem;
   color: gray;
   font-weight: 400;
-  margin-bottom: 10px;
+  margin-bottom: 0.625rem;
   span {
-    font-size: 24px;
+    font-size: 1.3125rem;
     font-weight: 700;
-    color: ${(props) =>
-      props.isHotel ? props.theme.red.accent : props.theme.main.accent};
-    margin-right: 10px;
+    color: ${(props) => (props.isHotel ? props.theme.red.accent : props.theme.main.accent)};
+    margin-right: 0.625rem;
   }
 `;
 
 const Form = styled.form`
   display: flex;
   align-items: center;
-  margin-top: 50px;
+  margin-top: 3.125rem;
 `;
 
 const Input = styled(motion.input)<{ isHotel: boolean }>`
-  width: 400px;
-  height: 66px;
-  padding: 20px;
-  font-size: 18px;
+  width: 25rem;
+  height: 4.125rem;
+  padding: 1.25rem;
+  font-size: 1.125rem;
   border: none;
-  box-shadow: 1px 2px 2px 2px lightgray;
-  border-radius: 7px;
+  box-shadow: 0.0625rem 0.125rem 0.125rem 0.125rem lightgray;
+  border-radius: 0.4375rem;
   font-weight: 600;
-  &::placeholder {
-    position: absolute;
-    top: 20px;
-  }
+
   &:focus {
     outline: none;
-    box-shadow: 1px 2px 2px 2px
-      ${(props) =>
-        props.isHotel ? props.theme.red.accent : props.theme.main.accent};
-    &::placeholder {
-      position: absolute;
-      top: 5px;
-    }
+    box-shadow: 0.0625rem 0.125rem 0.125rem 0.125rem
+      ${(props) => (props.isHotel ? props.theme.red.accent : props.theme.main.accent)};
   }
 `;
 
 const SubmitButton = styled.button<{ isHotel: boolean }>`
-  margin-left: 30px;
+  margin-left: 1.875rem;
   border: none;
-  background-color: ${(props) =>
-    props.isHotel ? props.theme.red.accent : props.theme.main.accent};
+  background-color: ${(props) => (props.isHotel ? props.theme.red.accent : props.theme.main.accent)};
   color: white;
-  padding: 20px 25px;
-  font-size: 16px;
-  border-radius: 50px;
+  padding: 1.25rem 1.5625rem;
+  font-size: 1rem;
+  border-radius: 3.125rem;
   font-weight: 700;
   cursor: pointer;
   &:hover {
-    background-color: ${(props) =>
-      props.isHotel
-        ? props.theme.red.accent + "aa"
-        : props.theme.main.accent + "aa"};
+    background-color: ${(props) => (props.isHotel ? props.theme.red.accent + "aa" : props.theme.main.accent + "aa")};
   }
 `;
 const Results = styled.div`
-  width: 35%;
-  min-height: 500px;
+  width: 40%;
+  min-height: 31.25rem;
+
+  @media screen and (max-width: 899px) {
+    width: 80%;
+    margin-top: 3.125rem;
+  }
 `;
 
 const Selected = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  grid-row-gap: 15px;
-  grid-column-gap: 5px;
+  grid-template-columns: repeat(auto-fill, minmax(11.25rem, 1fr));
+  grid-row-gap: 0.9375rem;
+  grid-column-gap: 0.3125rem;
 `;
 
 const Row = styled.div`
-  margin-bottom: 30px;
-  padding: 10px 12%;
+  margin-bottom: 1.875rem;
+  padding: 0.625rem 12%;
 `;
 
 const RowTitle = styled.h2`
-  font-size: 24px;
+  font-size: 1.3125rem;
   font-weight: 700;
-  margin: 10px 0;
-`;
-
-const GoBackButton = styled(motion.button)`
-  border: none;
-  background-color: ${(props) => props.theme.main.accent};
-  color: white;
-  border-radius: 25px;
-  width: 50px;
-  height: 50px;
-  font-size: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-right: 20px;
-  cursor: pointer;
-  margin-top: 100px;
+  margin: 0.625rem 0;
 `;
 
 const titleVar = {

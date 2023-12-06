@@ -20,11 +20,7 @@ const Signup = () => {
       if (data.password === data.passwordauth) {
         if (
           users[
-            data.email.split("@")[0] +
-              "$" +
-              data.email.split("@")[1].split(".")[0] +
-              "$" +
-              data.email.split(".")[1]
+            data.email.split("@")[0] + "$" + data.email.split("@")[1].split(".")[0] + "$" + data.email.split(".")[1]
           ]
         ) {
           alert(`이미 사용중인 ID 입니다.`);
@@ -110,11 +106,7 @@ const Signup = () => {
               <Button variants={buttonVar} whileHover={"hover"} type="submit">
                 SUBMIT
               </Button>
-              <Button
-                variants={buttonVar}
-                whileHover={"hover"}
-                onClick={goLogin}
-              >
+              <Button variants={buttonVar} whileHover={"hover"} onClick={goLogin}>
                 CANCEL
               </Button>
             </Buttons>
@@ -140,35 +132,41 @@ const Container = styled.div`
   width: 90vw;
   height: 90vh;
   background-color: ${(props) => props.theme.main.bg};
-  box-shadow: 0px 1px 2px 6px rgba(0, 0, 0, 0.2);
+  box-shadow: 0rem 0.0625rem 0.125rem 0.375rem rgba(0, 0, 0, 0.2);
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px 12%;
+  padding: 1.25rem 12%;
+  @media screen and (max-width: 1199px) {
+    padding: 1.25rem 0;
+  }
 `;
 
 const Main = styled.div`
   width: 100%;
   height: 90%;
   background-color: white;
-  margin: 0 40px;
-  padding: 60px;
+  margin: 0 2.5rem;
+  padding: 3.75rem;
   overflow: auto;
+  @media screen and (max-width: 899px) {
+    margin: 0;
+  }
 `;
 
 const Title = styled.h2`
   color: ${(props) => props.theme.main.word};
-  font-size: 36px;
+  font-size: 2.25rem;
   font-weight: 700;
-  margin-bottom: 8px;
+  margin-bottom: 0.5rem;
 `;
 
 const SubTitle = styled.h2`
-  font-size: 18px;
+  font-size: 1.125rem;
   font-weight: 500;
   color: gray;
   display: flex;
-  margin-bottom: 40px;
+  margin-bottom: 2.5rem;
 `;
 
 const Form = styled.form`
@@ -193,21 +191,21 @@ const Email = styled.div``;
 const Info = styled.div``;
 
 const InputTitle = styled.h2`
-  font-size: 18px;
+  font-size: 1.125rem;
   font-weight: 600;
   color: black;
-  margin-bottom: 10px;
+  margin-bottom: 0.625rem;
 `;
 
 const Input = styled.input`
   width: 80%;
-  height: 50px;
-  border: 2px solid lightgray;
-  font-size: 16px;
+  height: 3.125rem;
+  border: 0.125rem solid lightgray;
+  font-size: 1rem;
   font-weight: 600;
-  padding: 10px;
-  border-radius: 10px;
-  margin-bottom: 30px;
+  padding: 0.625rem;
+  border-radius: 0.625rem;
+  margin-bottom: 1.875rem;
   &:focus {
     outline: none;
     border-color: ${(props) => props.theme.main.accent};
@@ -226,17 +224,17 @@ const Button = styled(motion.button)`
   background-color: ${(props) => props.theme.main.accent};
   color: white;
   border: none;
-  padding: 20px;
-  border-radius: 10px;
+  padding: 1.25rem;
+  border-radius: 0.625rem;
   width: 45%;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: 600;
 
   &:last-child {
     background-color: transparent;
     color: ${(props) => props.theme.main.accent};
-    border: 2px solid ${(props) => props.theme.main.accent};
+    border: 0.125rem solid ${(props) => props.theme.main.accent};
   }
 `;
 
