@@ -38,7 +38,7 @@ const Trip = () => {
           </SubTitle>
           <Form onSubmit={handleSubmit(onValid)}>
             <Input {...register("title", { required: true })} autoComplete="off" placeholder="Enter a name of Trip" />
-            <SubmitButton type="submit">Create a journey</SubmitButton>
+            <SubmitButton type="submit">Create</SubmitButton>
           </Form>
         </Header>
         <Main>
@@ -134,7 +134,6 @@ const Form = styled.form`
 
 const Input = styled.input`
   width: 25rem;
-  height: 4.125rem;
   padding: 1.25rem;
   font-size: 1rem;
   border: none;
@@ -150,12 +149,12 @@ const Input = styled.input`
 const SubmitButton = styled.button`
   margin-left: 2.5rem;
   border: none;
-  background-color: ${(props) => props.theme.main.accent};
+  background-color: ${(props) => props.theme.main.button};
   color: ${(props) => props.theme.main.word};
   padding: 1.25rem 1.875rem;
   font-size: 1rem;
-  border-radius: 1.25rem;
-  font-weight: 700;
+  border-radius: 1.5625rem;
+  font-weight: 600;
   cursor: pointer;
   &:hover {
     background-color: ${(props) => props.theme.main.accent + "aa"};

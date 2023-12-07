@@ -113,13 +113,6 @@ const Journeys = () => {
       <NavigationBar />
       <Container>
         <Main>
-          {/* <GoBackButton
-            variants={buttonVar}
-            whileHover={"hover"}
-            onClick={onGoBackClicked}
-          >
-            <FontAwesomeIcon icon={faLeftLong}></FontAwesomeIcon>
-          </GoBackButton> */}
           <MainTitle>Manage your schedule</MainTitle>
           <MainDescription>
             Create categories of your travel (ex. {destination} city tour) and manage your schedule by dragging and
@@ -276,11 +269,14 @@ const Boards = styled.div`
 const MainDescription = styled.h2`
   font-size: 1rem;
   font-weight: 500;
+  @media screen and (max-width: 599px) {
+    display: none;
+  }
 `;
 
 const SubTitle = styled.h2`
   font-size: 1rem;
-  font-weight: 700;
+  font-weight: 600;
 `;
 
 const BoardTitle = styled.h2`
@@ -313,7 +309,6 @@ const Form = styled.form`
 
 const Input = styled(motion.input)<{ isHotel: boolean }>`
   width: 31.25rem;
-  height: 4.125rem;
   padding: 1.25rem;
   font-size: 1rem;
   border: none;
@@ -330,7 +325,6 @@ const SubmitButton = styled.button`
   margin-left: 1.875rem;
   border: none;
   background-color: ${(props) => props.theme.main.accent};
-  color: white;
   padding: 1.25rem 1.5625rem;
   font-size: 1rem;
   border-radius: 3.125rem;

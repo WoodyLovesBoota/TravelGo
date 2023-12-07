@@ -36,6 +36,7 @@ const Hex = styled(motion.div)`
   position: relative;
   visibility: hidden;
   cursor: pointer;
+
   &:nth-of-type(7n + 5) {
     margin-left: 12.5%;
   }
@@ -55,6 +56,10 @@ const HexInner = styled(motion.div)`
   * {
     position: absolute;
     visibility: visible;
+    box-shadow: 10px 10px 32px 0 rgba(0, 0, 0, 0.1);
+    &:hover {
+      background-color: #80461baa;
+    }
   }
 `;
 const Content = styled.div`
@@ -64,15 +69,16 @@ const Content = styled.div`
   overflow: hidden;
   transform: skewY(-30deg) rotate3d(0, 0, 1, 60deg);
   background: ${(props) => props.theme.main.point};
-
   justify-content: center;
   align-items: center;
-
   p {
     font-size: 1.3125rem;
     font-weight: 500;
     text-align: center;
     color: #fff;
+    &:hover {
+      background-color: transparent;
+    }
   }
 `;
 

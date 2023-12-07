@@ -1,13 +1,6 @@
 import styled from "styled-components";
 
-const GoogleRouteMap = ({
-  origin,
-  waypoints,
-  destination,
-  width,
-  height,
-  zoom,
-}: IGoogleRouteMapProps) => {
+const GoogleRouteMap = ({ origin, waypoints, destination, width, height, zoom }: IGoogleRouteMapProps) => {
   const API_KEY = process.env.REACT_APP_GOOGLE_MAP_API_KEY;
 
   let waypoint = "";
@@ -50,7 +43,9 @@ const Wrapper = styled.div<{ width: string; height: string }>`
   height: ${(props) => props.height};
   iframe {
     border-bottom: 10px;
+    border-radius: 15px;
   }
+  border-radius: 15px;
 `;
 
 interface IGoogleRouteMapProps {

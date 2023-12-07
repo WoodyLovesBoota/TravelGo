@@ -120,9 +120,6 @@ const Detail = styled.h2`
 `;
 
 const Button = styled(motion.button)`
-  display: flex;
-  justify-content: center;
-  align-items: center;
   height: 4.375rem;
   width: 9.375rem;
   cursor: pointer;

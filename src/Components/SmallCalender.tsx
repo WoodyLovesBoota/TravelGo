@@ -135,6 +135,7 @@ const Container = styled.div`
 
 const Header = styled.div`
   display: flex;
+  margin-bottom: 0.625rem;
 `;
 
 const DateInfo = styled.h2`
@@ -246,9 +247,10 @@ const Button = styled.button`
   background-color: transparent;
   border: none;
   font-size: 1.25rem;
-  font-weight: 400;
+  font-weight: 600;
   color: gray;
   cursor: pointer;
+  margin-right: 0.625rem;
 `;
 
 interface ISmallCalenderProps {

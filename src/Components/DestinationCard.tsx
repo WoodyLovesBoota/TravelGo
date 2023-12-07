@@ -36,7 +36,7 @@ const DestinationCard = ({ title, destination }: IBigTripCardProps) => {
 
   return (
     <AnimatePresence>
-      <Wrapper variants={shadowVar} whileHover={"hover"}>
+      <Wrapper>
         {destination && (
           <Container>
             <Destination
@@ -142,10 +142,6 @@ const Button = styled(motion.button)`
 
 const buttonVar = {
   hover: { scale: 1.2 },
-};
-
-const shadowVar = {
-  hover: { boxShadow: "0 0 30px 0 #686868" },
 };
 
 interface IBigTripCardProps {

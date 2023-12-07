@@ -45,6 +45,7 @@ declare module "styled-components" {
       word: string;
       point: string;
       hlbg: string;
+      button: string;
     };
   }
 }

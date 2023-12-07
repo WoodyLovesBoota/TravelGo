@@ -144,7 +144,7 @@ const SubTitle = styled.h2`
 `;
 
 const Main = styled.div`
-  background-color: ${(props) => props.theme.main.accent};
+  background-color: ${(props) => props.theme.main.normal};
   padding: 8%;
 `;
 
@@ -171,7 +171,6 @@ const Form = styled(motion.form)`
 
 const Input = styled(motion.input)`
   width: 25rem;
-  height: 4.125rem;
   padding: 1.25rem;
   font-size: 1rem;
   border: none;
@@ -187,7 +186,7 @@ const Input = styled(motion.input)`
 const SubmitButton = styled.button`
   margin-left: 2.5rem;
   border: none;
-  background-color: ${(props) => props.theme.main.accent};
+  background-color: ${(props) => props.theme.main.button};
   color: ${(props) => props.theme.main.word};
   padding: 1.25rem 1.875rem;
   font-size: 1rem;

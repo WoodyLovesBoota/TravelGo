@@ -50,7 +50,7 @@ const Place = () => {
   );
 
   const goBack = () => {
-    navigate(`/trip/${destinationMatch?.params.title}`);
+    navigate(`/destination/${destinationMatch?.params.title}`);
   };
 
   const goForward = () => {
@@ -201,7 +201,6 @@ export default Place;
 
 const Wrapper = styled(motion.div)`
   overflow-x: auto;
-  height: 100vh;
   width: 100vw;
   padding-bottom: 3.125rem;
 `;
@@ -220,7 +219,8 @@ const Header = styled.div`
 `;
 
 const Main = styled.div`
-  padding: 6.25rem 15%;
+  padding: 6.25rem 12%;
+  padding-right: 5%;
   display: flex;
   justify-content: space-between;
   width: 100%;
@@ -354,10 +354,15 @@ const Button = styled(motion.button)`
 `;
 
 const ResultList = styled.div`
-  display: flex;
+  /* display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  width: 100%; */
   width: 100%;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
 `;
 
 const ResultTitle = styled.h2<{ isHotel: boolean }>`
@@ -400,7 +405,6 @@ const SubmitButton = styled.button<{ isHotel: boolean }>`
   margin-left: 1.875rem;
   border: none;
   background-color: ${(props) => (props.isHotel ? props.theme.red.accent : props.theme.main.accent)};
-  color: white;
   padding: 1.25rem 1.5625rem;
   font-size: 1rem;
   border-radius: 3.125rem;
@@ -411,12 +415,13 @@ const SubmitButton = styled.button<{ isHotel: boolean }>`
   }
 `;
 const Results = styled.div`
-  width: 40%;
-  min-height: 31.25rem;
-
+  width: 50%;
+  margin-bottom: 6.25rem;
+  margin-left: 3.125rem;
   @media screen and (max-width: 899px) {
-    width: 80%;
+    width: 100%;
     margin-top: 3.125rem;
+    margin-left: 0;
   }
 `;
 

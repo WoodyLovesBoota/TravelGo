@@ -131,7 +131,7 @@ const Title = styled.h2`
   color: ${(props) => props.theme.main.word};
   font-size: 2.25rem;
   font-weight: 700;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.625rem;
 `;
 
 const LinkSignup = styled(motion.p)`
@@ -167,7 +167,6 @@ const Email = styled.div`
 const InputTitle = styled.h2`
   font-size: 1.125rem;
   font-weight: 600;
-  color: black;
   margin-bottom: 0.625rem;
 `;
 
@@ -175,7 +174,7 @@ const Input = styled.input`
   width: 100%;
   height: 3.125rem;
   border: 0.125rem solid lightgray;
-  font-size: 1.125rem;
+  font-size: 1rem;
   font-weight: 600;
   padding: 0.625rem;
   border-radius: 0.625rem;
@@ -191,8 +190,7 @@ const Input = styled.input`
 const Password = styled.div``;
 
 const Button = styled(motion.button)`
-  background-color: ${(props) => props.theme.main.accent};
-  color: white;
+  background-color: ${(props) => props.theme.main.button};
   border: none;
   padding: 1.25rem;
   border-radius: 0.625rem;

@@ -153,8 +153,8 @@ const Header = styled.div`
 
 const Title = styled.h2`
   text-align: center;
-  font-weight: 800;
-  font-size: 1.25rem;
+  font-weight: 600;
+  font-size: 1.125rem;
 `;
 
 const Area = styled.div<IDragging>`

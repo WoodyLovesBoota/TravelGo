@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
-import { destinationState, userState, playerState, tripState } from "../atoms";
+import { destinationState, userState, playerState, tripState, IJourney } from "../atoms";
 import { useState } from "react";
 import BigPath from "../Components/BigPath";
 import { DragDropContext, DropResult, Droppable, Draggable } from "react-beautiful-dnd";
@@ -49,8 +49,9 @@ const Path = () => {
         const newTemp = newObj[source.index];
         newObj.splice(source.index, 1);
         newObj.splice(destination.index, 0, newTemp);
-        const newObject = Object.fromEntries(newObj);
-        const newOne = { ...detailCopy, ["attractions"]: newObject };
+        let nnObj: { [key: string]: (IJourney | undefined)[] } = {};
+        newObj.forEach((e) => (nnObj[e[0]] = e[1]));
+        const newOne = { ...detailCopy, ["attractions"]: nnObj };
         const newDestination = { ...arrayCopy, ["detail"]: newOne };
         const newTarget = [...target.slice(0, index), newDestination, ...target.slice(index + 1)];
         const newTrip = { ...copy, [currentTrip]: newTarget };
@@ -224,11 +225,17 @@ const Description = styled.h2`
   font-size: 1rem;
   font-weight: 500;
   margin-bottom: 6.25rem;
+  @media screen and (max-width: 599px) {
+    display: none;
+  }
 `;
 
 const Question = styled.h2`
   font-size: 1.125rem;
   font-weight: 600;
+  @media screen and (max-width: 599px) {
+    display: none;
+  }
 `;
 
 const SubTitle = styled.h2`

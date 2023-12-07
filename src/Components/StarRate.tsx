@@ -1,11 +1,5 @@
 import styled from "styled-components";
-const StarRate = ({
-  dataRating,
-  size,
-}: {
-  dataRating: number | undefined;
-  size: string;
-}) => {
+const StarRate = ({ dataRating, size }: { dataRating: number | undefined; size: string }) => {
   return (
     <StarRateWrap>
       {["one", "two", "three", "four", "five"].map((count, index) => {
@@ -22,13 +16,7 @@ const StarRate = ({
         }
         return (
           <span key={dataRating + count}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width={size}
-              height={size}
-              viewBox="0 0 14 13"
-              fill="#cacaca"
-            >
+            <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 14 13" fill="#cacaca">
               <clipPath id={`${dataRating}${count}StarClip`}>
                 <rect width={`${list[index] ? list[index] : 0}`} height="20" />
               </clipPath>
@@ -56,7 +44,7 @@ const StarRateWrap = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  width: 100%;
+  width: 50%;
   margin: 0;
   span {
     display: inline-block;

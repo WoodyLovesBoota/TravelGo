@@ -136,7 +136,7 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 1.25rem 12%;
+  padding: 1.25rem 8%;
   @media screen and (max-width: 1199px) {
     padding: 1.25rem 0;
   }
@@ -158,7 +158,7 @@ const Title = styled.h2`
   color: ${(props) => props.theme.main.word};
   font-size: 2.25rem;
   font-weight: 700;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.625rem;
 `;
 
 const SubTitle = styled.h2`
@@ -183,7 +183,7 @@ const Row = styled.div`
 `;
 
 const Column = styled.div`
-  width: 45%;
+  width: 47%;
 `;
 
 const Email = styled.div``;
@@ -221,8 +221,7 @@ const Password = styled.div`
 `;
 
 const Button = styled(motion.button)`
-  background-color: ${(props) => props.theme.main.accent};
-  color: white;
+  background-color: ${(props) => props.theme.main.button};
   border: none;
   padding: 1.25rem;
   border-radius: 0.625rem;
