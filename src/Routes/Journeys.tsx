@@ -126,7 +126,7 @@ const Journeys = () => {
                 placeholder={`Enter name of category (ex. ${destination} city tour)`}
                 autoComplete="off"
               />
-              <SubmitButton type="submit">Add a category</SubmitButton>
+              <SubmitButton type="submit">Create</SubmitButton>
             </Form>
           </FormWrapper>
         </Main>
@@ -137,9 +137,6 @@ const Journeys = () => {
                 <SubTitle>Drag & Drop</SubTitle>
                 <Title>Your travel schedules in {currentDestination?.name}</Title>
               </div>
-              <Button variants={buttonVar} whileHover={"hover"} isPositive={Boolean(false)} onClick={onGoBackClicked}>
-                <span>Go Back</span>find more attractions
-              </Button>
             </NoNameHeader>
             <NoNameBoard>
               <BoardNoName
@@ -157,7 +154,7 @@ const Journeys = () => {
           </NoName>
           <Arrow>
             <FontAwesomeIcon icon={faDownLong}></FontAwesomeIcon>
-          </Arrow>{" "}
+          </Arrow>
           <NamedJourney>
             <BoardTitle>{currentDestination?.name}</BoardTitle>
             <Boards>
@@ -189,9 +186,16 @@ const Journeys = () => {
         </DragDropContext>
         <Row>
           <Title>Did you add all your Journeys?</Title>
-          <Button variants={buttonVar} whileHover={"hover"} isPositive={Boolean(true)} onClick={onGoForwardClicked}>
-            <span>Yes</span>Go to Next Step
-          </Button>
+          <Buttons>
+            <Button variants={buttonVar} whileHover={"hover"} onClick={onGoBackClicked}>
+              <span>No</span>
+              <span>find more attractions</span>
+            </Button>
+            <Button variants={buttonVar} whileHover={"hover"} onClick={onGoForwardClicked}>
+              <span>Yes</span>
+              <span>check your route</span>
+            </Button>
+          </Buttons>
         </Row>
       </Container>
     </Wrapper>
@@ -207,11 +211,11 @@ const Wrapper = styled(motion.div)`
 `;
 
 const Container = styled.div`
-  padding: 8% 0;
+  padding-bottom: 8%;
 `;
 
 const NoName = styled.div`
-  padding: 0 12%;
+  padding: 0 8%;
   width: 100%;
 `;
 
@@ -219,14 +223,14 @@ const NoNameHeader = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
-  margin-bottom: 0.625rem;
+  margin-bottom: 10px;
   align-items: flex-end;
-  margin-top: 1.875rem;
+  margin-top: 30px;
 `;
 
 const NoNameBoard = styled.div`
   position: sticky;
-  top: 1.875rem;
+  top: 30px;
   z-index: 110;
   width: 100%;
 `;
@@ -236,10 +240,10 @@ const Row = styled.div`
   flex-direction: column;
   align-items: flex-start;
   width: 100%;
-  padding: 0 12%;
+  padding: 0 8%;
   &:last-child {
     align-items: center;
-    margin-top: 6.25rem;
+    margin-top: 100px;
     min-height: 20vh;
   }
 `;
@@ -248,41 +252,44 @@ const Main = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 5% 15%;
+  padding: 150px 8%;
+  @media screen and (max-width: 500px) {
+    min-height: 100vh;
+  }
 `;
 
 const NamedJourney = styled.div`
   background-color: ${(props) => props.theme.main.accent};
-  padding: 3.125rem 12%;
+  padding: 50px 8%;
 `;
 
 const Boards = styled.div`
   display: flex;
   flex-wrap: nowrap;
   overflow-x: auto;
-  min-height: 12.5rem;
+  min-height: 200px;
   &::-webkit-scrollbar {
-    height: 0.3125rem;
+    height: 5px;
   }
 `;
 
 const MainDescription = styled.h2`
-  font-size: 1rem;
+  font-size: 16px;
   font-weight: 500;
-  @media screen and (max-width: 599px) {
+`;
+
+const SubTitle = styled.h2`
+  font-size: 16px;
+  font-weight: 600;
+  @media screen and (max-width: 800px) {
     display: none;
   }
 `;
 
-const SubTitle = styled.h2`
-  font-size: 1rem;
-  font-weight: 600;
-`;
-
 const BoardTitle = styled.h2`
-  font-size: 1.3125rem;
+  font-size: 21px;
   font-weight: 600;
-  margin-bottom: 1.25rem;
+  margin-bottom: 20px;
 `;
 
 const Title = styled.h2`
@@ -290,73 +297,107 @@ const Title = styled.h2`
   font-weight: 600;
 `;
 
+const Buttons = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 80%;
+`;
+
 const MainTitle = styled.h2`
   font-size: 3rem;
   font-weight: 700;
-  margin-bottom: 3.125rem;
+  margin-bottom: 50px;
   width: 100%;
-  margin-top: 1.25rem;
 `;
 
 const FormWrapper = styled.div`
-  margin-top: 3.125rem;
+  margin-top: 50px;
+  @media screen and (max-width: 800px) {
+    width: 100%;
+  }
 `;
 
 const Form = styled.form`
   display: flex;
   align-items: center;
+  @media screen and (max-width: 800px) {
+    flex-direction: column;
+  }
 `;
 
 const Input = styled(motion.input)<{ isHotel: boolean }>`
-  width: 31.25rem;
-  padding: 1.25rem;
-  font-size: 1rem;
+  width: 500px;
+  padding: 20px;
+  font-size: 16px;
   border: none;
-  box-shadow: 0.0625rem 0.125rem 0.125rem 0.125rem lightgray;
-  border-radius: 0.4375rem;
+  box-shadow: 1px 2px 2px 2px lightgray;
+  border-radius: 7px;
   font-weight: 600;
   &:focus {
     outline: none;
-    box-shadow: 0.0625rem 0.125rem 0.125rem 0.125rem ${(props) => props.theme.main.accent};
+    box-shadow: 1px 2px 2px 2px ${(props) => props.theme.main.accent};
+  }
+  @media screen and (max-width: 1000px) {
+    width: 400px;
+  }
+  @media screen and (max-width: 800px) {
+    width: 100%;
   }
 `;
 
 const SubmitButton = styled.button`
-  margin-left: 1.875rem;
+  margin-left: 30px;
   border: none;
   background-color: ${(props) => props.theme.main.accent};
-  padding: 1.25rem 1.5625rem;
-  font-size: 1rem;
-  border-radius: 3.125rem;
+  padding: 20px 25px;
+  font-size: 16px;
+  border-radius: 50px;
   font-weight: 700;
   cursor: pointer;
   &:hover {
     background-color: ${(props) => props.theme.main.accent + "aa"};
   }
+  @media screen and (max-width: 800px) {
+    width: 100%;
+    border-radius: 7px;
+    margin-left: 0;
+    margin-top: 15px;
+  }
 `;
 
-const Button = styled(motion.button)<{ isPositive: boolean }>`
+const Button = styled(motion.button)`
   cursor: pointer;
-  width: ${(props) => (props.isPositive ? "12.5rem" : "10rem")};
-  padding: ${(props) => (props.isPositive ? "1.25rem" : ".625rem")};
-  border-radius: 0.3125rem;
-  font-size: ${(props) => (props.isPositive ? ".875rem" : ".75rem")};
+  width: 160px;
+  padding: 10px;
+  border-radius: 5px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
   border: none;
-  margin-top: 1.875rem;
-  font-weight: 500;
+  margin: 0 10px;
+  margin-top: 30px;
 
+  &:first-child {
+    background-color: ${(props) => props.theme.red.accent};
+  }
+  &:last-child {
+    background-color: ${(props) => props.theme.green.accent};
+  }
   span {
     &:first-child {
-      font-size: ${(props) => (props.isPositive ? "1.5rem" : "1.125rem")};
+      font-size: 18px;
       font-weight: 600;
-      margin-bottom: 0.3125rem;
+      margin-bottom: 5px;
+    }
+    &:last-child {
+      font-size: 12px;
+      font-weight: 500;
+      @media screen and (max-width: 500px) {
+        display: none;
+      }
     }
   }
-  background-color: ${(props) => (props.isPositive ? props.theme.green.accent : props.theme.red.accent)};
 `;
 
 const Arrow = styled.p`

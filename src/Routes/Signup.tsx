@@ -103,12 +103,8 @@ const Signup = () => {
               </Column>
             </Row>
             <Buttons>
-              <Button variants={buttonVar} whileHover={"hover"} type="submit">
-                SUBMIT
-              </Button>
-              <Button variants={buttonVar} whileHover={"hover"} onClick={goLogin}>
-                CANCEL
-              </Button>
+              <Button type="submit">SUBMIT</Button>
+              <Button onClick={goLogin}>CANCEL</Button>
             </Buttons>
           </Form>
         </Main>
@@ -121,7 +117,7 @@ export default Signup;
 
 const Wrapper = styled.div`
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
   background-color: ${(props) => props.theme.main.accent};
   display: flex;
   justify-content: center;
@@ -129,28 +125,38 @@ const Wrapper = styled.div`
 `;
 
 const Container = styled.div`
-  width: 90vw;
-  height: 90vh;
+  width: 90%;
+  min-height: 80vh;
   background-color: ${(props) => props.theme.main.bg};
-  box-shadow: 0rem 0.0625rem 0.125rem 0.375rem rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 1px 2px 6px rgba(0, 0, 0, 0.2);
   display: flex;
-  justify-content: center;
   align-items: center;
-  padding: 1.25rem 8%;
-  @media screen and (max-width: 1199px) {
-    padding: 1.25rem 0;
+  padding: 20px;
+
+  @media screen and (max-width: 500px) {
+    height: 100vh;
+    width: 100%;
+    padding: 10px;
+    align-items: flex-start;
   }
 `;
 
 const Main = styled.div`
   width: 100%;
-  height: 90%;
+  min-height: 75vh;
   background-color: white;
-  margin: 0 2.5rem;
-  padding: 3.75rem;
-  overflow: auto;
-  @media screen and (max-width: 899px) {
-    margin: 0;
+  margin: 0 40px;
+  padding: 50px;
+  @media screen and (max-width: 1200px) {
+    width: 100%;
+  }
+  @media screen and (max-width: 800px) {
+    margin: 0 10px;
+    padding: 40px 20px;
+    padding-bottom: 10px;
+  }
+  @media screen and (max-width: 800px) {
+    min-height: 95vh;
   }
 `;
 
@@ -158,19 +164,23 @@ const Title = styled.h2`
   color: ${(props) => props.theme.main.word};
   font-size: 2.25rem;
   font-weight: 700;
-  margin-bottom: 0.625rem;
+  margin-bottom: 15px;
 `;
 
 const SubTitle = styled.h2`
-  font-size: 1.125rem;
+  font-size: 18px;
   font-weight: 500;
   color: gray;
   display: flex;
   margin-bottom: 2.5rem;
+  @media screen and (max-width: 800px) {
+    font-size: 16px;
+    flex-direction: column;
+  }
 `;
 
 const Form = styled.form`
-  height: 100%;
+  min-height: 70vh;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -180,10 +190,17 @@ const Row = styled.div`
   display: flex;
   width: 100%;
   justify-content: space-between;
+  @media screen and (max-width: 800px) {
+    flex-direction: column;
+    justify-content: flex-start;
+  }
 `;
 
 const Column = styled.div`
   width: 47%;
+  @media screen and (max-width: 800px) {
+    width: 100%;
+  }
 `;
 
 const Email = styled.div``;
@@ -191,20 +208,23 @@ const Email = styled.div``;
 const Info = styled.div``;
 
 const InputTitle = styled.h2`
-  font-size: 1.125rem;
+  font-size: 18px;
   font-weight: 600;
   color: black;
-  margin-bottom: 0.625rem;
+  margin-bottom: 10px;
+  @media screen and (max-width: 800px) {
+    font-size: 16px;
+  }
 `;
 
 const Input = styled.input`
-  width: 80%;
-  height: 3.125rem;
-  border: 0.125rem solid lightgray;
-  font-size: 1rem;
+  width: 95%;
+  height: 50px;
+  border: 2px solid lightgray;
+  font-size: 16px;
   font-weight: 600;
-  padding: 0.625rem;
-  border-radius: 0.625rem;
+  padding: 10px;
+  border-radius: 10px;
   margin-bottom: 1.875rem;
   &:focus {
     outline: none;
@@ -212,6 +232,11 @@ const Input = styled.input`
   }
   &::placeholder {
     color: lightgray;
+  }
+  @media screen and (max-width: 800px) {
+    font-size: 16px;
+    padding: 15px;
+    width: 100%;
   }
 `;
 
@@ -223,17 +248,35 @@ const Password = styled.div`
 const Button = styled(motion.button)`
   background-color: ${(props) => props.theme.main.button};
   border: none;
-  padding: 1.25rem;
-  border-radius: 0.625rem;
+  padding: 20px;
+  border-radius: 10px;
   width: 45%;
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 16px;
   font-weight: 600;
+
+  &:hover {
+    background-color: ${(props) => props.theme.main.button + "aa"};
+  }
 
   &:last-child {
     background-color: transparent;
     color: ${(props) => props.theme.main.accent};
-    border: 0.125rem solid ${(props) => props.theme.main.accent};
+    border: 2px solid ${(props) => props.theme.main.accent};
+  }
+
+  @media screen and (max-width: 500px) {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 50vw;
+    border-radius: 0px;
+    &:last-child {
+      right: 0;
+      left: 50vw;
+      border: 0;
+      background-color: white;
+    }
   }
 `;
 

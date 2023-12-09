@@ -58,14 +58,16 @@ const Login = () => {
           <Form onSubmit={handleSubmit(onValid)}>
             <Title>Login</Title>
             <SubTitle>
-              Doesn't have an account yet?
-              <LinkSignup variants={buttonVar} whileHover={"hover"} onClick={moveToSignUp}>
-                Sign Up
-              </LinkSignup>
-              or
-              <LinkSignup variants={buttonVar} whileHover={"hover"} onClick={moveToMain}>
-                Go Main
-              </LinkSignup>
+              <Question>Doesn't have an account yet?</Question>
+              <Question>
+                <LinkSignup variants={buttonVar} whileHover={"hover"} onClick={moveToSignUp}>
+                  Sign Up
+                </LinkSignup>
+                or
+                <LinkSignup variants={buttonVar} whileHover={"hover"} onClick={moveToMain}>
+                  Main
+                </LinkSignup>
+              </Question>
             </SubTitle>
             <Email>
               <InputTitle>Email Address</InputTitle>
@@ -84,12 +86,9 @@ const Login = () => {
                 placeholder="Enter your password."
               />
             </Password>
-            <Button variants={buttonVar} whileHover={"hover"} type="submit">
-              LOGIN
-            </Button>
+            <Button type="submit">LOGIN</Button>
           </Form>
         </Main>
-        {/* <Image src="images/login.png" /> */}
       </Container>
     </Wrapper>
   );
@@ -99,7 +98,7 @@ export default Login;
 
 const Wrapper = styled.div`
   width: 100vw;
-  height: 100vh;
+  height: max(100vh, 650px);
   background-color: ${(props) => props.theme.main.accent};
   display: flex;
   justify-content: center;
@@ -107,23 +106,33 @@ const Wrapper = styled.div`
 `;
 
 const Container = styled.div`
-  width: 90vw;
-  height: 80vh;
+  width: 90%;
+  height: 80%;
   background-color: ${(props) => props.theme.main.bg};
-  box-shadow: 0rem 0.0625rem 0.125rem 0.375rem rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 1px 2px 6px rgba(0, 0, 0, 0.2);
   display: flex;
   align-items: center;
-  padding: 1.25rem;
+  padding: 20px;
+
+  @media screen and (max-width: 500px) {
+    height: 100vh;
+    width: 100%;
+    padding: 10px;
+  }
 `;
 
 const Main = styled.div`
-  width: 40%;
-  height: 90%;
+  width: 50%;
+  height: 95%;
   background-color: white;
-  margin: 0 2.5rem;
-  padding: 2.5rem;
-  @media screen and (max-width: 1199px) {
+  margin: 0 40px;
+  padding: 50px;
+  @media screen and (max-width: 1200px) {
     width: 100%;
+  }
+  @media screen and (max-width: 800px) {
+    margin: 0 10px;
+    padding: 40px 20px;
   }
 `;
 
@@ -131,26 +140,50 @@ const Title = styled.h2`
   color: ${(props) => props.theme.main.word};
   font-size: 2.25rem;
   font-weight: 700;
-  margin-bottom: 0.625rem;
+  margin-bottom: 15px;
 `;
 
 const LinkSignup = styled(motion.p)`
   font-weight: 500;
-  font-size: 1.125rem;
-  margin-left: 0.625rem;
-  margin-right: 0.625rem;
+  font-size: 18px;
+  margin-left: 10px;
+  margin-right: 10px;
   color: ${(props) => props.theme.main.accent};
   cursor: pointer;
   font-weight: 700;
+  @media screen and (max-width: 800px) {
+    font-size: 16px;
+    margin-right: 10px;
+    margin-left: 0;
+    &:last-child {
+      margin-left: 10px;
+    }
+  }
 `;
 
 const SubTitle = styled.h2`
-  font-size: 1.125rem;
+  font-size: 18px;
+  font-weight: 500;
+  color: gray;
+  display: flex;
+  margin-bottom: 2.5rem;
+  @media screen and (max-width: 800px) {
+    font-size: 16px;
+    flex-direction: column;
+  }
+`;
+
+const Question = styled.p`
+  font-size: 18px;
   font-weight: 500;
   color: gray;
   display: flex;
 
-  margin-bottom: 2.5rem;
+  @media screen and (max-width: 800px) {
+    font-size: 16px;
+    width: 100%;
+    margin-bottom: 10px;
+  }
 `;
 
 const Form = styled.form`
@@ -161,29 +194,36 @@ const Form = styled.form`
 `;
 
 const Email = styled.div`
-  margin-bottom: 1.875rem;
+  margin-bottom: 3.125rem;
 `;
 
 const InputTitle = styled.h2`
-  font-size: 1.125rem;
+  font-size: 18px;
   font-weight: 600;
-  margin-bottom: 0.625rem;
+  margin-bottom: 10px;
+  @media screen and (max-width: 800px) {
+    font-size: 16px;
+  }
 `;
 
 const Input = styled.input`
   width: 100%;
-  height: 3.125rem;
-  border: 0.125rem solid lightgray;
-  font-size: 1rem;
+  height: 60px;
+  border: 2px solid lightgray;
+  font-size: 18px;
   font-weight: 600;
-  padding: 0.625rem;
-  border-radius: 0.625rem;
+  padding: 20px;
+  border-radius: 12px;
   &:focus {
     outline: none;
     border-color: ${(props) => props.theme.main.accent};
   }
   &::placeholder {
     color: lightgray;
+  }
+  @media screen and (max-width: 800px) {
+    font-size: 16px;
+    padding: 15px;
   }
 `;
 
@@ -192,13 +232,24 @@ const Password = styled.div``;
 const Button = styled(motion.button)`
   background-color: ${(props) => props.theme.main.button};
   border: none;
-  padding: 1.25rem;
-  border-radius: 0.625rem;
+  padding: 20px;
+  border-radius: 10px;
   width: 100%;
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 18px;
   font-weight: 600;
   margin-top: auto;
+  &:hover {
+    background-color: ${(props) => props.theme.main.button + "aa"};
+  }
+
+  @media screen and (max-width: 500px) {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100vw;
+    border-radius: 0px;
+  }
 `;
 
 const buttonVar = { hover: { scale: 1.1 } };

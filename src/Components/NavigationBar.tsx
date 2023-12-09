@@ -188,8 +188,6 @@ const NavigationBar = () => {
 export default NavigationBar;
 
 const Wrapper = styled.div`
-  position: fixed;
-  top: 0;
   width: 100vw;
   height: 6.25rem;
   z-index: 50;
@@ -202,7 +200,7 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   padding: 0 12%;
-  border-bottom: 0.125rem solid ${(props) => props.theme.main.point};
+  border-bottom: 1px solid ${(props) => props.theme.main.blur + "cc"};
 `;
 
 const Right = styled.div`
@@ -214,7 +212,7 @@ const Right = styled.div`
 
 const Title = styled.h2`
   font-weight: 900;
-  font-size: 1.3125rem;
+  font-size: 21px;
   cursor: pointer;
   padding: 1.875rem 0;
 `;
@@ -222,41 +220,53 @@ const Title = styled.h2`
 const Capital = styled.span`
   color: ${(props) => props.theme.main.accent};
   font-weight: 900;
-  font-size: 1.3125rem;
+  font-size: 21px;
   cursor: pointer;
   padding: 1.875rem 0;
 `;
 
 const SecondBar = styled(motion.div)`
   padding: 1.875rem 12%;
-  border-bottom: 0.125rem solid ${(props) => props.theme.main.point};
+  border-bottom: 1px solid ${(props) => props.theme.main.blur + "cc"};
   transform-origin: top center;
 `;
 
 const Journey = styled.div<{ isJourney: boolean }>`
   font-weight: 600;
-  font-size: 1rem;
-  margin-right: 5rem;
+  font-size: 16px;
+  margin-right: 80px;
   cursor: pointer;
   color: ${(props) => props.theme.main.point};
-  border-left: 0.125rem solid ${(props) => props.theme.main.point};
-  border-right: 0.125rem solid ${(props) => props.theme.main.point};
+  border-left: 1px solid ${(props) => props.theme.main.blur + "cc"};
+  border-right: 1px solid ${(props) => props.theme.main.blur + "cc"};
   height: 100%;
-  padding: 1.875rem;
+  padding: 30px;
+  @media screen and (max-width: 800px) {
+    display: none;
+  }
 `;
 
 const Journeys = styled.div`
   display: flex;
   width: 100%;
-  margin-bottom: 1.25rem;
+  margin-bottom: 20px;
+  @media screen and (max-width: 800px) {
+    display: none;
+  }
 `;
 
 const SingleJourney = styled.div`
   width: 100%;
+  @media screen and (max-width: 800px) {
+    display: none;
+  }
 `;
 
 const JourneyDetailBox = styled.div`
   display: flex;
+  @media screen and (max-width: 800px) {
+    display: none;
+  }
 `;
 
 const BlackSpan = styled(motion.h2)`
@@ -271,23 +281,29 @@ const GraySpan = styled(motion.h2)`
 
 const JourneyDetail = styled(motion.h2)<{ isNow: boolean }>`
   cursor: pointer;
-  margin-right: 1.875rem;
-  font-size: 1rem;
+  margin-right: 30px;
+  font-size: 16px;
   font-weight: 500;
   color: ${(props) => (props.isNow ? props.theme.main.word : "gray")};
+  @media screen and (max-width: 800px) {
+    display: none;
+  }
 `;
 
 const JourneyTitle = styled(motion.h2)<{ isNow: boolean }>`
   cursor: pointer;
-  margin-right: 1.875rem;
-  font-size: 1rem;
+  margin-right: 30px;
+  font-size: 16px;
   font-weight: 500;
   color: ${(props) => (props.isNow ? props.theme.main.word : "gray")};
+  @media screen and (max-width: 800px) {
+    display: none;
+  }
 `;
 
 const UserCard = styled.div`
   height: 100%;
-  font-size: 1rem;
+  font-size: 16px;
   font-weight: 600;
   display: flex;
   align-items: center;
@@ -298,21 +314,21 @@ const UserCard = styled.div`
 `;
 
 const Name = styled.h2`
-  font-size: 1rem;
+  font-size: 16px;
   font-weight: 600;
   margin: 0 0.9375rem;
   color: ${(props) => props.theme.main.point};
 `;
 
 const InfoTitle = styled.h2`
-  margin-bottom: 0.3125rem;
+  margin-bottom: 5px;
   font-weight: 400;
   color: ${(props) => props.theme.main.point};
 `;
 
 const Info = styled.h2`
-  font-size: 1rem;
-  margin-bottom: 1.25rem;
+  font-size: 16px;
+  margin-bottom: 20px;
   font-weight: 600;
   color: ${(props) => props.theme.main.point};
 `;
@@ -325,7 +341,7 @@ const UserInfoCard = styled(motion.div)`
   height: 31.25rem;
   z-index: 200;
   padding: 1.25rem;
-  box-shadow: 0.0625rem 0.125rem 0.25rem rgba(0, 0, 0, 0.5);
+  box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.5);
   cursor: default;
   display: flex;
   flex-direction: column;
@@ -338,9 +354,9 @@ const UserInfoCard = styled(motion.div)`
 const LogOut = styled(motion.div)`
   margin-top: auto;
   text-align: center;
-  border-top: 0.125rem solid ${(props) => props.theme.main.point};
+  border-top: 2px solid ${(props) => props.theme.main.point};
   color: ${(props) => props.theme.main.point};
-  padding: 1.25rem;
+  padding: 20px;
   font-weight: 600;
   cursor: pointer;
 `;

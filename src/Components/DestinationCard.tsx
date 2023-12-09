@@ -69,11 +69,11 @@ const DestinationCard = ({ title, destination }: IBigTripCardProps) => {
 export default DestinationCard;
 
 const Wrapper = styled(motion.div)`
-  padding: 0.9375rem;
+  padding: 15px;
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: 0.125rem 0.125rem 0.25rem 0.125rem lightgray;
+  box-shadow: 2px 2px 4px 2px lightgray;
   cursor: pointer;
   width: 100%;
   background-color: white;
@@ -92,13 +92,13 @@ const Header = styled.div`
 `;
 
 const Arrow = styled(motion.h2)`
-  font-size: 1.125rem;
+  font-size: 18px;
   background-color: white;
-  padding: 0.625rem;
+  padding: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 2.5rem;
+  border-radius: 40px;
 `;
 
 const Destination = styled.div<{ bgPhoto: string }>`
@@ -106,34 +106,34 @@ const Destination = styled.div<{ bgPhoto: string }>`
   background-size: cover;
   background-position: center center;
   width: 100%;
-  height: 12.5rem;
+  height: 200px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  padding: 0.9375rem;
-  padding-bottom: 0.9375rem;
+  padding: 15px;
+  padding-bottom: 15px;
   cursor: pointer;
 `;
 
 const DestinationTitle = styled.h2`
-  font-size: 1.125rem;
+  font-size: 18px;
   font-weight: 600;
-  margin: 0.4375rem auto;
+  margin: 7px auto;
 `;
 
 const DestinationSubTitle = styled.h2`
-  font-size: 0.875rem;
+  font-size: 14px;
   font-weight: 500;
   margin: 0 auto;
 `;
 
 const Button = styled(motion.button)`
   border: none;
-  width: 3.75rem;
-  height: 1.875rem;
+  width: 60px;
+  height: 30px;
   cursor: pointer;
-  font-size: 0.75rem;
-  border-radius: 0.3125rem;
+  font-size: 12px;
+  border-radius: 5px;
   background-color: white;
   font-weight: 600;
   margin-top: auto;

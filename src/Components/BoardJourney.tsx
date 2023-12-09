@@ -128,15 +128,15 @@ const BoardJourney = ({ journey, boardId }: IJourneyBoardProps) => {
 export default BoardJourney;
 
 const Wrapper = styled.div`
-  border-radius: 0.25rem;
-  width: 20.625rem;
-  min-height: 11.25rem;
-  margin-right: 0.625rem;
-  padding: 1.25rem 1.5625rem;
-  padding-bottom: 0.625rem;
+  border-radius: 4px;
+  width: min(330px, 100%);
+  min-height: 180px;
+  margin-right: 10px;
+  padding: 20px 25px;
+  padding-bottom: 10px;
   display: flex;
   flex-direction: column;
-  margin-left: 0.3125rem;
+  margin-left: 5px;
   position: relative;
   color: ${(props) => props.theme.main.word};
   background-color: white;
@@ -147,14 +147,14 @@ const Header = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.25rem;
-  margin-left: 0.3125rem;
+  margin-bottom: 20px;
+  margin-left: 5px;
 `;
 
 const Title = styled.h2`
   text-align: center;
   font-weight: 600;
-  font-size: 1.125rem;
+  font-size: 18px;
 `;
 
 const Area = styled.div<IDragging>`
@@ -170,23 +170,23 @@ const Button = styled.button`
 
 const ToggleBox = styled(motion.div)`
   position: absolute;
-  width: 12.5rem;
-  height: 10.625rem;
-  top: 0.625rem;
-  right: 0.625rem;
+  width: 200px;
+  height: 170px;
+  top: 10px;
+  right: 10px;
   background-color: ${(props) => props.theme.main.accent + "dd"};
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   transform-origin: top right;
-  padding: 0.625rem 0.9375rem;
-  border-radius: 0.3125rem;
+  padding: 10px 15px;
+  border-radius: 5px;
   z-index: 3;
 `;
 
 const RenameForm = styled.form`
-  height: 2.5rem;
-  margin-bottom: 0.625rem;
+  height: 40px;
+  margin-bottom: 10px;
   width: 90%;
   display: flex;
   justify-content: space-between;
@@ -196,9 +196,9 @@ const RenameForm = styled.form`
     width: 100%;
     background-color: transparent;
     border: none;
-    border-bottom: 0.0938rem solid white;
-    padding-left: 0.3125rem;
-    font-size: 1rem;
+    border-bottom: 1.5008px solid white;
+    padding-left: 5px;
+    font-size: 16px;
     &:focus {
       outline: none;
     }
@@ -210,8 +210,8 @@ const RenameForm = styled.form`
 `;
 
 const ToggleButton = styled.div`
-  height: 1.5625rem;
-  margin-left: 0.3125rem;
+  height: 25px;
+  margin-left: 5px;
   font-weight: 500;
   cursor: pointer;
   display: flex;
@@ -221,12 +221,12 @@ const ToggleButton = styled.div`
     align-items: center;
   }
   p {
-    margin-left: 0.625rem;
-    font-size: 1rem;
+    margin-left: 10px;
+    font-size: 16px;
     color: white;
   }
   span {
-    font-size: 1rem;
+    font-size: 16px;
   }
 `;
 

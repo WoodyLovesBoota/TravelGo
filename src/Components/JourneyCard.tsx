@@ -84,31 +84,30 @@ const Container = styled.div<{ bgPhoto: string }>`
     ${(props) => props.bgPhoto};
   background-size: cover;
   background-position: center center;
-
   width: 11.25rem;
   height: 13.125rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   padding: 1.3125rem 1.125rem;
-  padding-bottom: 0.9375rem;
-  border-radius: 0.625rem;
+  padding-bottom: 15px;
+  border-radius: 10px;
 `;
 
 const Title = styled.h2`
-  font-size: 1.125rem;
+  font-size: 16px;
   font-weight: 600;
   color: white;
 `;
 
 const Button = styled(motion.button)`
   border: none;
-  width: 3.75rem;
-  height: 1.875rem;
+  width: 60px;
+  height: 30px;
   cursor: pointer;
   color: gray;
-  font-size: 0.75rem;
-  border-radius: 0.3125rem;
+  font-size: 12px;
+  border-radius: 5px;
   background-color: white;
   font-weight: 600;
 `;

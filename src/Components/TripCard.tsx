@@ -21,11 +21,6 @@ const TripCard = ({ title, number }: ITripCardProps) => {
       </HexInner>
     </Hex>
   );
-
-  {
-    /* <Container onClick={handleTripCardClicked}>{number}</Container>
-      <Title>{title}</Title> */
-  }
 };
 
 export default TripCard;
@@ -52,14 +47,11 @@ const HexInner = styled(motion.div)`
   padding-bottom: 114.6%;
   overflow: hidden;
   visibility: hidden;
+
   transform: rotate3d(0, 0, 1, -60deg) skewY(30deg);
   * {
     position: absolute;
     visibility: visible;
-    box-shadow: 10px 10px 32px 0 rgba(0, 0, 0, 0.1);
-    &:hover {
-      background-color: #80461baa;
-    }
   }
 `;
 const Content = styled.div`
@@ -67,10 +59,21 @@ const Content = styled.div`
   width: 100%;
   height: 100%;
   overflow: hidden;
-  transform: skewY(-30deg) rotate3d(0, 0, 1, 60deg);
-  background: ${(props) => props.theme.main.point};
   justify-content: center;
   align-items: center;
+  transform: skewY(-30deg) rotate3d(0, 0, 1, 60deg);
+
+  background: linear-gradient(
+    135deg,
+    hsla(15, 100%, 25%, 1) 1%,
+    hsla(17, 41%, 51%, 1) 19%,
+    hsla(23, 41%, 63%, 1) 34%,
+    hsla(23, 65%, 73%, 1) 50%,
+    hsla(23, 41%, 63%, 1) 68%,
+    hsla(17, 41%, 51%, 1) 83%,
+    hsla(15, 100%, 25%, 1) 100%
+  );
+
   p {
     font-size: 1.3125rem;
     font-weight: 500;

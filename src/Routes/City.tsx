@@ -34,36 +34,34 @@ const City = () => {
       <NavigationBar />
       <Wrapper variants={inputVar} initial="initial" animate="animate">
         <Header>
-          <Column>
-            <Title>
-              <Button variants={buttonVar} whileHover={"hover"} onClick={onOverlayClicked}>
-                <FontAwesomeIcon icon={faLeftLong}></FontAwesomeIcon>
-              </Button>
-              {currentTrip}
-            </Title>
-            <SubTitle>
-              Please add a destination (ex. city, region ...). You can click the card to add detail for the destination.
-            </SubTitle>
-            <Form onSubmit={handleSubmit(onValid)}>
-              <Input
-                {...rest}
-                name="destination"
-                ref={(e) => {
-                  ref(e);
-                  inputRef.current = e;
-                }}
-                placeholder="Enter your destination"
-                autoFocus
-                autoComplete="off"
-                spellCheck={false}
-                required
-              />
-              <SubmitButton type="submit">Add a destination</SubmitButton>
-            </Form>
-          </Column>
-          {users[player.email].trips[currentTrip] && users[player.email].trips[currentTrip]?.length ? (
+          <Title>
+            <Button variants={buttonVar} whileHover={"hover"} onClick={onOverlayClicked}>
+              <FontAwesomeIcon icon={faLeftLong}></FontAwesomeIcon>
+            </Button>
+            {currentTrip}
+          </Title>
+          <SubTitle>
+            Please add a destination (ex. city, region ...). You can click the card to add detail for the destination.
+          </SubTitle>
+          <Form onSubmit={handleSubmit(onValid)}>
+            <Input
+              {...rest}
+              name="destination"
+              ref={(e) => {
+                ref(e);
+                inputRef.current = e;
+              }}
+              placeholder="Enter your destination"
+              autoFocus
+              autoComplete="off"
+              spellCheck={false}
+              required
+            />
+            <SubmitButton type="submit">Add a destination</SubmitButton>
+          </Form>
+          {/* {users[player.email].trips[currentTrip] && users[player.email].trips[currentTrip]?.length ? (
             <SmallCalender destinations={users[player.email].trips[currentTrip]} />
-          ) : null}
+          ) : null} */}
         </Header>
         <Main>
           {users[player.email].trips[currentTrip].length === 0 ? (
@@ -88,30 +86,18 @@ const City = () => {
 export default City;
 
 const Wrapper = styled(motion.div)`
-  overflow: auto;
   width: 100vw;
-  z-index: 99;
+  min-height: 100vh;
   color: ${(props) => props.theme.main.word};
-  padding: 8% 0;
-  padding-bottom: 0;
   display: flex;
   flex-direction: column;
-  width: 100%;
 `;
 
 const Header = styled.div`
-  padding: 8% 8%;
-  display: flex;
-  justify-content: space-between;
-  @media screen and (max-width: 1199px) {
-    flex-direction: column;
-  }
-`;
+  padding: 12% 8%;
 
-const Column = styled.div`
-  width: 70%;
-  @media screen and (max-width: 1199px) {
-    width: 100%;
+  @media screen and (max-width: 800px) {
+    min-height: 100vh;
   }
 `;
 
@@ -119,82 +105,93 @@ const Button = styled(motion.button)`
   border: none;
   background-color: ${(props) => props.theme.main.accent};
   color: ${(props) => props.theme.main.word};
-  border-radius: 1.5625rem;
-  width: 2.5rem;
-  height: 2.5rem;
-  font-size: 1rem;
+  border-radius: 25px;
+  width: 40px;
+  height: 40px;
+  font-size: 16px;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-right: 1.25rem;
+  margin-right: 20px;
   cursor: pointer;
 `;
 
 const Title = styled.div`
   font-size: 3rem;
   font-weight: 800;
-  margin-bottom: 3.125rem;
+  margin-bottom: 50px;
   display: flex;
   align-items: center;
 `;
 
 const SubTitle = styled.h2`
-  font-size: 1rem;
+  font-size: 16px;
   font-weight: 500;
 `;
 
 const Main = styled.div`
   background-color: ${(props) => props.theme.main.normal};
-  padding: 8%;
+  padding: 12% 8%;
+  width: 100%;
 `;
 
 const Cards = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(15.625rem, 1fr));
-  grid-gap: 1.875rem;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-gap: 30px;
 `;
 
 const Loader = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 6.25rem;
-  font-size: 1rem;
+  font-size: 16px;
   font-weight: 500;
 `;
 
 const Form = styled(motion.form)`
   display: flex;
-  margin: 4.375rem 0;
+  margin: 70px 0;
   width: 100%;
+  @media screen and (max-width: 800px) {
+    flex-direction: column;
+  }
 `;
 
 const Input = styled(motion.input)`
-  width: 25rem;
-  padding: 1.25rem;
-  font-size: 1rem;
+  width: 400px;
+  padding: 20px;
+  font-size: 16px;
   border: none;
-  box-shadow: 0.0625rem 0.125rem 0.125rem 0.125rem lightgray;
-  border-radius: 0.4375rem;
+  box-shadow: 1px 2px 2px 2px lightgray;
+  border-radius: 7px;
   font-weight: 600;
   &:focus {
     outline: none;
-    box-shadow: 0.0625rem 0.125rem 0.125rem 0.125rem ${(props) => props.theme.main.accent};
+    box-shadow: 1px 2px 2px 2px ${(props) => props.theme.main.accent};
+  }
+  @media screen and (max-width: 800px) {
+    width: 100%;
   }
 `;
 
 const SubmitButton = styled.button`
-  margin-left: 2.5rem;
+  margin-left: 40px;
   border: none;
   background-color: ${(props) => props.theme.main.button};
   color: ${(props) => props.theme.main.word};
-  padding: 1.25rem 1.875rem;
-  font-size: 1rem;
-  border-radius: 3.125rem;
+  padding: 20px 30px;
+  font-size: 16px;
+  border-radius: 50px;
   font-weight: 600;
   cursor: pointer;
   &:hover {
     background-color: ${(props) => props.theme.main.accent + "aa"};
+  }
+  @media screen and (max-width: 800px) {
+    width: 100%;
+    margin: 20px 0;
+    border-radius: 7px;
   }
 `;
 

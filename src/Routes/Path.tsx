@@ -67,7 +67,7 @@ const Path = () => {
       <Container>
         <Main>
           <InformationColumn>
-            <MainTitle>Make path your journey</MainTitle>
+            <MainTitle>Check your journey</MainTitle>
             <Description>
               Make order your travel and check the details.Check your journey detail by clicking the card. Visualize
               your itinerary on the map.
@@ -188,9 +188,9 @@ const Container = styled.div`
 `;
 
 const Loader = styled.div`
-  font-size: 1rem;
+  font-size: 16px;
   font-weight: 500;
-  margin-top: 1.875rem;
+  margin-top: 30px;
 `;
 
 const Row = styled.div`
@@ -200,10 +200,10 @@ const Row = styled.div`
 `;
 
 const Main = styled.div`
-  padding: 15% 12%;
+  padding: 150px 12%;
   display: flex;
   justify-content: space-between;
-  @media screen and (max-width: 899px) {
+  @media screen and (max-width: 56.1875rem) {
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
@@ -216,38 +216,38 @@ const Header = styled.div`
 `;
 
 const MainTitle = styled.h2`
-  font-size: 3rem;
+  font-size: 48px;
   font-weight: 700;
-  margin-bottom: 1.875rem;
+  margin-bottom: 30px;
 `;
 
 const Description = styled.h2`
-  font-size: 1rem;
+  font-size: 16px;
   font-weight: 500;
-  margin-bottom: 6.25rem;
-  @media screen and (max-width: 599px) {
+  margin-bottom: 100px;
+  @media screen and (max-width: 37.4375rem) {
     display: none;
   }
 `;
 
 const Question = styled.h2`
-  font-size: 1.125rem;
+  font-size: 18px;
   font-weight: 600;
-  @media screen and (max-width: 599px) {
+  @media screen and (max-width: 37.4375rem) {
     display: none;
   }
 `;
 
 const SubTitle = styled.h2`
-  font-size: 1rem;
+  font-size: 16px;
   font-weight: 500;
   margin-bottom: 1%;
 `;
 
 const Title = styled.h2`
-  font-size: 1.3125rem;
+  font-size: 21px;
   font-weight: 500;
-  margin-bottom: 0.625rem;
+  margin-bottom: 10px;
 `;
 
 const Area = styled.div<IDragging>`
@@ -255,7 +255,7 @@ const Area = styled.div<IDragging>`
   flex-grow: 1;
   overflow-y: auto;
   overflow-x: hidden;
-  padding-bottom: 1.875rem;
+  padding-bottom: 30px;
 `;
 
 const HeaderColumn = styled.div`
@@ -269,10 +269,10 @@ const HeaderColumn = styled.div`
 const JourneyDeck = styled.div`
   display: flex;
   flex-direction: column;
-  min-width: 25rem;
-  @media screen and (max-width: 899px) {
+  min-width: 400px;
+  @media screen and (max-width: 56.1875rem) {
     width: 100%;
-    margin-top: 3.125rem;
+    margin-top: 50px;
   }
 `;
 
@@ -280,7 +280,7 @@ const HiddenListColumn = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  @media screen and (max-width: 899px) {
+  @media screen and (max-width: 56.1875rem) {
     display: none;
   }
 `;
@@ -290,7 +290,7 @@ const InformationColumn = styled.div`
   flex-direction: column;
   align-items: flex-start;
   width: 45%;
-  @media screen and (max-width: 899px) {
+  @media screen and (max-width: 56.1875rem) {
     width: 100%;
   }
 `;
@@ -299,38 +299,38 @@ const Card = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 0.9375rem 1.25rem;
-  margin-bottom: 0.3125rem;
-  width: 25rem;
-  border-radius: 0.3125rem;
+  padding: 15px 20px;
+  margin-bottom: 5px;
+  width: 400px;
+  border-radius: 5px;
   background-color: transparent;
   transform-origin: center left;
   cursor: pointer;
   background-color: ${(props) => props.theme.main.accent};
   color: white;
-  @media screen and (max-width: 899px) {
+  @media screen and (max-width: 56.1875rem) {
     width: 100%;
   }
 `;
 
 const CardTitle = styled.h2`
-  font-size: 1rem;
+  font-size: 16px;
   font-weight: 600;
-  margin-bottom: 0.625rem;
+  margin-bottom: 10px;
 `;
 
 const CardSubTitle = styled.h2`
-  font-size: 0.75rem;
+  font-size: 12px;
   font-weight: 400;
 `;
 
 const List = styled.div`
-  margin-top: 3.75rem;
+  margin-top: 60px;
 `;
 
 const Element = styled.h2`
-  margin-bottom: 0.625rem;
-  font-size: 0.875rem;
+  margin-bottom: 10px;
+  font-size: 14px;
   font-weight: 500;
 `;
 
@@ -340,22 +340,22 @@ const Buttons = styled.div`
 
 const Button = styled(motion.button)<{ plus: boolean }>`
   cursor: pointer;
-  padding: 1.125rem 1.875rem;
-  border-radius: 0.3125rem;
+  padding: 18px 30px;
+  border-radius: 5px;
   font-weight: 600;
-  font-size: 0.875rem;
+  font-size: 14px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
   border: none;
-  margin-top: 1.875rem;
-  margin-right: 0.9375rem;
+  margin-top: 30px;
+  margin-right: 15px;
   span {
     &:first-child {
-      font-size: 1.25rem;
+      font-size: 20px;
       font-weight: 600;
-      margin-bottom: 0.3125rem;
+      margin-bottom: 5px;
     }
   }
   background-color: ${(props) => (props.plus ? props.theme.green.accent : props.theme.red.accent)};

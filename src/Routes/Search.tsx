@@ -137,7 +137,7 @@ const Search = () => {
                   <GoogleMap
                     destination={destinationData?.candidates[0]?.formatted_address}
                     width="100%"
-                    height="16.875rem"
+                    height="270px"
                     zoom={8}
                   />
                 </DestinationInfo>
@@ -167,12 +167,10 @@ const Search = () => {
                     <Question>Is this the place for you to Travel?</Question>
                     <Buttons>
                       <Button variants={buttonVar} whileHover={"hover"} onClick={onNoClicked}>
-                        <span>No</span>
-                        <span>search destination</span>
+                        No
                       </Button>
                       <Button variants={buttonVar} whileHover={"hover"} type="submit" onClick={onYesClicked}>
-                        <span>Yes</span>
-                        <span>add {destinationData?.candidates[0]?.name} to destination</span>
+                        Yes
                       </Button>
                     </Buttons>
                   </Selection>
@@ -202,7 +200,7 @@ const Loader = styled.div`
   justify-content: center;
   align-items: center;
   height: 100vh;
-  font-size: 1.125rem;
+  font-size: 18px;
   font-weight: 500;
 `;
 
@@ -224,14 +222,14 @@ const DateBox = styled.div`
 const Divider = styled.h2`
   font-weight: 600;
   color: gray;
-  margin-top: 1.25rem;
+  margin-top: 20px;
 `;
 
 const DateInput = styled.input`
   background-color: lightgray;
   border: none;
-  padding: 0.9375rem 0.5rem;
-  border-radius: 0.3125rem;
+  padding: 15px 8px;
+  border-radius: 5px;
   font-weight: 600;
   color: gray;
   width: 100%;
@@ -250,7 +248,7 @@ const Background = styled.div<{ bgPhoto: string }>`
   background-image: url(${(props) => props.bgPhoto});
   background-position: center center;
   background-size: cover;
-  filter: blur(0.4375rem);
+  filter: blur(7px);
 `;
 
 const Container = styled(motion.div)<{ bgPhoto: string }>`
@@ -266,15 +264,17 @@ const Column = styled.div`
   &:last-child {
     padding: 3.125rem 3.125rem;
     background-color: rgba(255, 255, 255, 0.6);
-    height: 45rem;
-    width: 39.375rem;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    border-radius: 0.9375rem;
+    border-radius: 15px;
     @media screen and (max-width: 1199px) {
       height: 51.875rem;
       width: 39.375rem;
+    }
+    @media screen and (max-width: 500px) {
+      width: 100vw;
+      min-height: 51.875rem;
     }
   }
 `;
@@ -287,8 +287,8 @@ const Image = styled(motion.div)<{ bgPhoto: string }>`
   background-image: url(${(props) => props.bgPhoto});
   background-position: center center;
   background-size: cover;
-  width: 5.625rem;
-  height: 5.625rem;
+  width: 90px;
+  height: 90px;
   cursor: pointer;
   @media screen and (max-width: 1199px) {
     display: none;
@@ -302,7 +302,7 @@ const Card = styled(motion.div)<{ bgPhoto: string }>`
   background-size: cover;
   background-position: center;
   cursor: pointer;
-  margin-right: 0.9375rem;
+  margin-right: 15px;
   @media screen and (max-width: 1199px) {
     display: none;
   }
@@ -314,16 +314,16 @@ const CardTitle = styled(motion.h2)`
 `;
 
 const Content = styled.h2`
-  font-size: 1rem;
-  margin-left: 0.5rem;
-  margin-bottom: 1.875rem;
+  font-size: 16px;
+  margin-left: 8px;
+  margin-bottom: 30px;
   font-weight: 500;
 `;
 
 const DestinationInfo = styled.div`
   display: flex;
   flex-direction: column;
-  margin-bottom: 1.875rem;
+  margin-bottom: 30px;
 `;
 
 const Selection = styled.div`
@@ -336,31 +336,23 @@ const Selection = styled.div`
 const Buttons = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-top: 0rem;
+  margin-top: 0px;
 `;
 
 const Button = styled(motion.button)`
   width: 45%;
   cursor: pointer;
-  padding: 0.9375rem 0.5rem;
-  border-radius: 0.3125rem;
-  color: ${(props) => props.theme.white.normal};
+  padding: 15px 8px;
+  border-radius: 5px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
   border: none;
-  margin: 0 0.625rem;
-  span {
-    &:first-child {
-      font-size: 1.125rem;
-      font-weight: 600;
-    }
-    &:last-child {
-      font-size: 0.875rem;
-      font-weight: 500;
-    }
-  }
+  margin: 0 10px;
+  font-size: 18px;
+  font-weight: 600;
+
   &:first-child {
     background-color: ${(props) => props.theme.red.accent};
   }
@@ -370,9 +362,9 @@ const Button = styled(motion.button)`
 `;
 
 const Question = styled.h2`
-  margin: 0.625rem auto;
-  margin-top: 2.1875rem;
-  font-size: 1.125rem;
+  margin: 10px auto;
+  margin-top: 35px;
+  font-size: 16px;
   font-weight: 700;
 `;
 

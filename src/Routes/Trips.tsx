@@ -32,7 +32,9 @@ const Trip = () => {
       <NavigationBar />
       <Container>
         <Header>
-          <Title>Create your journey</Title>
+          <Title>
+            Create your<span> journey</span>
+          </Title>
           <SubTitle>
             Choose the journey you want and fill out the contents of the trip. Or you can create a new journey.
           </SubTitle>
@@ -61,103 +63,145 @@ export default Trip;
 
 const Wrapper = styled(motion.div)`
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
 `;
 
 const Container = styled.div`
   display: flex;
-  width: 100%;
-  height: 100%;
-  @media screen and (max-width: 1100px) {
+  width: 100vw;
+  padding: 12% 8%;
+
+  @media screen and (max-width: 1200px) {
     flex-direction: column;
     align-items: center;
   }
-`;
-
-const Header = styled.div`
-  padding: 12% 8%;
-  width: 50%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  @media screen and (max-width: 1100px) {
-    width: 70%;
-    height: inherit;
+  @media screen and (max-width: 500px) {
     padding-bottom: 0;
   }
 `;
 
+const Header = styled.div`
+  width: 55%;
+  height: 100%;
+  margin-bottom: 15%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  @media screen and (max-width: 1200px) {
+    width: 100%;
+  }
+  @media screen and (max-width: 500px) {
+    min-height: 100vh;
+    justify-content: flex-start;
+  }
+`;
+
 const Main = styled.div`
-  padding: 10%;
   width: 50%;
   height: 100%;
   display: flex;
-  align-items: center;
-  @media screen and (max-width: 1100px) {
-    width: 60%;
+  align-items: flex-start;
+  justify-content: flex-start;
+  @media screen and (max-width: 1200px) {
+    width: 100%;
     height: inherit;
-    padding-top: 0;
+  }
+  @media screen and (max-width: 500px) {
+    background-color: ${(props) => props.theme.main.accent};
+    width: 100vw;
+    padding: 30% 12%;
   }
 `;
 
 const Title = styled.h2`
   font-size: 3rem;
   font-weight: 600;
-  margin-bottom: 3.125rem;
+  margin-bottom: 50px;
   width: 100%;
+  span {
+    font-size: 3rem;
+    font-weight: 600;
+    @media screen and (max-width: 500px) {
+      width: 100%;
+      display: block;
+    }
+  }
 `;
 
 const SubTitle = styled.h2`
-  font-size: 1rem;
+  font-size: 16px;
   font-weight: 500;
-  margin-bottom: 3.125rem;
+  margin-bottom: 50px;
+  width: 100%;
 `;
 
 const TripCards = styled.div`
-  width: 100%;
-  margin: 0 auto;
+  width: 600px;
+  margin-left: 50px;
   display: flex;
   align-items: center;
   flex-wrap: wrap;
+  @media screen and (max-width: 1200px) {
+    width: 70%;
+    margin: 0;
+  }
+  @media screen and (max-width: 800px) {
+    width: 100%;
+  }
+  @media screen and (max-width: 500px) {
+  }
 `;
 
 const Loader = styled.div`
-  font-size: 1rem;
+  font-size: 16px;
   font-weight: 500;
 `;
 
 const Form = styled.form`
   display: flex;
   align-items: center;
+  @media screen and (max-width: 500px) {
+    flex-direction: column;
+    width: 100%;
+  }
 `;
 
 const Input = styled.input`
-  width: 25rem;
-  padding: 1.25rem;
-  font-size: 1rem;
+  width: 23.75rem;
+  padding: 20px;
+  font-size: 16px;
   border: none;
-  box-shadow: 0.0625rem 0.125rem 0.125rem 0.125rem lightgray;
-  border-radius: 0.4375rem;
+  box-shadow: 1px 2px 2px 2px lightgray;
+  border-radius: 7px;
   font-weight: 600;
   &:focus {
     outline: none;
-    box-shadow: 0.0625rem 0.125rem 0.125rem 0.125rem ${(props) => props.theme.main.accent};
+    box-shadow: 1px 2px 2px 2px ${(props) => props.theme.main.accent};
+  }
+  @media screen and (max-width: 500px) {
+    width: 100%;
   }
 `;
 
 const SubmitButton = styled.button`
-  margin-left: 2.5rem;
+  margin-left: 1.25rem;
   border: none;
   background-color: ${(props) => props.theme.main.button};
   color: ${(props) => props.theme.main.word};
-  padding: 1.25rem 1.875rem;
-  font-size: 1rem;
-  border-radius: 1.5625rem;
+  padding: 20px 30px;
+  font-size: 16px;
+  border-radius: 25px;
   font-weight: 600;
   cursor: pointer;
   &:hover {
     background-color: ${(props) => props.theme.main.accent + "aa"};
+  }
+  @media screen and (max-width: 800px) {
+  }
+  @media screen and (max-width: 500px) {
+    width: 100%;
+    margin-top: 20px;
+    border-radius: 12px;
   }
 `;
 

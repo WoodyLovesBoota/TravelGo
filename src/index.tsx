@@ -30,19 +30,10 @@ const GlobalStyle = createGlobalStyle`
     vertical-align: baseline;
     font-family: "Noto sans KR", sans-serif;
     color: #373e3f;
-    @media screen and (max-width: 1799px) {
-      font-size: 14px;
-    }
-    @media screen and (max-width: 1199px) {
+    @media screen and (max-width: 1000px) {
       font-size: 12px;
     }
-    @media screen and (max-width: 899px) {
-      font-size: 10px;
-    }
-
-    @media screen and (max-width: 599px) {
-      font-size: 8px;
-    }
+    word-break: break-all;
   }
   /* HTML5 display-role reset for older browsers */
   article, aside, details, figcaption, figure,

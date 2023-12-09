@@ -278,18 +278,27 @@ const BigContainer = styled.div`
 
 const BigPlace = styled(motion.div)`
   position: fixed;
-  width: 50rem;
-  height: 80vh;
-  top: 10vh;
+  width: 800px;
+  height: 90vh;
+  top: 5vh;
   left: 0;
   right: 0;
   margin: 0 auto;
   background-color: ${(props) => props.theme.main.bg};
-  border-radius: 1.875rem;
+  border-radius: 30px;
   overflow: auto;
   display: flex;
   flex-direction: column;
   z-index: 131;
+  @media screen and (max-width: 1000px) {
+    width: 600px;
+  }
+  @media screen and (max-width: 800px) {
+    width: 450px;
+  }
+  @media screen and (max-width: 500px) {
+    width: 90%;
+  }
 `;
 
 const Overlay = styled(motion.div)`
@@ -304,15 +313,15 @@ const Overlay = styled(motion.div)`
 `;
 
 const Content = styled.h2`
-  margin-bottom: 0.4375rem;
+  margin-bottom: 7px;
   font-weight: 600;
-  font-size: 0.875rem;
+  font-size: 14px;
 `;
 
 const Nested = styled.div`
   width: 100%;
-  min-height: 6.875rem;
-  margin-bottom: 1.25rem;
+  min-height: 110px;
+  margin-bottom: 20px;
 `;
 
 const BigCover = styled.div`
@@ -331,21 +340,21 @@ const BigTitle = styled.div`
   align-items: center;
   width: 100%;
   p {
-    font-size: 1.3125rem;
+    font-size: 21px;
     font-weight: 600;
-    margin-right: 1.25rem;
+    margin-right: 20px;
   }
 `;
 
 const BigOverview = styled(motion.div)`
-  padding: 1.875rem;
-  font-size: 0.75rem;
+  padding: 30px;
+  font-size: 12px;
   width: 100%;
   height: 60%;
   z-index: 103;
   background-color: ${(props) => props.theme.main.bg};
   color: ${(props) => props.theme.main.word};
-  border-radius: 1.875rem;
+  border-radius: 30px;
   position: absolute;
   bottom: -10%;
   box-sizing: border-box;
@@ -354,7 +363,7 @@ const BigOverview = styled(motion.div)`
 `;
 
 const Icon = styled.span`
-  margin-right: 0.625rem;
+  margin-right: 10px;
 `;
 
 const Button = styled.div<{ isHotel: boolean }>`
@@ -362,14 +371,13 @@ const Button = styled.div<{ isHotel: boolean }>`
   justify-content: center;
   align-items: center;
   width: 90%;
-  font-size: 1rem;
+  font-size: 16px;
   font-weight: 600;
   background-color: ${(props) => (props.isHotel ? props.theme.red.accent : props.theme.main.accent)};
-  border-radius: 1.875rem;
-  color: ${(props) => props.theme.white.normal};
-  height: 3.125rem;
+  border-radius: 30px;
+  height: 50px;
   position: absolute;
-  bottom: 0.5rem;
+  bottom: 8px;
   z-index: 104;
   cursor: pointer;
 `;
@@ -377,29 +385,29 @@ const Button = styled.div<{ isHotel: boolean }>`
 const Tabs = styled.div`
   display: flex;
   align-items: center;
-  margin: 1.875rem 0;
+  margin: 30px 0;
 `;
 
 const Tab = styled.div<{ isActive: boolean; isHotel: boolean }>`
-  margin-right: 1.25rem;
+  margin-right: 20px;
   display: flex;
   justify-content: center;
   flex-direction: column;
   position: relative;
   color: ${(props) =>
     props.isActive ? (props.isHotel ? props.theme.red.accent : props.theme.main.accent) : props.theme.main.word};
-  font-size: 1rem;
+  font-size: 16px;
   transition: color 0.5s ease-in-out;
   font-weight: 600;
 `;
 
 const Circle = styled(motion.span)<{ isHotel: boolean }>`
   position: absolute;
-  width: 0.3125rem;
-  height: 0.3125rem;
+  width: 5px;
+  height: 5px;
   background-color: ${(props) => (props.isHotel ? props.theme.red.accent : props.theme.main.accent)};
-  border-radius: 0.1563rem;
-  bottom: -0.625rem;
+  border-radius: 2.5008px;
+  bottom: -10px;
   left: 0;
   right: 0;
   margin: 0 auto;

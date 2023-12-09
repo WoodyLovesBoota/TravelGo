@@ -195,10 +195,10 @@ const Card = styled.div<{
   mainColor: string;
   bgPhoto: string;
 }>`
-  border-radius: 0.3125rem;
-  padding: 0.625rem;
-  padding-top: 0.3125rem;
-  margin-bottom: 0.9375rem;
+  border-radius: 5px;
+  padding: 10px;
+  padding-top: 5px;
+  margin-bottom: 10px;
   color: black;
   position: relative;
   background-image: linear-gradient(
@@ -219,8 +219,8 @@ const Header = styled.div`
 `;
 
 const Color = styled.div`
-  width: 1.5625rem;
-  height: 1.5625rem;
+  width: 25px;
+  height: 25px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -228,8 +228,8 @@ const Color = styled.div`
 `;
 
 const Detail = styled.div`
-  width: 1.5625rem;
-  height: 1.5625rem;
+  width: 25px;
+  height: 25px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -237,8 +237,8 @@ const Detail = styled.div`
 `;
 
 const Delete = styled.div`
-  width: 1.5625rem;
-  height: 1.5625rem;
+  width: 25px;
+  height: 25px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -251,54 +251,54 @@ const HeaderButtons = styled.div`
 
 const Bar = styled.div<{ isDragging: boolean; mainColor: string }>`
   width: 15%;
-  height: 0.5rem;
+  height: 8px;
   background-color: ${(props) => {
     const mainC = props.mainColor;
     return props.theme[mainC].accent;
   }};
   opacity: ${(props) => (props.isDragging ? 1 : 0.4)};
-  margin-top: 0.3125rem;
-  margin-bottom: 0.4375rem;
-  border-radius: 0.3125rem;
+  margin-top: 5px;
+  margin-bottom: 7px;
+  border-radius: 5px;
 `;
 
 const Name = styled.h2`
-  font-size: 0.9375rem;
+  font-size: 15px;
   font-weight: 700;
-  margin-bottom: 0.4375rem;
+  margin-bottom: 7px;
 `;
 
 const Address = styled.h3`
-  font-size: 0.75rem;
+  font-size: 12px;
   font-weight: 600;
 `;
 
 const Icon = styled.span`
-  font-size: 0.8125rem;
+  font-size: 13px;
 `;
 
 const ToggleBox = styled(motion.div)`
   position: absolute;
-  top: 1.25rem;
-  right: 0.625rem;
+  top: 20px;
+  right: 10px;
   display: flex;
   transform-origin: top right;
-  border-radius: 0.3125rem;
+  border-radius: 5px;
   z-index: 2;
 `;
 
 const ToggleButton = styled.div`
-  height: 1.5625rem;
+  height: 25px;
   font-weight: 500;
   cursor: pointer;
   span {
-    font-size: 0.75rem;
+    font-size: 12px;
   }
 `;
 
 const ColorBox = styled.div<{ bgColor: string }>`
-  height: 1.25rem;
-  width: 1.25rem;
+  height: 20px;
+  width: 20px;
   background-color: ${(props) => props.bgColor};
 `;
 

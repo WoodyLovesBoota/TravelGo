@@ -111,7 +111,7 @@ const Place = () => {
                   isHotel={isHotel}
                 />
                 <SubmitButton isHotel={isHotel} type="submit">
-                  Search a place
+                  Search
                 </SubmitButton>
               </Form>
             </Header>
@@ -202,38 +202,43 @@ export default Place;
 const Wrapper = styled(motion.div)`
   overflow-x: auto;
   width: 100vw;
-  padding-bottom: 3.125rem;
+  padding-bottom: 50px;
 `;
 
 const DateInfo = styled.span`
   color: lightgray;
   font-weight: 550;
   margin-left: 0.625rem;
+  font-size: 16px;
 `;
 
 const Header = styled.div`
-  width: 55%;
-  @media screen and (max-width: 899px) {
+  width: 60%;
+  @media screen and (max-width: 1200px) {
     width: 100%;
   }
 `;
 
 const Main = styled.div`
-  padding: 6.25rem 12%;
-  padding-right: 5%;
+  padding: 0 12%;
+  padding-bottom: 200px;
   display: flex;
   justify-content: space-between;
   width: 100%;
-  @media screen and (max-width: 899px) {
+  @media screen and (max-width: 1200px) {
     flex-direction: column;
     justify-content: flex-start;
+    padding: 0 8%;
+  }
+  @media screen and (max-width: 800px) {
+    min-height: 100vh;
   }
 `;
 
 const Title = styled(motion.h2)<{ isHotel: boolean }>`
-  font-size: 1.3125rem;
+  font-size: 16px;
   font-weight: 600;
-  margin-bottom: 3.125rem;
+  margin-bottom: 50px;
   & p {
     font-size: 3rem;
     font-weight: 600;
@@ -250,7 +255,7 @@ const Loader = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
-  font-size: 1rem;
+  font-size: 14px;
   font-weight: 500;
 `;
 
@@ -269,10 +274,13 @@ const Container = styled.div`
 `;
 
 const Column = styled.div`
-  padding: 3.125rem 0%;
+  padding: 50px 0%;
   width: 100%;
-  padding-bottom: 6.25rem;
+  padding-bottom: 100px;
   background-color: ${(props) => props.theme.main.accent};
+  @media screen and (max-width: 800px) {
+    min-height: 70vh;
+  }
 `;
 
 const Circle = styled(motion.div)`
@@ -292,9 +300,9 @@ const Blank = styled.div`
 `;
 
 const Question = styled.h2`
-  margin: 3.125rem auto;
-  margin-top: 6.25rem;
-  font-size: 1.125rem;
+  margin: 50px auto;
+  margin-top: 100px;
+  font-size: 16px;
   font-weight: 700;
 `;
 
@@ -302,10 +310,10 @@ const Toggle = styled(motion.div)<{ isHotel: boolean }>`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-radius: 1.5625rem;
+  border-radius: 25px;
   width: 6.25rem;
   height: 3.125rem;
-  padding: 0.3125rem 0.625rem;
+  padding: 0.3125rem 0.75rem;
   color: ${(props) => (props.isHotel ? props.theme.red.normal : props.theme.main.normal)};
   cursor: pointer;
   background-color: ${(props) => (props.isHotel ? props.theme.red.normal : props.theme.main.normal)};
@@ -320,8 +328,8 @@ const Buttons = styled.div`
 const Button = styled(motion.button)`
   cursor: pointer;
   width: 15%;
-  padding: 0.9375rem 0.625rem;
-  border-radius: 0.3125rem;
+  padding: 15px 10px;
+  border-radius: 5px;
   font-weight: 600;
   color: ${(props) => props.theme.white.normal};
   display: flex;
@@ -329,20 +337,23 @@ const Button = styled(motion.button)`
   justify-content: space-between;
   align-items: center;
   border: none;
-  margin: 0 0.625rem;
-  @media screen and (max-width: 899px) {
-    width: 35%;
+  margin: 0 10px;
+  @media screen and (max-width: 1200px) {
+    width: 40%;
   }
   span {
     &:first-child {
       font-size: 1.5rem;
-      margin-bottom: 0.625rem;
+      margin-bottom: 10px;
       font-weight: 600;
     }
     &:last-child {
-      font-size: 0.875rem;
-      margin-bottom: 0.625rem;
+      font-size: 14px;
+      margin-bottom: 10px;
       font-weight: 600;
+      @media screen and (max-width: 500px) {
+        display: none;
+      }
     }
   }
   &:first-child {
@@ -354,73 +365,93 @@ const Button = styled(motion.button)`
 `;
 
 const ResultList = styled.div`
-  /* display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  width: 100%; */
-  width: 100%;
+  width: 600px;
   margin: 0 auto;
   display: flex;
   align-items: center;
   flex-wrap: wrap;
+  @media screen and (max-width: 1200px) {
+    margin: 0;
+    margin-top: 40px;
+  }
+  @media screen and (max-width: 800px) {
+    width: 120%;
+  }
 `;
 
 const ResultTitle = styled.h2<{ isHotel: boolean }>`
-  font-size: 0.875rem;
+  font-size: 14px;
   color: gray;
   font-weight: 400;
-  margin-bottom: 0.625rem;
+  margin-bottom: 10px;
   span {
-    font-size: 1.3125rem;
+    font-size: 21px;
     font-weight: 700;
     color: ${(props) => (props.isHotel ? props.theme.red.accent : props.theme.main.accent)};
-    margin-right: 0.625rem;
+    margin-right: 10px;
   }
 `;
 
 const Form = styled.form`
   display: flex;
   align-items: center;
-  margin-top: 3.125rem;
+  margin-top: 50px;
+  @media screen and (max-width: 800px) {
+    flex-direction: column;
+  }
 `;
 
 const Input = styled(motion.input)<{ isHotel: boolean }>`
-  width: 25rem;
-  height: 4.125rem;
-  padding: 1.25rem;
-  font-size: 1.125rem;
+  width: 400px;
+  height: 66px;
+  padding: 20px;
+  font-size: 18px;
   border: none;
-  box-shadow: 0.0625rem 0.125rem 0.125rem 0.125rem lightgray;
-  border-radius: 0.4375rem;
+  box-shadow: 1px 2px 2px 2px lightgray;
+  border-radius: 7px;
   font-weight: 600;
 
   &:focus {
     outline: none;
-    box-shadow: 0.0625rem 0.125rem 0.125rem 0.125rem
-      ${(props) => (props.isHotel ? props.theme.red.accent : props.theme.main.accent)};
+    box-shadow: 1px 2px 2px 2px ${(props) => (props.isHotel ? props.theme.red.accent : props.theme.main.accent)};
+  }
+  @media screen and (max-width: 1400px) {
+    width: 300px;
+  }
+  @media screen and (max-width: 1200px) {
+    width: 400px;
+  }
+  @media screen and (max-width: 800px) {
+    width: 100%;
   }
 `;
 
 const SubmitButton = styled.button<{ isHotel: boolean }>`
-  margin-left: 1.875rem;
+  margin-left: 20px;
   border: none;
   background-color: ${(props) => (props.isHotel ? props.theme.red.accent : props.theme.main.accent)};
-  padding: 1.25rem 1.5625rem;
-  font-size: 1rem;
-  border-radius: 3.125rem;
+  padding: 20px 25px;
+  font-size: 16px;
+  border-radius: 50px;
   font-weight: 700;
   cursor: pointer;
   &:hover {
     background-color: ${(props) => (props.isHotel ? props.theme.red.accent + "aa" : props.theme.main.accent + "aa")};
   }
+  @media screen and (max-width: 800px) {
+    width: 100%;
+    margin: 15px 0;
+    border-radius: 7px;
+  }
 `;
+
 const Results = styled.div`
   width: 50%;
-  margin-bottom: 6.25rem;
-  margin-left: 3.125rem;
-  @media screen and (max-width: 899px) {
+  margin-bottom: 100px;
+  margin-left: 50px;
+  @media screen and (max-width: 1200px) {
     width: 100%;
-    margin-top: 3.125rem;
+    margin-top: 50px;
     margin-left: 0;
   }
 `;
@@ -433,14 +464,14 @@ const Selected = styled.div`
 `;
 
 const Row = styled.div`
-  margin-bottom: 1.875rem;
-  padding: 0.625rem 12%;
+  margin-bottom: 30px;
+  padding: 10px 12%;
 `;
 
 const RowTitle = styled.h2`
   font-size: 1.3125rem;
   font-weight: 700;
-  margin: 0.625rem 0;
+  margin: 10px 0;
 `;
 
 const titleVar = {
