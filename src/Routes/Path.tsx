@@ -67,22 +67,13 @@ const Path = () => {
       <Container>
         <Main>
           <InformationColumn>
-            <MainTitle>Check your journey</MainTitle>
+            <MainTitle>
+              Check your <span>journey</span>
+            </MainTitle>
             <Description>
               Make order your travel and check the details.Check your journey detail by clicking the card. Visualize
               your itinerary on the map.
             </Description>
-            <Question>To modify your schedule..</Question>
-            <Buttons>
-              <Button variants={buttonVar} whileHover={"hover"} onClick={onJourneyClicked} plus={Boolean(false)}>
-                <span>Go Back</span>
-                fix your schedule
-              </Button>
-              <Button variants={buttonVar} whileHover={"hover"} onClick={onForwardlicked} plus={Boolean(true)}>
-                <span>Yes</span>
-                view your journey
-              </Button>
-            </Buttons>
           </InformationColumn>
           <HiddenListColumn>
             {hoverTitle ? (
@@ -169,7 +160,17 @@ const Path = () => {
             </DragDropContext>
           </JourneyDeck>
         </Main>
-        <Row></Row>
+        <Question>To modify your schedule..</Question>
+        <Buttons>
+          <Button variants={buttonVar} whileHover={"hover"} onClick={onJourneyClicked} plus={Boolean(false)}>
+            <span>Go Back</span>
+            <span>fix your schedule</span>
+          </Button>
+          <Button variants={buttonVar} whileHover={"hover"} onClick={onForwardlicked} plus={Boolean(true)}>
+            <span>Go Next</span>
+            <span>view your journey</span>
+          </Button>
+        </Buttons>
       </Container>
       <BigPath boardName={clickedCard} />
     </Wrapper>
@@ -180,6 +181,7 @@ export default Path;
 
 const Wrapper = styled(motion.div)`
   width: 100vw;
+  padding-bottom: 150px;
 `;
 
 const Container = styled.div`
@@ -193,20 +195,18 @@ const Loader = styled.div`
   margin-top: 30px;
 `;
 
-const Row = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
 const Main = styled.div`
   padding: 150px 12%;
+  padding-bottom: 50px;
   display: flex;
   justify-content: space-between;
-  @media screen and (max-width: 56.1875rem) {
+  @media screen and (max-width: 1400px) {
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
+  }
+  @media screen and (max-width: 500px) {
+    min-height: 100vh;
   }
 `;
 
@@ -216,38 +216,44 @@ const Header = styled.div`
 `;
 
 const MainTitle = styled.h2`
-  font-size: 48px;
+  font-size: 3rem;
   font-weight: 700;
   margin-bottom: 30px;
+  span {
+    font-size: 3rem;
+    font-weight: 700;
+  }
 `;
 
 const Description = styled.h2`
   font-size: 16px;
   font-weight: 500;
   margin-bottom: 100px;
-  @media screen and (max-width: 37.4375rem) {
-    display: none;
-  }
 `;
 
 const Question = styled.h2`
   font-size: 18px;
   font-weight: 600;
-  @media screen and (max-width: 37.4375rem) {
-    display: none;
-  }
+  display: flex;
+  justify-content: center;
 `;
 
 const SubTitle = styled.h2`
   font-size: 16px;
   font-weight: 500;
   margin-bottom: 1%;
+  @media screen and (max-width: 500px) {
+    display: none;
+  }
 `;
 
 const Title = styled.h2`
   font-size: 21px;
   font-weight: 500;
   margin-bottom: 10px;
+  @media screen and (max-width: 500px) {
+    display: none;
+  }
 `;
 
 const Area = styled.div<IDragging>`
@@ -269,8 +275,7 @@ const HeaderColumn = styled.div`
 const JourneyDeck = styled.div`
   display: flex;
   flex-direction: column;
-  min-width: 400px;
-  @media screen and (max-width: 56.1875rem) {
+  @media screen and (max-width: 1400px) {
     width: 100%;
     margin-top: 50px;
   }
@@ -280,7 +285,7 @@ const HiddenListColumn = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  @media screen and (max-width: 56.1875rem) {
+  @media screen and (max-width: 1400px) {
     display: none;
   }
 `;
@@ -290,7 +295,7 @@ const InformationColumn = styled.div`
   flex-direction: column;
   align-items: flex-start;
   width: 45%;
-  @media screen and (max-width: 56.1875rem) {
+  @media screen and (max-width: 1400px) {
     width: 100%;
   }
 `;
@@ -308,7 +313,7 @@ const Card = styled.div`
   cursor: pointer;
   background-color: ${(props) => props.theme.main.accent};
   color: white;
-  @media screen and (max-width: 56.1875rem) {
+  @media screen and (max-width: 1400px) {
     width: 100%;
   }
 `;
@@ -336,14 +341,14 @@ const Element = styled.h2`
 
 const Buttons = styled.div`
   display: flex;
+  padding: 0 12%;
+  justify-content: center;
 `;
 
 const Button = styled(motion.button)<{ plus: boolean }>`
   cursor: pointer;
   padding: 18px 30px;
   border-radius: 5px;
-  font-weight: 600;
-  font-size: 14px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -353,9 +358,19 @@ const Button = styled(motion.button)<{ plus: boolean }>`
   margin-right: 15px;
   span {
     &:first-child {
-      font-size: 20px;
+      font-size: 18px;
       font-weight: 600;
       margin-bottom: 5px;
+      @media screen and (max-width: 500px) {
+        font-size: 16px;
+      }
+    }
+    &:last-child {
+      font-size: 14px;
+      font-weight: 500;
+      @media screen and (max-width: 500px) {
+        display: none;
+      }
     }
   }
   background-color: ${(props) => (props.plus ? props.theme.green.accent : props.theme.red.accent)};

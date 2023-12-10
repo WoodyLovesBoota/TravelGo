@@ -214,8 +214,19 @@ const DateInfo = styled.span`
 
 const Header = styled.div`
   width: 60%;
-  @media screen and (max-width: 1200px) {
+  @media screen and (max-width: 1210px) {
     width: 100%;
+  }
+`;
+
+const Results = styled.div`
+  width: 450px;
+  margin-bottom: 100px;
+  margin-left: 40px;
+  @media screen and (max-width: 1210px) {
+    width: 100%;
+    margin-top: 50px;
+    margin-left: 0;
   }
 `;
 
@@ -225,7 +236,7 @@ const Main = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
-  @media screen and (max-width: 1200px) {
+  @media screen and (max-width: 1210px) {
     flex-direction: column;
     justify-content: flex-start;
     padding: 0 8%;
@@ -262,7 +273,7 @@ const Loader = styled.div`
 const SubTitle = styled.h2`
   font-size: 1.3125rem;
   font-weight: 700;
-  margin-bottom: 1.875rem;
+  margin-bottom: 30px;
   padding: 0 12%;
 `;
 
@@ -338,7 +349,7 @@ const Button = styled(motion.button)`
   align-items: center;
   border: none;
   margin: 0 10px;
-  @media screen and (max-width: 1200px) {
+  @media screen and (max-width: 1210px) {
     width: 40%;
   }
   span {
@@ -370,7 +381,7 @@ const ResultList = styled.div`
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  @media screen and (max-width: 1200px) {
+  @media screen and (max-width: 1210px) {
     margin: 0;
     margin-top: 40px;
   }
@@ -418,7 +429,7 @@ const Input = styled(motion.input)<{ isHotel: boolean }>`
   @media screen and (max-width: 1400px) {
     width: 300px;
   }
-  @media screen and (max-width: 1200px) {
+  @media screen and (max-width: 1210px) {
     width: 400px;
   }
   @media screen and (max-width: 800px) {
@@ -442,17 +453,6 @@ const SubmitButton = styled.button<{ isHotel: boolean }>`
     width: 100%;
     margin: 15px 0;
     border-radius: 7px;
-  }
-`;
-
-const Results = styled.div`
-  width: 50%;
-  margin-bottom: 100px;
-  margin-left: 50px;
-  @media screen and (max-width: 1200px) {
-    width: 100%;
-    margin-top: 50px;
-    margin-left: 0;
   }
 `;
 
