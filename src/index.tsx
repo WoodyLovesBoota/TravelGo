@@ -26,14 +26,13 @@ const GlobalStyle = createGlobalStyle`
     border: 0;
     font-size: 16px;
     font-weight: 300;
-    line-height: 1.2;
+    line-height: 1.5;
     vertical-align: baseline;
     font-family: "Noto sans KR", sans-serif;
-    color: #373e3f;
+    color: white;
     @media screen and (max-width: 1000px) {
       font-size: 12px;
     }
-    word-break: break-all;
   }
   /* HTML5 display-role reset for older browsers */
   article, aside, details, figcaption, figure,
@@ -45,7 +44,6 @@ const GlobalStyle = createGlobalStyle`
     display: none;
   }
   body {
-    background-color: #FEFFE7;
   }
   menu, ol, ul {
     list-style: none;
@@ -81,17 +79,19 @@ const GlobalStyle = createGlobalStyle`
   &::-webkit-scrollbar {
     background-color: transparent;
     width: 5px;
-    height: 5px; 
-    display : none;
+    height: 5px;     
+    display: none;
   }
 
   &::-webkit-scrollbar-track {
-    background-color: transparent;
+    background-color: transparent;    
+    display: none;
   }
 
   &::-webkit-scrollbar-thumb {
-    background-color: ${(props) => props.theme.main.accent};
+    background-color: transparent;
     border-radius: 10px;
+    display: none;
   }
 `;
 const queryClient = new QueryClient();

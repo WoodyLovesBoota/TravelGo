@@ -11,6 +11,7 @@ import { faLocationDot, faPhone } from "@fortawesome/free-solid-svg-icons";
 import Overview from "../Routes/Overview";
 import Review from "../Routes/Review";
 import Map from "../Routes/Map";
+import { useEffect } from "react";
 
 const BigPlaceCard = ({ place, placeId, isHotel }: IBigPlaceProps) => {
   const navigate = useNavigate();
@@ -273,7 +274,7 @@ const BigContainer = styled.div`
   overflow: hidden;
   cursor: default;
   z-index: 200;
-  color: ${(props) => props.theme.white.normal};
+  color: black;
 `;
 
 const BigPlace = styled(motion.div)`
@@ -316,6 +317,7 @@ const Content = styled.h2`
   margin-bottom: 7px;
   font-weight: 600;
   font-size: 14px;
+  color: black;
 `;
 
 const Nested = styled.div`
@@ -339,10 +341,13 @@ const BigTitle = styled.div`
   display: flex;
   align-items: center;
   width: 100%;
+  color: black;
+
   p {
     font-size: 21px;
     font-weight: 600;
     margin-right: 20px;
+    color: black;
   }
 `;
 
@@ -395,7 +400,7 @@ const Tab = styled.div<{ isActive: boolean; isHotel: boolean }>`
   flex-direction: column;
   position: relative;
   color: ${(props) =>
-    props.isActive ? (props.isHotel ? props.theme.red.accent : props.theme.main.accent) : props.theme.main.word};
+    props.isActive ? (props.isHotel ? props.theme.red.accent : props.theme.main.accent) : "lightgray"};
   font-size: 16px;
   transition: color 0.5s ease-in-out;
   font-weight: 600;

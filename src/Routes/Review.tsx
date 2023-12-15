@@ -67,33 +67,35 @@ const Column = styled.div`
 `;
 
 const Name = styled.div`
-  font-size: 1.125rem;
+  font-size: 18px;
   font-weight: 600;
+  color: black;
 `;
 
 const Content = styled.div`
   line-height: 1.5;
-  word-spacing: 0.0625rem;
-  font-weight: 600;
-  font-size: 0.875rem;
+  font-weight: 500;
+  font-size: 16px;
+  color: black;
 `;
 
 const Rating = styled.div`
-  margin: 0.3125rem 0;
+  margin: 5px 0;
 `;
 
 const Date = styled.div`
   color: gray;
-  font-size: 0.875rem;
+  font-size: 14px;
+  font-weight: 500;
 `;
 
 const Button = styled.div`
-  width: 2.5rem;
-  font-size: 1.25rem;
+  width: 40px;
+  font-size: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
-  color: ${(props) => props.theme.white.darker};
+  color: gray;
   font-weight: 600;
   cursor: pointer;
 `;

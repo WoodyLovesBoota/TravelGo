@@ -10,8 +10,8 @@ const Overview = () => {
 export default Overview;
 
 const Content = styled.p`
-  word-spacing: 0.0625rem;
-  line-height: 1.5;
-  font-weight: 600;
-  font-size: 0.875rem;
+  word-spacing: 1px;
+  font-weight: 500;
+  font-size: 16px;
+  color: black;
 `;

@@ -80,21 +80,20 @@ const Search = () => {
         <Loader>Loading...</Loader>
       ) : (
         destinationMatch && (
-          <>
-            <Background
-              bgPhoto={makeImagePath(
-                clickedImage === ""
-                  ? detailData?.result?.photos
-                    ? detailData?.result?.photos[0]?.photo_reference
-                    : ""
-                  : clickedImage,
-                800
-              )}
-            />
-            <Container
-              variants={loadingVar}
-              initial={"initial"}
-              animate="animate"
+          <Container
+            variants={loadingVar}
+            initial={"initial"}
+            animate="animate"
+            bgPhoto={makeImagePath(
+              clickedImage === ""
+                ? detailData?.result?.photos
+                  ? detailData?.result?.photos[0]?.photo_reference
+                  : ""
+                : clickedImage,
+              800
+            )}
+          >
+            <Card
               bgPhoto={makeImagePath(
                 clickedImage === ""
                   ? detailData?.result?.photos
@@ -104,67 +103,51 @@ const Search = () => {
                 800
               )}
             >
-              <Column>
-                <Card
-                  bgPhoto={makeImagePath(
-                    clickedImage === ""
-                      ? detailData?.result?.photos
-                        ? detailData?.result?.photos[0]?.photo_reference
-                        : ""
-                      : clickedImage,
-                    800
+              <Images>
+                {detailData?.result?.photos &&
+                  detailData?.result?.photos.map(
+                    (img, i) =>
+                      i < 8 && (
+                        <Image
+                          bgPhoto={makeImagePath(img.photo_reference, 500)}
+                          onClick={() => {
+                            img.photo_reference && setClickedImage(img.photo_reference);
+                          }}
+                        />
+                      )
                   )}
-                />
-                <Images>
-                  {detailData?.result?.photos &&
-                    detailData?.result?.photos.map(
-                      (img, i) =>
-                        i < 8 && (
-                          <Image
-                            bgPhoto={makeImagePath(img.photo_reference, 500)}
-                            onClick={() => {
-                              img.photo_reference && setClickedImage(img.photo_reference);
-                            }}
-                          />
-                        )
-                    )}
-                </Images>
-              </Column>
+              </Images>
+              <GoogleMap
+                destination={destinationData?.candidates[0]?.formatted_address}
+                width="50%"
+                height="90%"
+                zoom={11}
+              />
               <Column>
                 <DestinationInfo>
                   <CardTitle>{destinationData?.candidates[0]?.name}</CardTitle>
-                  <Content>{destinationData?.candidates[0]?.formatted_address}</Content>
-                  <GoogleMap
-                    destination={destinationData?.candidates[0]?.formatted_address}
-                    width="100%"
-                    height="270px"
-                    zoom={8}
-                  />
                 </DestinationInfo>
                 <Form onSubmit={handleSubmit(onValid)}>
-                  <DateRow>
-                    <DateBox>
-                      <InputTitle>Departure date</InputTitle>
-                      <DateInput
-                        {...register("start", { required: true })}
-                        type="date"
-                        data-placeholder="날짜 선택"
-                        aria-required="true"
-                      />
-                    </DateBox>
-                    <Divider>~</Divider>
-                    <DateBox>
-                      <InputTitle>Arrival date</InputTitle>
-                      <DateInput
-                        {...register("end", { required: true })}
-                        type="date"
-                        data-placeholder="날짜 선택"
-                        aria-required="true"
-                      />
-                    </DateBox>
-                  </DateRow>
+                  <DateBox>
+                    <InputTitle>Departure date</InputTitle>
+                    <DateInput
+                      {...register("start", { required: true })}
+                      type="date"
+                      data-placeholder="날짜 선택"
+                      aria-required="true"
+                    />
+                  </DateBox>
+                  <DateBox>
+                    <InputTitle>Arrival date</InputTitle>
+                    <DateInput
+                      {...register("end", { required: true })}
+                      type="date"
+                      data-placeholder="날짜 선택"
+                      aria-required="true"
+                    />
+                  </DateBox>
                   <Selection>
-                    <Question>Is this the place for you to Travel?</Question>
+                    <Question>목적지를 추가할까요?</Question>
                     <Buttons>
                       <Button variants={buttonVar} whileHover={"hover"} onClick={onNoClicked}>
                         No
@@ -176,8 +159,8 @@ const Search = () => {
                   </Selection>
                 </Form>
               </Column>
-            </Container>
-          </>
+            </Card>
+          </Container>
         )
       )}
     </Wrapper>
@@ -208,47 +191,25 @@ const Form = styled.form`
   width: 100%;
 `;
 
-const DateRow = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-`;
-
 const DateBox = styled.div`
-  width: 40%;
-`;
-
-const Divider = styled.h2`
-  font-weight: 600;
-  color: gray;
-  margin-top: 20px;
+  width: 100%;
+  margin-bottom: 50px;
 `;
 
 const DateInput = styled.input`
-  background-color: lightgray;
+  background-color: white;
   border: none;
-  padding: 15px 8px;
+  padding: 15px;
   border-radius: 5px;
   font-weight: 600;
-  color: gray;
+  color: black;
   width: 100%;
 `;
 
 const InputTitle = styled.h2`
   font-weight: 600;
-`;
-
-const Background = styled.div<{ bgPhoto: string }>`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-image: url(${(props) => props.bgPhoto});
-  background-position: center center;
-  background-size: cover;
-  filter: blur(7px);
+  font-size: 18px;
+  margin-bottom: 15px;
 `;
 
 const Container = styled(motion.div)<{ bgPhoto: string }>`
@@ -261,26 +222,20 @@ const Container = styled(motion.div)<{ bgPhoto: string }>`
 `;
 
 const Column = styled.div`
-  &:last-child {
-    padding: 3.125rem 3.125rem;
-    background-color: rgba(255, 255, 255, 0.6);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    border-radius: 15px;
-    @media screen and (max-width: 1199px) {
-      height: 51.875rem;
-      width: 39.375rem;
-    }
-    @media screen and (max-width: 500px) {
-      width: 100vw;
-      min-height: 51.875rem;
-    }
-  }
+  padding: 72px;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+  border-radius: 15px;
+  width: 50%;
+  margin-left: 20px;
+  height: 90%;
 `;
 
 const Images = styled.div`
   display: flex;
+  position: absolute;
+  bottom: 0;
 `;
 
 const Image = styled(motion.div)<{ bgPhoto: string }>`
@@ -296,28 +251,19 @@ const Image = styled(motion.div)<{ bgPhoto: string }>`
 `;
 
 const Card = styled(motion.div)<{ bgPhoto: string }>`
-  width: 45rem;
-  height: 39.375rem;
-  background-image: url(${(props) => props.bgPhoto});
+  width: 100vw;
+  height: 100vh;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${(props) => props.bgPhoto});
   background-size: cover;
   background-position: center;
-  cursor: pointer;
-  margin-right: 15px;
-  @media screen and (max-width: 1199px) {
-    display: none;
-  }
+  display: flex;
+  padding: 72px;
 `;
 
 const CardTitle = styled(motion.h2)`
-  font-size: 2.25rem;
-  font-weight: 600;
-`;
-
-const Content = styled.h2`
-  font-size: 16px;
-  margin-left: 8px;
+  font-size: 48px;
+  font-weight: 400;
   margin-bottom: 30px;
-  font-weight: 500;
 `;
 
 const DestinationInfo = styled.div`
@@ -362,10 +308,11 @@ const Button = styled(motion.button)`
 `;
 
 const Question = styled.h2`
-  margin: 10px auto;
-  margin-top: 35px;
+  margin: 0 auto;
+  margin-top: 30px;
+  margin-bottom: 30px;
   font-size: 16px;
-  font-weight: 700;
+  font-weight: 500;
 `;
 
 const buttonVar = {

@@ -14,6 +14,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHotel } from "@fortawesome/free-solid-svg-icons";
 import { faFortAwesome } from "@fortawesome/free-brands-svg-icons";
 import HotelCard from "../Components/HotelCard";
+import { makeImagePath } from "../utils";
 
 const Place = () => {
   const [currentDestination, setCurrentDestination] = useRecoilState(destinationState);
@@ -68,25 +69,29 @@ const Place = () => {
 
   return (
     <AnimatePresence>
-      <Wrapper variants={loadingVar} initial="initial" animate="animate">
-        <NavigationBar />
-        <Container>
+      <Container>
+        <Wrapper
+          variants={loadingVar}
+          initial="initial"
+          animate="animate"
+          bgphoto={`url(${makeImagePath(
+            currentDestination?.photos ? currentDestination?.photos[0].photo_reference : "",
+            800
+          )})`}
+        >
+          <NavigationBar />
+
           <Main>
             <Header>
               <Title isHotel={isHotel} variants={titleVar} initial="initial" animate="animate">
-                <p>
-                  Find <span>{isHotel ? `Hotels` : `Attractions`}</span>
-                </p>
-                to visit in {currentDestination?.name}
-                <DateInfo>
-                  {"(" +
-                    currentTarget.detail.date.split("|")[0] +
-                    " ~ " +
-                    currentTarget.detail.date.split("|")[1] +
-                    ")"}
-                </DateInfo>
+                {isHotel ? `Hotels` : `Attractions`}
+                <DateInfo>in {currentDestination?.name}</DateInfo>
               </Title>
-
+              <Description>
+                {currentDestination?.name}에서의 일정을 추가해 보세요. 방문하고싶은 관광 명소나 식당, 머물 예정인 호텔
+                등을 추가하여 세부적인 여행 계획을 세우세요. 먼저 관광지나 호텔의 이름을 검색한 후, 정확한 장소를
+                선택하세요.
+              </Description>
               <Toggle isHotel={isHotel} onClick={onToggleClicked}>
                 <Blank>
                   {isHotel && (
@@ -120,67 +125,61 @@ const Place = () => {
                 isLoading ? (
                   <Loader> ...Loading</Loader>
                 ) : (
-                  <div>
-                    <ResultTitle isHotel={isHotel}>
-                      <span>"{value}"</span> 검색결과
-                    </ResultTitle>
-                    <ResultList>
-                      {data.predictions.map((place) => (
-                        <PlaceCard key={place.place_id + "card"} place={place} isHotel={isHotel} />
-                      ))}
-                    </ResultList>
-                  </div>
+                  <ResultList>
+                    {data.predictions.map((place) => (
+                      <PlaceCard key={place.place_id + "card"} place={place} isHotel={isHotel} />
+                    ))}
+                  </ResultList>
                 )
               ) : null}
             </Results>
           </Main>
-
-          <Column>
-            <SubTitle>
-              {currentDestination?.name} ({attractionList["NoName"].length + hotelList.length})
-            </SubTitle>
-            <Row>
-              <RowTitle>Attractions ({attractionList["NoName"].length})</RowTitle>
-              {attractionList["NoName"].length === 0 ? (
-                <Loader>There is no selected place.. Please add your places.</Loader>
-              ) : (
-                <Selected>
-                  {attractionList["NoName"].map(
-                    (jCard) =>
-                      jCard && (
-                        <JourneyCard
-                          key={jCard.timestamp}
-                          name={jCard.name}
-                          placeId={jCard.placeId}
-                          timestamp={jCard.timestamp}
-                        />
-                      )
-                  )}
-                </Selected>
-              )}
-            </Row>
-            <Row>
-              <RowTitle>Hotels ({hotelList.length})</RowTitle>
-              {hotelList.length === 0 ? (
-                <Loader>There is no selected place.. Please add your places.</Loader>
-              ) : (
-                <Selected>
-                  {hotelList.map(
-                    (jCard) =>
-                      jCard && (
-                        <HotelCard
-                          key={jCard.timestamp}
-                          name={jCard.name}
-                          placeId={jCard.placeId}
-                          timestamp={jCard.timestamp}
-                        />
-                      )
-                  )}
-                </Selected>
-              )}
-            </Row>
-          </Column>
-          <Question>Have you added all the attractions in {currentDestination?.name}?</Question>
+        </Wrapper>
+        <Column>
+          <SubTitle>{currentDestination?.name}</SubTitle>
+          <Row>
+            <RowTitle>Attractions ({attractionList["NoName"].length})</RowTitle>
+            {attractionList["NoName"].length === 0 ? (
+              <Loader>There is no selected place.. Please add your places.</Loader>
+            ) : (
+              <Selected>
+                {attractionList["NoName"].map(
+                  (jCard) =>
+                    jCard && (
+                      <JourneyCard
+                        key={jCard.timestamp}
+                        name={jCard.name}
+                        placeId={jCard.placeId}
+                        timestamp={jCard.timestamp}
+                      />
+                    )
+                )}
+              </Selected>
+            )}
+          </Row>
+          <Row>
+            <RowTitle>Hotels ({hotelList.length})</RowTitle>
+            {hotelList.length === 0 ? (
+              <Loader>There is no selected place.. Please add your places.</Loader>
+            ) : (
+              <Selected>
+                {hotelList.map(
+                  (jCard) =>
+                    jCard && (
+                      <HotelCard
+                        key={jCard.timestamp}
+                        name={jCard.name}
+                        placeId={jCard.placeId}
+                        timestamp={jCard.timestamp}
+                      />
+                    )
+                )}
+              </Selected>
+            )}
+          </Row>
+        </Column>
+        <Last>
+          <RowTitle>{currentDestination?.name}에서의 일정을 모두 추가하셨나요?</RowTitle>
           <Buttons>
             <Button variants={buttonVar} whileHover={"hover"} onClick={goBack}>
               <span>No</span>
@@ -191,75 +190,72 @@ const Place = () => {
               <span>Move to Next Step</span>
             </Button>
           </Buttons>
-        </Container>
-      </Wrapper>
+        </Last>
+      </Container>
     </AnimatePresence>
   );
 };
 
 export default Place;
 
-const Wrapper = styled(motion.div)`
-  overflow-x: auto;
+const Container = styled.div`
   width: 100vw;
-  padding-bottom: 50px;
+`;
+
+const Wrapper = styled(motion.div)<{ bgphoto: string }>`
+  overflow-x: auto;
+  width: 100%;
+  min-height: 100vh;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), ${(props) => props.bgphoto};
+  background-size: cover;
+  background-position: center center;
+`;
+
+const Title = styled(motion.h2)<{ isHotel: boolean }>`
+  font-size: 72px;
+  font-weight: 600;
+  margin-bottom: 50px;
+  color: white;
+  padding-top: 100px;
 `;
 
 const DateInfo = styled.span`
-  color: lightgray;
-  font-weight: 550;
-  margin-left: 0.625rem;
-  font-size: 16px;
+  color: white;
+  font-weight: 600;
+  margin-left: 40px;
+  font-size: 24px;
+`;
+
+const Description = styled.h2`
+  color: white;
+  font-weight: 400;
+  font-size: 18px;
+  width: 70%;
+  line-height: 2;
+  margin-bottom: 50px;
 `;
 
 const Header = styled.div`
-  width: 60%;
-  @media screen and (max-width: 1210px) {
-    width: 100%;
-  }
+  width: 45%;
 `;
 
 const Results = styled.div`
-  width: 450px;
-  margin-bottom: 100px;
-  margin-left: 40px;
-  @media screen and (max-width: 1210px) {
-    width: 100%;
-    margin-top: 50px;
-    margin-left: 0;
-  }
+  width: 45%;
+  padding-top: 100px;
+`;
+
+const ResultList = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 10px;
 `;
 
 const Main = styled.div`
-  padding: 0 12%;
+  padding: 0 140px;
   padding-bottom: 200px;
   display: flex;
   justify-content: space-between;
   width: 100%;
-  @media screen and (max-width: 1210px) {
-    flex-direction: column;
-    justify-content: flex-start;
-    padding: 0 8%;
-  }
-  @media screen and (max-width: 800px) {
-    min-height: 100vh;
-  }
-`;
-
-const Title = styled(motion.h2)<{ isHotel: boolean }>`
-  font-size: 16px;
-  font-weight: 600;
-  margin-bottom: 50px;
-  & p {
-    font-size: 3rem;
-    font-weight: 600;
-    & span {
-      margin-left: 1.25rem;
-      font-size: 3rem;
-      font-weight: 600;
-      color: ${(props) => (props.isHotel ? props.theme.red.normal : props.theme.main.normal)};
-    }
-  }
 `;
 
 const Loader = styled.div`
@@ -271,27 +267,17 @@ const Loader = styled.div`
 `;
 
 const SubTitle = styled.h2`
-  font-size: 1.3125rem;
-  font-weight: 700;
-  margin-bottom: 30px;
-  padding: 0 12%;
-`;
-
-const Container = styled.div`
-  padding-top: 8%;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
+  font-size: 18px;
+  font-weight: 500;
+  color: gray;
 `;
 
 const Column = styled.div`
-  padding: 50px 0%;
   width: 100%;
-  padding-bottom: 100px;
-  background-color: ${(props) => props.theme.main.accent};
-  @media screen and (max-width: 800px) {
-    min-height: 70vh;
-  }
+  padding: 140px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const Circle = styled(motion.div)`
@@ -302,7 +288,7 @@ const Circle = styled(motion.div)`
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 1.25rem;
+  font-size: 20px;
 `;
 
 const Blank = styled.div`
@@ -310,24 +296,17 @@ const Blank = styled.div`
   height: 90%;
 `;
 
-const Question = styled.h2`
-  margin: 50px auto;
-  margin-top: 100px;
-  font-size: 16px;
-  font-weight: 700;
-`;
-
 const Toggle = styled(motion.div)<{ isHotel: boolean }>`
   display: flex;
   justify-content: space-between;
   align-items: center;
   border-radius: 25px;
-  width: 6.25rem;
-  height: 3.125rem;
-  padding: 0.3125rem 0.75rem;
-  color: ${(props) => (props.isHotel ? props.theme.red.normal : props.theme.main.normal)};
+  width: 100px;
+  height: 50px;
+  padding: 5px 12px;
   cursor: pointer;
-  background-color: ${(props) => (props.isHotel ? props.theme.red.normal : props.theme.main.normal)};
+  background-color: ${(props) => (props.isHotel ? props.theme.red.normal + "88" : props.theme.main.accent + "88")};
+  margin-bottom: 50px;
 `;
 
 const Buttons = styled.div`
@@ -349,12 +328,10 @@ const Button = styled(motion.button)`
   align-items: center;
   border: none;
   margin: 0 10px;
-  @media screen and (max-width: 1210px) {
-    width: 40%;
-  }
+
   span {
     &:first-child {
-      font-size: 1.5rem;
+      font-size: 24px;
       margin-bottom: 10px;
       font-weight: 600;
     }
@@ -375,65 +352,25 @@ const Button = styled(motion.button)`
   }
 `;
 
-const ResultList = styled.div`
-  width: 600px;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  @media screen and (max-width: 1210px) {
-    margin: 0;
-    margin-top: 40px;
-  }
-  @media screen and (max-width: 800px) {
-    width: 120%;
-  }
-`;
-
-const ResultTitle = styled.h2<{ isHotel: boolean }>`
-  font-size: 14px;
-  color: gray;
-  font-weight: 400;
-  margin-bottom: 10px;
-  span {
-    font-size: 21px;
-    font-weight: 700;
-    color: ${(props) => (props.isHotel ? props.theme.red.accent : props.theme.main.accent)};
-    margin-right: 10px;
-  }
-`;
-
 const Form = styled.form`
   display: flex;
   align-items: center;
   margin-top: 50px;
-  @media screen and (max-width: 800px) {
-    flex-direction: column;
-  }
 `;
 
 const Input = styled(motion.input)<{ isHotel: boolean }>`
   width: 400px;
-  height: 66px;
   padding: 20px;
   font-size: 18px;
   border: none;
-  box-shadow: 1px 2px 2px 2px lightgray;
   border-radius: 7px;
   font-weight: 600;
-
+  background-color: rgba(0, 0, 0, 0.8);
   &:focus {
     outline: none;
-    box-shadow: 1px 2px 2px 2px ${(props) => (props.isHotel ? props.theme.red.accent : props.theme.main.accent)};
   }
-  @media screen and (max-width: 1400px) {
-    width: 300px;
-  }
-  @media screen and (max-width: 1210px) {
-    width: 400px;
-  }
-  @media screen and (max-width: 800px) {
-    width: 100%;
+  &::placeholder {
+    color: white;
   }
 `;
 
@@ -449,29 +386,35 @@ const SubmitButton = styled.button<{ isHotel: boolean }>`
   &:hover {
     background-color: ${(props) => (props.isHotel ? props.theme.red.accent + "aa" : props.theme.main.accent + "aa")};
   }
-  @media screen and (max-width: 800px) {
-    width: 100%;
-    margin: 15px 0;
-    border-radius: 7px;
-  }
 `;
 
 const Selected = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(11.25rem, 1fr));
-  grid-row-gap: 0.9375rem;
-  grid-column-gap: 0.3125rem;
+  grid-template-columns: repeat(6, 1fr);
+  grid-gap: 10px;
 `;
 
 const Row = styled.div`
   margin-bottom: 30px;
-  padding: 10px 12%;
+  width: 100%;
 `;
 
 const RowTitle = styled.h2`
-  font-size: 1.3125rem;
+  font-size: 24px;
+  color: black;
   font-weight: 700;
-  margin: 10px 0;
+  margin-bottom: 50px;
+  margin-top: 20px;
+  text-align: center;
+`;
+
+const Last = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 140px 0;
+  background-color: ${(props) => props.theme.main.accent};
 `;
 
 const titleVar = {

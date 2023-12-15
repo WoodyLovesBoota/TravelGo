@@ -9,7 +9,6 @@ import { faLeftLong } from "@fortawesome/free-solid-svg-icons";
 import { useForm } from "react-hook-form";
 import { useRef } from "react";
 import NavigationBar from "../Components/NavigationBar";
-import SmallCalender from "../Components/SmallCalender";
 
 const City = () => {
   const [users, setUsers] = useRecoilState(userState);
@@ -31,17 +30,18 @@ const City = () => {
 
   return (
     <AnimatePresence>
-      <NavigationBar />
       <Wrapper variants={inputVar} initial="initial" animate="animate">
         <Header>
+          <NavigationBar />
           <Title>
-            <Button variants={buttonVar} whileHover={"hover"} onClick={onOverlayClicked}>
+            {/* <Button variants={buttonVar} whileHover={"hover"} onClick={onOverlayClicked}>
               <FontAwesomeIcon icon={faLeftLong}></FontAwesomeIcon>
-            </Button>
+            </Button> */}
             {currentTrip}
           </Title>
           <SubTitle>
-            Please add a destination (ex. city, region ...). You can click the card to add detail for the destination.
+            도시 혹은 지역을 검색하여 {currentTrip}에서의 목적지를 추가하세요. 이후 카드를 클릭하여 세부사항을 점검할 수
+            있습니다.
           </SubTitle>
           <Form onSubmit={handleSubmit(onValid)}>
             <Input
@@ -57,13 +57,12 @@ const City = () => {
               spellCheck={false}
               required
             />
-            <SubmitButton type="submit">Add a destination</SubmitButton>
+            {/* <SubmitButton type="submit">Add a destination</SubmitButton> */}
           </Form>
-          {/* {users[player.email].trips[currentTrip] && users[player.email].trips[currentTrip]?.length ? (
-            <SmallCalender destinations={users[player.email].trips[currentTrip]} />
-          ) : null} */}
         </Header>
         <Main>
+          <MainTitle>여행지 목록</MainTitle>
+          <MainSubTitle>당신이 선택한 여행지는?</MainSubTitle>
           {users[player.email].trips[currentTrip].length === 0 ? (
             <Loader>There is no destination. Please add your destination</Loader>
           ) : (
@@ -87,58 +86,65 @@ export default City;
 
 const Wrapper = styled(motion.div)`
   width: 100vw;
-  min-height: 100vh;
   color: ${(props) => props.theme.main.word};
   display: flex;
   flex-direction: column;
 `;
 
 const Header = styled.div`
-  padding: 12% 8%;
-
-  @media screen and (max-width: 800px) {
-    min-height: 100vh;
-  }
-`;
-
-const Button = styled(motion.button)`
-  border: none;
-  background-color: ${(props) => props.theme.main.accent};
-  color: ${(props) => props.theme.main.word};
-  border-radius: 25px;
-  width: 40px;
-  height: 40px;
-  font-size: 16px;
+  background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("/banner.png");
+  background-position: center center;
+  background-size: cover;
+  width: 100%;
+  min-height: 100vh;
+  padding-bottom: 100px;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  margin-right: 20px;
-  cursor: pointer;
 `;
 
 const Title = styled.div`
-  font-size: 3rem;
-  font-weight: 800;
-  margin-bottom: 50px;
-  display: flex;
-  align-items: center;
+  font-size: 72px;
+  font-weight: 600;
+  margin-bottom: 40px;
+  padding-top: 100px;
 `;
 
 const SubTitle = styled.h2`
-  font-size: 16px;
-  font-weight: 500;
+  font-size: 18px;
+  font-weight: 400;
+  width: 25%;
+  text-align: center;
 `;
 
 const Main = styled.div`
-  background-color: ${(props) => props.theme.main.normal};
-  padding: 12% 8%;
   width: 100%;
+  padding: 150px 72px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const MainTitle = styled.h2`
+  font-size: 32px;
+  font-weight: 600;
+  color: black;
+  margin-bottom: 15px;
+`;
+
+const MainSubTitle = styled.h2`
+  color: gray;
+  font-size: 21px;
+  font-weight: 400;
+  margin-bottom: 50px;
 `;
 
 const Cards = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   grid-gap: 30px;
+  grid-row-gap: 60px;
+  width: 100%;
 `;
 
 const Loader = styled.div`
@@ -151,6 +157,7 @@ const Loader = styled.div`
 
 const Form = styled(motion.form)`
   display: flex;
+  justify-content: center;
   margin: 70px 0;
   width: 100%;
   @media screen and (max-width: 800px) {
@@ -159,19 +166,18 @@ const Form = styled(motion.form)`
 `;
 
 const Input = styled(motion.input)`
-  width: 400px;
+  width: 700px;
   padding: 20px;
-  font-size: 16px;
+  font-size: 18px;
   border: none;
-  box-shadow: 1px 2px 2px 2px lightgray;
   border-radius: 7px;
   font-weight: 600;
+  background-color: rgba(0, 0, 0, 0.6);
   &:focus {
     outline: none;
-    box-shadow: 1px 2px 2px 2px ${(props) => props.theme.main.accent};
   }
-  @media screen and (max-width: 800px) {
-    width: 100%;
+  &::placeholder {
+    color: white;
   }
 `;
 

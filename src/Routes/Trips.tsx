@@ -33,7 +33,8 @@ const Trip = () => {
       <Container>
         <Header>
           <Title>
-            Create your<span> journey</span>
+            MAKE YOUR <br />
+            OWN TRIP.
           </Title>
           <SubTitle>
             Choose the journey you want and fill out the contents of the trip. Or you can create a new journey.
@@ -63,92 +64,63 @@ export default Trip;
 
 const Wrapper = styled(motion.div)`
   width: 100vw;
+  background: url("./bg.png");
+  background-position: center center;
+  background-size: cover;
   min-height: 100vh;
 `;
 
 const Container = styled.div`
   display: flex;
-  width: 100vw;
-  padding: 12% 8%;
-
-  @media screen and (max-width: 1200px) {
-    flex-direction: column;
-    align-items: center;
-  }
-  @media screen and (max-width: 500px) {
-    padding-bottom: 0;
-  }
+  padding: 80px 140px;
+  padding-right: 0;
+  width: 100%;
 `;
 
 const Header = styled.div`
-  width: 55%;
-  height: 100%;
-  margin-bottom: 15%;
+  width: 40%;
   display: flex;
   justify-content: center;
   flex-direction: column;
-  @media screen and (max-width: 1200px) {
-    width: 100%;
-  }
-  @media screen and (max-width: 500px) {
-    min-height: 100vh;
-    justify-content: flex-start;
-  }
 `;
 
-const Main = styled.div`
-  width: 50%;
-  height: 100%;
-  display: flex;
-  align-items: flex-start;
-  justify-content: flex-start;
-  @media screen and (max-width: 1200px) {
-    width: 100%;
-    height: inherit;
-  }
-  @media screen and (max-width: 500px) {
-    background-color: ${(props) => props.theme.main.accent};
-    width: 100vw;
-    padding: 30% 12%;
-  }
-`;
+const Main = styled.div``;
 
 const Title = styled.h2`
-  font-size: 3rem;
-  font-weight: 600;
+  font-size: 80px;
+  font-weight: 500;
   margin-bottom: 50px;
-  width: 100%;
-  span {
-    font-size: 3rem;
-    font-weight: 600;
-    @media screen and (max-width: 500px) {
-      width: 100%;
-      display: block;
-    }
-  }
+  line-height: 1;
 `;
 
 const SubTitle = styled.h2`
-  font-size: 16px;
-  font-weight: 500;
+  font-size: 21px;
+  font-weight: 400;
   margin-bottom: 50px;
-  width: 100%;
+  width: 80%;
 `;
 
 const TripCards = styled.div`
-  width: 600px;
-  margin-left: 50px;
   display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  @media screen and (max-width: 1200px) {
-    width: 70%;
-    margin: 0;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  width: 60vw;
+  padding-top: 50px;
+  padding-left: 30px;
+  &::-webkit-scrollbar {
+    height: 10px;
+    display: block;
   }
-  @media screen and (max-width: 800px) {
-    width: 100%;
+
+  &::-webkit-scrollbar-track {
+    background-color: transparent;
+    display: block;
   }
-  @media screen and (max-width: 500px) {
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    display: block;
   }
 `;
 
@@ -167,31 +139,30 @@ const Form = styled.form`
 `;
 
 const Input = styled.input`
-  width: 23.75rem;
-  padding: 20px;
-  font-size: 16px;
-  border: none;
-  box-shadow: 1px 2px 2px 2px lightgray;
-  border-radius: 7px;
+  width: 90%;
+  padding: 15px;
+  font-size: 21px;
+  border-radius: 10px;
   font-weight: 600;
+  background-color: rgba(255, 255, 255, 0.2);
   &:focus {
     outline: none;
-    box-shadow: 1px 2px 2px 2px ${(props) => props.theme.main.accent};
   }
-  @media screen and (max-width: 500px) {
-    width: 100%;
+  &::placeholder {
+    color: white;
   }
 `;
 
 const SubmitButton = styled.button`
   margin-left: 1.25rem;
   border: none;
-  background-color: ${(props) => props.theme.main.button};
-  color: ${(props) => props.theme.main.word};
+  background-color: ${(props) => props.theme.main.accent};
+  color: white;
   padding: 20px 30px;
   font-size: 16px;
   border-radius: 25px;
   font-weight: 600;
+  display: none;
   cursor: pointer;
   &:hover {
     background-color: ${(props) => props.theme.main.accent + "aa"};

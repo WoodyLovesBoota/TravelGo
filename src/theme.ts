@@ -21,7 +21,7 @@ export const theme: DefaultTheme = {
   gray: { accent: "#7CC56E", normal: "#D0F0C1" },
 
   main: {
-    accent: "#FED745",
+    accent: "#054E67",
     normal: "#FED745",
     blur: "#FFEC41",
     bg: "#FEFFE7",

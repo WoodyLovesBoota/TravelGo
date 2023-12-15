@@ -19,7 +19,7 @@ const PlaceCard = ({ place, isHotel }: IPlaceCardProps) => {
   );
 
   const handleCardClicked = (placeId: string | undefined) => {
-    navigate(`/travel/${currentTrip}/${destination?.name}/${placeId}`);
+    navigate(`/travel/${currentTrip}/${destination?.name}/${placeId}/overview`);
   };
   return (
     <AnimatePresence>
@@ -39,25 +39,12 @@ const PlaceCard = ({ place, isHotel }: IPlaceCardProps) => {
                   500
                 )})`}
                 layoutId={place.place_id}
-                variants={boxVariants}
-                initial={"initial"}
-                whileHover={isHotel ? "hoverHotel" : "hover"}
                 onClick={() => handleCardClicked(place?.place_id)}
               >
-                <HexInner>
-                  <Content
-                    bgPhoto={`url(${makeImagePath(
-                      data?.result.photos
-                        ? data?.result.photos[0].photo_reference
-                        : destination
-                        ? destination.photos[0].photo_reference
-                        : "",
-                      500
-                    )})`}
-                  >
-                    <Name> {data.result ? data?.result.name : ""}</Name>
-                  </Content>
-                </HexInner>
+                <Name> {data.result ? data?.result.name : ""}</Name>
+                <Address> {data.result ? data?.result.formatted_address : ""}</Address>
+                <Description>{data.result ? data?.result.international_phone_number : ""}</Description>
+                <StarRate dataRating={data?.result.rating} size="14"></StarRate>
               </Container>
               <BigPlaceCard
                 key={data.result ? data?.result.name : ""}
@@ -79,81 +66,38 @@ const Loader = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 1rem;
+  font-size: 16px;
   font-weight: 600;
 `;
 
 const Container = styled(motion.div)<{ bgPhoto: string }>`
-  width: 25%;
-  margin-bottom: 1.8%;
-  position: relative;
-  visibility: hidden;
+  width: 100%;
   cursor: pointer;
-  &:nth-of-type(5n + 4) {
-    margin-left: 12.5%;
-  }
-  &:after {
-    content: "";
-    display: block;
-    padding-bottom: 80%;
-  }
+  height: 10vw;
+  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), ${(props) => props.bgPhoto};
+  background-size: cover;
+  background-position: center center;
+  border-radius: 10px;
+  padding: 20px;
 `;
 
 const Name = styled.h2`
-  font-size: 18px;
-  font-weight: 600;
-  @media screen and (max-width: 500px) {
-    font-size: 16px;
-  }
+  font-size: 21px;
+  font-weight: 700;
 `;
 
-const HexInner = styled(motion.div)`
-  position: absolute;
-  width: 99%;
-  padding-bottom: 114.6%;
-  overflow: hidden;
-  visibility: hidden;
-  transform: rotate3d(0, 0, 1, -60deg) skewY(30deg);
-  * {
-    position: absolute;
-    visibility: visible;
-    box-shadow: 10px 10px 32px 0 rgba(0, 0, 0, 0.1);
-  }
+const Address = styled.h2`
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 10px;
 `;
 
-const Content = styled.div<{ bgPhoto: string }>`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  transform: skewY(-30deg) rotate3d(0, 0, 1, 60deg);
-  justify-content: center;
-  align-items: center;
-  background-image: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), ${(props) => props.bgPhoto};
-  background-position: center center;
-  background-size: cover;
-  &:hover {
-    background-image: linear-gradient(rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)), ${(props) => props.bgPhoto};
-  }
+const Description = styled.h2`
+  font-size: 16px;
+  font-weight: 400;
+  color: lightgray;
+  margin-bottom: 10px;
 `;
-
-const boxVariants = {
-  initial: { opacity: 1 },
-  hover: {
-    boxShadow: "0rem 0rem .25rem .125rem #FECA44",
-  },
-  hoverHotel: {
-    boxShadow: "0rem 0rem .25rem .125rem #f49a23",
-  },
-};
-
-const photoVariants = {
-  initial: { opacity: 1 },
-  hover: {
-    scale: 1.2,
-  },
-};
 
 interface IPlaceCardProps {
   place: IAutoCompletePlaceDetail | undefined;

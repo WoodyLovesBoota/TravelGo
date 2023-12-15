@@ -25,19 +25,14 @@ const Home = () => {
   return (
     <Wrapper>
       <Header>
-        <Capital>B</Capital>EEE
+        {/* <Capital>B</Capital>EEE
         <LoginButton variants={buttonVar} whileHover={"hover"} onClick={goNext}>
           Log In
-        </LoginButton>
+        </LoginButton> */}
       </Header>
 
       <Container>
-        <SubTitle>Build your journey</SubTitle>
-        <Title>Make your travel plans</Title>
-        <Detail>
-          Start planning your travel adventures with BEEE. Create the trip you've always wanted, wherever in the world
-          you want to go.
-        </Detail>
+        <Title>Hit the road. make your own trip.</Title>
         <Button variants={buttonVar} whileHover={"hover"} onClick={goTemp}>
           Get Start
         </Button>
@@ -53,8 +48,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   width: 100vw;
   min-height: 100vh;
-  color: #373e3f;
-  background: url("./bee-bg.jpeg");
+  /* background: url("./bee-bg.jpeg"); */
   background-size: cover;
   background-position: center center;
 `;
