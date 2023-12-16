@@ -150,10 +150,10 @@ const Search = () => {
                     <Question>목적지를 추가할까요?</Question>
                     <Buttons>
                       <Button variants={buttonVar} whileHover={"hover"} onClick={onNoClicked}>
-                        No
+                        아니오
                       </Button>
                       <Button variants={buttonVar} whileHover={"hover"} type="submit" onClick={onYesClicked}>
-                        Yes
+                        네
                       </Button>
                     </Buttons>
                   </Selection>

@@ -51,6 +51,27 @@ const Place = () => {
   );
 
   const goBack = () => {
+    setCurrentDestination({
+      formatted_address: "string",
+      international_phone_number: "string",
+      rating: 0,
+      photos: [{ photo_reference: "string" }],
+      geometry: {
+        location: {
+          lat: 0,
+          lng: 0,
+        },
+      },
+      name: "string",
+      editorial_summary: { overview: "string" },
+      reviews: {
+        rating: 0,
+        text: "string",
+        relative_time_description: "string",
+        author_name: "string",
+      },
+      place_id: "string",
+    });
     navigate(`/destination/${destinationMatch?.params.title}`);
   };
 
@@ -71,9 +92,6 @@ const Place = () => {
     <AnimatePresence>
       <Container>
         <Wrapper
-          variants={loadingVar}
-          initial="initial"
-          animate="animate"
           bgphoto={`url(${makeImagePath(
             currentDestination?.photos ? currentDestination?.photos[0].photo_reference : "",
             800
@@ -81,7 +99,7 @@ const Place = () => {
         >
           <NavigationBar />
 
-          <Main>
+          <Main variants={loadingVar} initial="initial" animate="animate">
             <Header>
               <Title isHotel={isHotel} variants={titleVar} initial="initial" animate="animate">
                 {isHotel ? `Hotels` : `Attractions`}
@@ -135,7 +153,7 @@ const Place = () => {
             </Results>
           </Main>
         </Wrapper>
-        <Column>
+        <Column variants={loadingVar} initial="initial" animate="animate">
           <SubTitle>{currentDestination?.name}</SubTitle>
           <Row>
             <RowTitle>Attractions ({attractionList["NoName"].length})</RowTitle>
@@ -178,16 +196,16 @@ const Place = () => {
             )}
           </Row>
         </Column>
-        <Last>
-          <RowTitle>{currentDestination?.name}에서의 일정을 모두 추가하셨나요?</RowTitle>
+        <Last variants={loadingVar} initial="initial" animate="animate">
+          <Question>{currentDestination?.name}에서의 일정을 모두 추가하셨나요?</Question>
           <Buttons>
-            <Button variants={buttonVar} whileHover={"hover"} onClick={goBack}>
-              <span>No</span>
-              <span>Change my Destination</span>
+            <Button onClick={goBack}>
+              <span>아니요</span>
+              <span>목적지를 변경합니다.</span>
             </Button>
-            <Button variants={buttonVar} whileHover={"hover"} onClick={goForward}>
-              <span>Yes</span>
-              <span>Move to Next Step</span>
+            <Button onClick={goForward}>
+              <span>네</span>
+              <span>다음 단계로 이동합니다.</span>
             </Button>
           </Buttons>
         </Last>
@@ -206,7 +224,7 @@ const Wrapper = styled(motion.div)<{ bgphoto: string }>`
   overflow-x: auto;
   width: 100%;
   min-height: 100vh;
-  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), ${(props) => props.bgphoto};
+  background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), ${(props) => props.bgphoto};
   background-size: cover;
   background-position: center center;
 `;
@@ -216,7 +234,7 @@ const Title = styled(motion.h2)<{ isHotel: boolean }>`
   font-weight: 600;
   margin-bottom: 50px;
   color: white;
-  padding-top: 100px;
+  padding-top: 150px;
 `;
 
 const DateInfo = styled.span`
@@ -235,11 +253,11 @@ const Description = styled.h2`
   margin-bottom: 50px;
 `;
 
-const Header = styled.div`
+const Header = styled(motion.div)`
   width: 45%;
 `;
 
-const Results = styled.div`
+const Results = styled(motion.div)`
   width: 45%;
   padding-top: 100px;
 `;
@@ -250,7 +268,7 @@ const ResultList = styled.div`
   grid-gap: 10px;
 `;
 
-const Main = styled.div`
+const Main = styled(motion.div)`
   padding: 0 140px;
   padding-bottom: 200px;
   display: flex;
@@ -267,12 +285,12 @@ const Loader = styled.div`
 `;
 
 const SubTitle = styled.h2`
-  font-size: 18px;
-  font-weight: 500;
+  font-size: 21px;
+  font-weight: 400;
   color: gray;
 `;
 
-const Column = styled.div`
+const Column = styled(motion.div)`
   width: 100%;
   padding: 140px;
   display: flex;
@@ -309,47 +327,51 @@ const Toggle = styled(motion.div)<{ isHotel: boolean }>`
   margin-bottom: 50px;
 `;
 
-const Buttons = styled.div`
-  display: flex;
-  justify-content: center;
-  width: 100%;
-`;
-
-const Button = styled(motion.button)`
+const Button = styled.button`
   cursor: pointer;
-  width: 15%;
-  padding: 15px 10px;
+  width: 160px;
+  padding: 10px;
   border-radius: 5px;
-  font-weight: 600;
-  color: ${(props) => props.theme.white.normal};
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
   border: none;
   margin: 0 10px;
+  margin-top: 30px;
+
+  &:first-child {
+    background-color: ${(props) => props.theme.red.accent};
+    &:hover {
+      background-color: ${(props) => props.theme.red.accent + "aa"};
+    }
+  }
+  &:last-child {
+    background-color: ${(props) => props.theme.green.accent};
+    &:hover {
+      background-color: ${(props) => props.theme.green.accent + "aa"};
+    }
+  }
 
   span {
     &:first-child {
-      font-size: 24px;
-      margin-bottom: 10px;
+      font-size: 18px;
       font-weight: 600;
+      margin-bottom: 5px;
     }
     &:last-child {
-      font-size: 14px;
-      margin-bottom: 10px;
-      font-weight: 600;
+      font-size: 12px;
+      font-weight: 500;
       @media screen and (max-width: 500px) {
         display: none;
       }
     }
   }
-  &:first-child {
-    background-color: ${(props) => props.theme.red.accent};
-  }
-  &:last-child {
-    background-color: ${(props) => props.theme.green.accent};
-  }
+`;
+const Buttons = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 100%;
 `;
 
 const Form = styled.form`
@@ -400,15 +422,15 @@ const Row = styled.div`
 `;
 
 const RowTitle = styled.h2`
-  font-size: 24px;
-  color: black;
-  font-weight: 700;
+  font-size: 32px;
+  font-weight: 600;
   margin-bottom: 50px;
   margin-top: 20px;
   text-align: center;
+  color: black;
 `;
 
-const Last = styled.div`
+const Last = styled(motion.div)`
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -417,13 +439,16 @@ const Last = styled.div`
   background-color: ${(props) => props.theme.main.accent};
 `;
 
+const Question = styled.h2`
+  font-size: 21px;
+  font-weight: 400;
+  margin-bottom: 20px;
+  text-align: center;
+`;
+
 const titleVar = {
   initial: { y: "10vh", opacity: 0 },
   animate: { y: 0, opacity: 1, transition: { duration: 0.2 } },
-};
-
-const buttonVar = {
-  hover: { scale: 1.1 },
 };
 
 const loadingVar = {

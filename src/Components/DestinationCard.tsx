@@ -1,8 +1,6 @@
 import styled from "styled-components";
 import { makeImagePath } from "../utils";
 import { IPlaceDetail } from "../api";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faRightLong } from "@fortawesome/free-solid-svg-icons";
 import { AnimatePresence, motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";

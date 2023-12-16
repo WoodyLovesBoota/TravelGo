@@ -47,20 +47,21 @@ const HotelCard = ({ name, placeId, timestamp }: IJourneyCardProps) => {
       {isLoading ? (
         <Loader>loading...</Loader>
       ) : (
-        <Container
-          bgPhoto={`url(${makeImagePath(
-            data?.result.photos
-              ? data?.result.photos[0].photo_reference
-              : destinationData
-              ? destinationData.photos[0].photo_reference
-              : "",
-            500
-          )})`}
-        >
-          <Title>{name}</Title>
-          <Button variants={buttonVar} whileHover={"hover"} onClick={deleteJourney}>
-            삭제하기
-          </Button>
+        <Container>
+          <Photo
+            bgPhoto={`url(${makeImagePath(
+              data?.result.photos
+                ? data?.result.photos[0].photo_reference
+                : destinationData
+                ? destinationData.photos[0].photo_reference
+                : "",
+              500
+            )})`}
+          />
+          <Description>
+            <Title>{name}</Title>
+            <Button onClick={deleteJourney}>삭제하기</Button>
+          </Description>
         </Container>
       )}
     </Wrapper>
@@ -73,43 +74,55 @@ const Wrapper = styled.div``;
 
 const Loader = styled.div``;
 
-const Container = styled.div<{ bgPhoto: string }>`
-  background-image: linear-gradient(to bottom right, rgba(0, 0, 0, 0.8), transparent, transparent, transparent),
-    ${(props) => props.bgPhoto};
-  background-size: cover;
-  background-position: center center;
-
-  width: 11.25rem;
-  height: 13.125rem;
+const Container = styled.div`
   display: flex;
   flex-direction: column;
+  width: 100%;
+  padding: 5px;
+  border-radius: 20px;
+  box-shadow: 0 0 10px 0px gray;
+`;
+
+const Photo = styled.div<{ bgPhoto: string }>`
+  background-image: ${(props) => props.bgPhoto};
+  background-size: cover;
+  background-position: center center;
+  width: 100%;
+  height: 10vw;
+  border-radius: 20px;
+`;
+
+const Description = styled.div`
+  display: flex;
   justify-content: space-between;
-  padding: 1.3125rem 1.125rem;
-  padding-bottom: 0.9375rem;
-  border-radius: 0.625rem;
+  align-items: center;
+  padding: 20px 10px;
+  padding-top: 10px;
 `;
 
 const Title = styled.h2`
-  font-size: 1.125rem;
+  font-size: 16px;
   font-weight: 600;
-  color: white;
+  color: black;
+  margin-top: 10px;
 `;
 
 const Button = styled(motion.button)`
   border: none;
-  width: 3.75rem;
-  height: 1.875rem;
+  width: 60px;
+  height: 80%;
   cursor: pointer;
-  color: gray;
-  font-size: 0.75rem;
-  border-radius: 0.3125rem;
-  background-color: white;
-  font-weight: 600;
+  font-size: 14px;
+  border-radius: 5px;
+  font-weight: 500;
+  margin-top: auto;
+  z-index: 50;
+  color: black;
+  background-color: lightgray;
+  &:hover {
+    background-color: #e9e9e9;
+  }
 `;
-
-const buttonVar = {
-  hover: { color: "#000000", scale: 1.2 },
-};
 
 interface IJourneyCardProps {
   name: string | undefined;

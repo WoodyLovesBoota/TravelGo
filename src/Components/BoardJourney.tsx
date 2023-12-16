@@ -4,9 +4,11 @@ import { Droppable } from "react-beautiful-dnd";
 import DragJourneyCard from "./DragJourneyCard";
 import { useRecoilState } from "recoil";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEllipsis, faPen, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { faEllipsis, faPen, faRoute, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { useRef, useState } from "react";
 import { motion } from "framer-motion";
+import BigPath from "../Components/BigPath";
+import { useNavigate } from "react-router-dom";
 
 const BoardJourney = ({ journey, boardId }: IJourneyBoardProps) => {
   const [isToggleOpen, setIsToggleOpen] = useState(false);
@@ -15,6 +17,15 @@ const BoardJourney = ({ journey, boardId }: IJourneyBoardProps) => {
   const [userInfo, setUserInfo] = useRecoilState(userState);
   const [player, setPlayer] = useRecoilState(playerState);
   const [currentTrip, setCurrentTrip] = useRecoilState(tripState);
+  const [clickedCard, setClickedCard] = useState("");
+  const navigate = useNavigate();
+  const destination = currentDestination?.name;
+
+  const onCardClicked = (boardName: string) => {
+    setClickedCard(boardName);
+    setIsToggleOpen(false);
+    navigate(`/journey/${currentTrip}/${destination}/${boardName}`);
+  };
 
   const deleteBoard = () => {
     setUserInfo((current) => {
@@ -115,12 +126,23 @@ const BoardJourney = ({ journey, boardId }: IJourneyBoardProps) => {
               </span>
             </ToggleButton>
           </RenameForm>
-          <ToggleButton onClick={deleteBoard}>
-            <FontAwesomeIcon icon={faTrashCan} style={{ color: "white" }} />
-            <p>Delete</p>
-          </ToggleButton>
+          <Buttons>
+            <ToggleButton
+              onClick={() => {
+                onCardClicked(boardId);
+              }}
+            >
+              <FontAwesomeIcon icon={faRoute} style={{ color: "white" }} />
+              <p>Path</p>
+            </ToggleButton>
+            <ToggleButton onClick={deleteBoard}>
+              <FontAwesomeIcon icon={faTrashCan} style={{ color: "white" }} />
+              <p>Delete</p>
+            </ToggleButton>
+          </Buttons>
         </ToggleBox>
       ) : null}
+      <BigPath boardName={clickedCard} />
     </Wrapper>
   );
 };
@@ -153,6 +175,7 @@ const Header = styled.div`
 
 const Title = styled.h2`
   text-align: center;
+  color: black;
   font-weight: 600;
   font-size: 18px;
 `;
@@ -177,7 +200,6 @@ const ToggleBox = styled(motion.div)`
   background-color: ${(props) => props.theme.main.accent + "dd"};
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   transform-origin: top right;
   padding: 10px 15px;
   border-radius: 5px;
@@ -196,7 +218,7 @@ const RenameForm = styled.form`
     width: 100%;
     background-color: transparent;
     border: none;
-    border-bottom: 1.5008px solid white;
+    border-bottom: 1.5px solid white;
     padding-left: 5px;
     font-size: 16px;
     &:focus {
@@ -209,17 +231,19 @@ const RenameForm = styled.form`
   }
 `;
 
+const Buttons = styled.div`
+  margin-top: auto;
+`;
+
 const ToggleButton = styled.div`
   height: 25px;
   margin-left: 5px;
   font-weight: 500;
+  margin-bottom: 10px;
   cursor: pointer;
   display: flex;
-  align-items: flex-end;
-  &:last-child {
-    display: flex;
-    align-items: center;
-  }
+  align-items: center;
+
   p {
     margin-left: 10px;
     font-size: 16px;

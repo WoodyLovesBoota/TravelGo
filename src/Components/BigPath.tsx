@@ -23,10 +23,10 @@ const BigPath = ({ boardName }: IBigPathProps) => {
       userInfo[player.email].trips[currentTrip].findIndex((e) => e.destination?.name === currentDestination?.name)
     ].detail.attractions[boardName];
 
-  const bigPathMatch: PathMatch<string> | null = useMatch("/path/:title/:destination/:boardName");
+  const bigPathMatch: PathMatch<string> | null = useMatch("/journey/:title/:destination/:boardName");
 
   const handleOverlayClicked = () => {
-    navigate(`/path/${currentTrip}/${destination}`);
+    navigate(`/journey/${currentTrip}/${destination}`);
   };
 
   const onDragEnd = (info: DropResult) => {

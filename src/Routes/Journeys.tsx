@@ -10,6 +10,7 @@ import NavigationBar from "../Components/NavigationBar";
 import BoardNoName from "../Components/BoardNoName";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDownLong, faLeftLong } from "@fortawesome/free-solid-svg-icons";
+import { makeImagePath } from "../utils";
 
 const Journeys = () => {
   const { register, setValue, handleSubmit } = useForm<IBoardForm>();
@@ -25,7 +26,7 @@ const Journeys = () => {
   };
 
   const onGoForwardClicked = () => {
-    navigate(`/path/${currentTrip}/${destination}`);
+    navigate(`/summary/${currentTrip}/${destination}`);
   };
 
   const onDragEnd = (info: DropResult) => {
@@ -109,114 +110,132 @@ const Journeys = () => {
   };
 
   return (
-    <Wrapper variants={loadingVar} initial="initial" animate="animate">
-      <NavigationBar />
-      <Container>
-        <Main>
-          <MainTitle>Manage your schedule</MainTitle>
-          <MainDescription>
-            Create categories of your travel (ex. {destination} city tour) and manage your schedule by dragging and
-            dropping the place card.
-          </MainDescription>
-          <FormWrapper>
-            <Form onSubmit={handleSubmit(onValid)}>
-              <Input
-                {...register("board", { required: true })}
-                type="text"
-                placeholder={`Enter name of category (ex. ${destination} city tour)`}
-                autoComplete="off"
-              />
-              <SubmitButton type="submit">Create</SubmitButton>
-            </Form>
-          </FormWrapper>
-        </Main>
+    <>
+      <Wrapper
+        bgphoto={`url(${makeImagePath(
+          currentDestination?.photos ? currentDestination?.photos[1].photo_reference : "",
+          800
+        )})`}
+      >
+        <NavigationBar />
         <DragDropContext onDragEnd={onDragEnd}>
-          <NoName>
-            <NoNameHeader>
-              <div>
-                <SubTitle>Drag & Drop</SubTitle>
-                <Title>Your travel schedules in {currentDestination?.name}</Title>
-              </div>
-            </NoNameHeader>
-            <NoNameBoard>
-              <BoardNoName
-                journey={
-                  userInfo[player.email].trips[currentTrip][
-                    userInfo[player.email].trips[currentTrip].findIndex(
-                      (e) => e.destination?.name === currentDestination?.name
-                    )
-                  ].detail.attractions["NoName"]
-                }
-                boardId={"NoName"}
-                key={"NoName"}
-              />
-            </NoNameBoard>
-          </NoName>
-          <Arrow>
-            <FontAwesomeIcon icon={faDownLong}></FontAwesomeIcon>
-          </Arrow>
-          <NamedJourney>
-            <BoardTitle>{currentDestination?.name}</BoardTitle>
-            <Boards>
-              {Object.keys(
-                userInfo[player.email].trips[currentTrip][
-                  userInfo[player.email].trips[currentTrip].findIndex(
-                    (e) => e.destination?.name === currentDestination?.name
-                  )
-                ].detail.attractions
-              ).map((boardName) => {
-                return (
-                  boardName !== "NoName" && (
-                    <JourneyBoard
-                      journey={
-                        userInfo[player.email].trips[currentTrip][
-                          userInfo[player.email].trips[currentTrip].findIndex(
-                            (e) => e.destination?.name === currentDestination?.name
-                          )
-                        ].detail.attractions[boardName]
-                      }
-                      key={boardName}
-                      boardId={boardName}
+          <Main variants={loadingVar} initial="initial" animate="animate">
+            <Column>
+              <MainTitle>
+                Manage your
+                <br />
+                schedule
+              </MainTitle>
+              <MainDescription>
+                여러분의 여행의 카테고리를 만들어 보세요 (ex. {destination} city tour). 장소 카드를 drag & drop 하여
+                카테고리에 장소와 스케줄을 추가하세요. 카테고리 별로 경로를 확인하여 보다 더 효울적인 동선을 계획하세요.
+              </MainDescription>
+            </Column>
+            <NoName>
+              <NoNameHeader>
+                <div>
+                  <SubTitle>Drag & Drop</SubTitle>
+                  <Title>{currentDestination?.name}에서의 스케줄을 관리하세요.</Title>
+                </div>
+              </NoNameHeader>
+              <NoNameBoard>
+                <BoardNoName
+                  journey={
+                    userInfo[player.email].trips[currentTrip][
+                      userInfo[player.email].trips[currentTrip].findIndex(
+                        (e) => e.destination?.name === currentDestination?.name
+                      )
+                    ].detail.attractions["NoName"]
+                  }
+                  boardId={"NoName"}
+                  key={"NoName"}
+                />
+              </NoNameBoard>
+            </NoName>
+          </Main>
+          <Container variants={loadingVar} initial="initial" animate="animate">
+            <Arrow>
+              <FontAwesomeIcon icon={faDownLong}></FontAwesomeIcon>
+            </Arrow>
+            <NamedJourney>
+              <Boards>
+                <FormWrapper>
+                  <Form onSubmit={handleSubmit(onValid)}>
+                    <Input
+                      {...register("board", { required: true })}
+                      type="text"
+                      placeholder={`Enter name of category (ex. ${destination} city tour)`}
+                      autoComplete="off"
                     />
-                  )
-                );
-              })}
-            </Boards>
-          </NamedJourney>
+                    <SubmitButton type="submit">Create</SubmitButton>
+                  </Form>
+                </FormWrapper>
+                <DroppableBoards>
+                  {Object.keys(
+                    userInfo[player.email].trips[currentTrip][
+                      userInfo[player.email].trips[currentTrip].findIndex(
+                        (e) => e.destination?.name === currentDestination?.name
+                      )
+                    ].detail.attractions
+                  ).map((boardName) => {
+                    return (
+                      boardName !== "NoName" && (
+                        <JourneyBoard
+                          journey={
+                            userInfo[player.email].trips[currentTrip][
+                              userInfo[player.email].trips[currentTrip].findIndex(
+                                (e) => e.destination?.name === currentDestination?.name
+                              )
+                            ].detail.attractions[boardName]
+                          }
+                          key={boardName}
+                          boardId={boardName}
+                        />
+                      )
+                    );
+                  })}
+                </DroppableBoards>
+              </Boards>
+            </NamedJourney>
+          </Container>
         </DragDropContext>
-        <Row>
-          <Title>Did you add all your Journeys?</Title>
-          <Buttons>
-            <Button variants={buttonVar} whileHover={"hover"} onClick={onGoBackClicked}>
-              <span>No</span>
-              <span>find more attractions</span>
-            </Button>
-            <Button variants={buttonVar} whileHover={"hover"} onClick={onGoForwardClicked}>
-              <span>Yes</span>
-              <span>check your route</span>
-            </Button>
-          </Buttons>
-        </Row>
-      </Container>
-    </Wrapper>
+      </Wrapper>
+
+      <Row variants={loadingVar} initial="initial" animate="animate">
+        <Rowtitle>모든 장소를 배치하셨나요?</Rowtitle>
+        <Buttons>
+          <Button onClick={onGoBackClicked}>
+            <span>아니요</span>
+            <span>더 많은 장소를 찾는다.</span>
+          </Button>
+          <Button onClick={onGoForwardClicked}>
+            <span>네</span>
+            <span>여행을 확인한다.</span>
+          </Button>
+        </Buttons>
+      </Row>
+    </>
   );
 };
 
 export default Journeys;
 
-const Wrapper = styled(motion.div)`
-  height: 100vh;
+const Wrapper = styled(motion.div)<{ bgphoto: string }>`
   width: 100vw;
+  min-height: 100vh;
   overflow-x: hidden;
+  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), ${(props) => props.bgphoto};
+  background-position: center center;
+  background-size: cover;
+  padding-bottom: 150px;
 `;
 
-const Container = styled.div`
-  padding-bottom: 8%;
+const Container = styled(motion.div)`
+  padding: 0px 72px;
 `;
 
 const NoName = styled.div`
-  padding: 0 8%;
-  width: 100%;
+  width: 55%;
 `;
 
 const NoNameHeader = styled.div`
@@ -225,57 +244,60 @@ const NoNameHeader = styled.div`
   justify-content: space-between;
   margin-bottom: 10px;
   align-items: flex-end;
-  margin-top: 30px;
 `;
 
 const NoNameBoard = styled.div`
-  position: sticky;
-  top: 30px;
   z-index: 110;
   width: 100%;
 `;
 
-const Row = styled.div`
+const Row = styled(motion.div)`
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
+  background-color: white;
   width: 100%;
-  padding: 0 8%;
-  &:last-child {
-    align-items: center;
-    margin-top: 100px;
-    min-height: 20vh;
-  }
+  padding: 100px 0;
 `;
 
-const Main = styled.div`
+const Main = styled(motion.div)`
+  display: flex;
+  justify-content: space-between;
+  padding: 150px 72px;
+  padding-bottom: 50px;
+`;
+
+const Column = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 150px 8%;
-  @media screen and (max-width: 500px) {
-    min-height: 100vh;
-  }
+  width: 50%;
 `;
 
 const NamedJourney = styled.div`
-  background-color: ${(props) => props.theme.main.accent};
-  padding: 50px 8%;
+  background-color: rgba(0, 0, 0, 0.8);
+  border-radius: 10px;
+  padding: 50px 24px;
 `;
 
 const Boards = styled.div`
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  min-height: 200px;
+`;
+
+const DroppableBoards = styled.div`
   display: flex;
   flex-wrap: nowrap;
   overflow-x: auto;
   min-height: 200px;
-  &::-webkit-scrollbar {
-    height: 5px;
-  }
 `;
 
 const MainDescription = styled.h2`
   font-size: 16px;
   font-weight: 500;
+  width: 60%;
+  line-height: 2;
 `;
 
 const SubTitle = styled.h2`
@@ -286,14 +308,14 @@ const SubTitle = styled.h2`
   }
 `;
 
-const BoardTitle = styled.h2`
+const Rowtitle = styled.h2`
   font-size: 21px;
-  font-weight: 600;
-  margin-bottom: 20px;
+  font-weight: 400;
+  color: black;
 `;
 
 const Title = styled.h2`
-  font-size: 1.3125rem;
+  font-size: 21px;
   font-weight: 600;
 `;
 
@@ -304,54 +326,47 @@ const Buttons = styled.div`
 `;
 
 const MainTitle = styled.h2`
-  font-size: 3rem;
-  font-weight: 700;
-  margin-bottom: 50px;
+  font-size: 80px;
+  font-weight: 800;
   width: 100%;
+  line-height: 1.2;
+  margin-bottom: 30px;
 `;
 
 const FormWrapper = styled.div`
-  margin-top: 50px;
-  @media screen and (max-width: 800px) {
-    width: 100%;
-  }
+  margin-bottom: 20px;
+  display: flex;
 `;
 
 const Form = styled.form`
   display: flex;
   align-items: center;
-  @media screen and (max-width: 800px) {
-    flex-direction: column;
-  }
 `;
 
 const Input = styled(motion.input)<{ isHotel: boolean }>`
   width: 500px;
-  padding: 20px;
-  font-size: 16px;
-  border: none;
-  box-shadow: 1px 2px 2px 2px lightgray;
+  padding: 12px 20px;
+  font-size: 18px;
+  border: 2px solid white;
   border-radius: 7px;
   font-weight: 600;
+  background-color: transparent;
+  color: white;
   &:focus {
     outline: none;
-    box-shadow: 1px 2px 2px 2px ${(props) => props.theme.main.accent};
   }
-  @media screen and (max-width: 1000px) {
-    width: 400px;
-  }
-  @media screen and (max-width: 800px) {
-    width: 100%;
+  &::placeholder {
+    color: white;
   }
 `;
 
 const SubmitButton = styled.button`
-  margin-left: 30px;
+  margin-left: 20px;
   border: none;
   background-color: ${(props) => props.theme.main.accent};
-  padding: 20px 25px;
-  font-size: 16px;
-  border-radius: 50px;
+  padding: 14px 20px;
+  font-size: 18px;
+  border-radius: 10px;
   font-weight: 700;
   cursor: pointer;
   &:hover {
@@ -365,7 +380,7 @@ const SubmitButton = styled.button`
   }
 `;
 
-const Button = styled(motion.button)`
+const Button = styled.button`
   cursor: pointer;
   width: 160px;
   padding: 10px;
@@ -380,9 +395,15 @@ const Button = styled(motion.button)`
 
   &:first-child {
     background-color: ${(props) => props.theme.red.accent};
+    &:hover {
+      background-color: ${(props) => props.theme.red.accent + "aa"};
+    }
   }
   &:last-child {
     background-color: ${(props) => props.theme.green.accent};
+    &:hover {
+      background-color: ${(props) => props.theme.green.accent + "aa"};
+    }
   }
   span {
     &:first-child {
@@ -405,13 +426,9 @@ const Arrow = styled.p`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 1.25rem auto;
-  font-size: 3rem;
+  margin-bottom: 50px;
+  font-size: 48px;
 `;
-
-const buttonVar = {
-  hover: { scale: 1.1 },
-};
 
 const loadingVar = {
   initial: { opacity: 0 },

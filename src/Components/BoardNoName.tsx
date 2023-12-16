@@ -7,7 +7,7 @@ const BoardNoName = ({ journey, boardId }: IJourneyBoardProps) => {
   return (
     <Wrapper>
       {journey.length === 0 ? (
-        <Empty>There is no schedule..</Empty>
+        <Empty>스케줄이 없습니다. 이전 화면으로 넘어가 장소를 추가해주세요.</Empty>
       ) : (
         <Droppable droppableId={boardId}>
           {(provided, snapshot) => (
@@ -47,8 +47,8 @@ const Wrapper = styled.div`
   width: 100%;
   padding: 20px 25px;
   color: ${(props) => props.theme.main.word};
-  background-color: ${(props) => props.theme.main.hlbg};
-  min-height: 100px;
+  background-color: rgba(0, 0, 0, 0.8);
+  min-height: 220px;
 `;
 
 const Empty = styled.h2`
@@ -60,18 +60,9 @@ const Empty = styled.h2`
 const Area = styled.div<IDragging>`
   background-color: transparent;
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   justify-content: space-between;
   grid-gap: 10px;
-  @media screen and (max-width: 1199px) {
-    grid-template-columns: repeat(3, 1fr);
-  }
-  @media screen and (max-width: 800px) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  @media screen and (max-width: 500px) {
-    grid-template-columns: repeat(1, 1fr);
-  }
 `;
 
 interface IJourneyBoardProps {

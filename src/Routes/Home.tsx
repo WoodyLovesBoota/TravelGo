@@ -1,41 +1,63 @@
-import styled from "styled-components";
+import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
 import { useRecoilState } from "recoil";
-import { playerState } from "../atoms";
+import styled from "styled-components";
+import { destinationState, playerState, tripState, userState } from "../atoms";
+import TripCard from "../Components/TripCard";
+import NavigationBar from "../Components/NavigationBar";
+import { motion } from "framer-motion";
+import imageList from "../imageData.json";
+import { useEffect } from "react";
 
 const Home = () => {
-  const navigate = useNavigate();
+  const { register, handleSubmit, setValue: setInputValue } = useForm<IForm>();
+  const [users, setUsers] = useRecoilState(userState);
   const [player, setPlayer] = useRecoilState(playerState);
-  const goTemp = () => {
-    setPlayer({
-      email: "guest$gmail$com",
-      info: {
-        name: "Guest",
-        password: "1111",
-      },
-    });
-    navigate("/trip");
+
+  const onValid = (data: IForm) => {
+    if (users[player.email].trips[data.title]) alert("동일한 이름의 여행이 존재합니다");
+    else {
+      setUsers((current) => {
+        const copy = { ...current[player.email].trips };
+        const target = { ...copy, [data.title]: [] };
+        const temp = { ...current[player.email], ["trips"]: target };
+        return { ...current, [player.email]: temp };
+      });
+
+      setInputValue("title", "");
+    }
   };
 
-  const goNext = () => {
-    navigate("/login");
-  };
+  useEffect(() => {}, []);
 
   return (
-    <Wrapper>
-      <Header>
-        {/* <Capital>B</Capital>EEE
-        <LoginButton variants={buttonVar} whileHover={"hover"} onClick={goNext}>
-          Log In
-        </LoginButton> */}
-      </Header>
-
-      <Container>
-        <Title>Hit the road. make your own trip.</Title>
-        <Button variants={buttonVar} whileHover={"hover"} onClick={goTemp}>
-          Get Start
-        </Button>
+    <Wrapper bgphoto={imageList[Math.floor(Math.random() * 10) % imageList.length]}>
+      <NavigationBar />
+      <Container variants={loadingVar} initial="initial" animate="animate">
+        <Header>
+          <Title>
+            MAKE YOUR <br />
+            OWN TRIP.
+          </Title>
+          <SubTitle>
+            새로운 여행을 만들어주세요. 원하는 여행을 선택하고 여행에 대한 정보를 입력하여 나만의 여행을 만들어 가세요.
+          </SubTitle>
+          <Form onSubmit={handleSubmit(onValid)}>
+            <Input {...register("title", { required: true })} autoComplete="off" placeholder="Enter a name of Trip" />
+            <SubmitButton type="submit">Create</SubmitButton>
+          </Form>
+        </Header>
+        <Main>
+          {Object.entries(users[player.email].trips).length === 0 ? (
+            <Loader>There is no trips... Please create a new trip.</Loader>
+          ) : (
+            <TripCards>
+              {Object.entries(users[player.email].trips).map(([title, trip], ind) => (
+                <TripCard key={title} title={title} number={ind} />
+              ))}
+            </TripCards>
+          )}
+        </Main>
       </Container>
     </Wrapper>
   );
@@ -43,103 +65,126 @@ const Home = () => {
 
 export default Home;
 
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
+const Wrapper = styled.div<{ bgphoto: string }>`
   width: 100vw;
-  min-height: 100vh;
-  /* background: url("./bee-bg.jpeg"); */
-  background-size: cover;
+  background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${(props) => props.bgphoto});
   background-position: center center;
+  background-size: cover;
+  min-height: 100vh;
+`;
+
+const Container = styled(motion.div)`
+  display: flex;
+  padding: 150px 140px;
+  padding-right: 0;
+  width: 100%;
+  margin: auto 0;
 `;
 
 const Header = styled.div`
-  padding: 4%;
-  font-size: 21px;
-  font-weight: 700;
+  width: 40%;
   display: flex;
-  align-items: center;
-`;
-
-const Capital = styled.span`
-  color: ${(props) => props.theme.main.accent};
-  font-weight: 700;
-  font-size: 21px;
-  cursor: pointer;
-`;
-
-const LoginButton = styled(motion.button)`
-  margin-left: auto;
-  font-size: 18px;
-  font-weight: 600;
-  color: #373e3f;
-  border: none;
-  background-color: transparent;
-  cursor: pointer;
-`;
-
-const Container = styled.div`
-  width: 100%;
-  height: 60%;
-  padding: 3% 8%;
-  display: flex;
-  flex-direction: column;
   justify-content: center;
-  margin-top: 50px;
+  flex-direction: column;
+`;
 
-  @media screen and (max-width: 800px) {
-    margin-top: 100px;
-  }
+const Main = styled.div``;
+
+const Title = styled.h2`
+  font-size: 80px;
+  font-weight: 500;
+  margin-bottom: 50px;
+  line-height: 1;
 `;
 
 const SubTitle = styled.h2`
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 30px;
-  @media screen and (max-width: 800px) {
-    display: none;
+  font-size: 21px;
+  font-weight: 400;
+  margin-bottom: 50px;
+  width: 80%;
+`;
+
+const TripCards = styled.div`
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  width: 60vw;
+  padding-top: 20px;
+  padding-left: 30px;
+  &::-webkit-scrollbar {
+    height: 10px;
+    display: block;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: transparent;
+    display: block;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    display: block;
   }
 `;
 
-const Title = styled.h2`
-  font-size: 3rem;
-  font-weight: 700;
-  margin-bottom: 40px;
-`;
-
-const Detail = styled.h2`
+const Loader = styled.div`
   font-size: 16px;
   font-weight: 500;
-  margin-bottom: 60px;
-  width: 50%;
-  line-height: 2;
-  @media screen and (max-width: 1200px) {
-    width: 70%;
-  }
-  @media screen and (max-width: 800px) {
+`;
+
+const Form = styled.form`
+  display: flex;
+  align-items: center;
+  @media screen and (max-width: 500px) {
+    flex-direction: column;
     width: 100%;
   }
 `;
 
-const Button = styled(motion.button)`
-  height: 4.375rem;
-  width: 9.375rem;
-  cursor: pointer;
-  border-radius: 2.1875rem;
+const Input = styled.input`
+  width: 90%;
+  padding: 15px;
+  font-size: 21px;
+  border-radius: 10px;
   font-weight: 600;
-  font-size: 18px;
-  border: none;
-  background-color: #fed745;
-  @media screen and (max-width: 500px) {
-    width: 100vw;
-    border-radius: 0;
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    height: 70px;
+  background-color: rgba(255, 255, 255, 0.2);
+  &:focus {
+    outline: none;
+  }
+  &::placeholder {
+    color: white;
   }
 `;
 
-const buttonVar = {
-  hover: { scale: 1.1 },
+const SubmitButton = styled.button`
+  margin-left: 1.25rem;
+  border: none;
+  background-color: ${(props) => props.theme.main.accent};
+  color: white;
+  padding: 20px 30px;
+  font-size: 16px;
+  border-radius: 25px;
+  font-weight: 600;
+  display: none;
+  cursor: pointer;
+  &:hover {
+    background-color: ${(props) => props.theme.main.accent + "aa"};
+  }
+  @media screen and (max-width: 800px) {
+  }
+  @media screen and (max-width: 500px) {
+    width: 100%;
+    margin-top: 20px;
+    border-radius: 12px;
+  }
+`;
+
+const loadingVar = {
+  initial: { opacity: 0 },
+  animate: { opacity: 1, transition: { delay: 0.3 } },
 };
+
+interface IForm {
+  title: string;
+}

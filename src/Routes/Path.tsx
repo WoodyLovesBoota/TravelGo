@@ -7,6 +7,7 @@ import BigPath from "../Components/BigPath";
 import { DragDropContext, DropResult, Droppable, Draggable } from "react-beautiful-dnd";
 import NavigationBar from "../Components/NavigationBar";
 import { motion } from "framer-motion";
+import { makeImagePath } from "../utils";
 
 const Path = () => {
   const navigate = useNavigate();
@@ -60,19 +61,27 @@ const Path = () => {
       });
     }
   };
-
   return (
-    <Wrapper variants={loadingVar} initial="initial" animate="animate">
+    <Wrapper
+      variants={loadingVar}
+      initial="initial"
+      animate="animate"
+      bgphoto={`url(${makeImagePath(
+        currentDestination?.photos ? currentDestination?.photos[3].photo_reference : "",
+        800
+      )})`}
+    >
       <NavigationBar />
       <Container>
         <Main>
           <InformationColumn>
             <MainTitle>
-              Check your <span>journey</span>
+              Check your <br />
+              journey
             </MainTitle>
             <Description>
-              Make order your travel and check the details.Check your journey detail by clicking the card. Visualize
-              your itinerary on the map.
+              여행의 순서를 정하고 세부 사항을 확인하세요. 카드를 클릭하여 여정 세부 정보를 확인하고 지도에서 여행
+              일정을 시각화하세요.
             </Description>
           </InformationColumn>
           <HiddenListColumn>
@@ -87,16 +96,6 @@ const Path = () => {
             ) : null}
           </HiddenListColumn>
           <JourneyDeck>
-            <Header>
-              <HeaderColumn>
-                <SubTitle>to change the order </SubTitle>
-                <Title>Drag & Drop</Title>
-              </HeaderColumn>
-              <HeaderColumn>
-                <SubTitle>to check your journey</SubTitle>
-                <Title>Click</Title>
-              </HeaderColumn>
-            </Header>
             <DragDropContext onDragEnd={onDragEnd}>
               <Droppable droppableId="Path">
                 {(provided, snapshot) => (
@@ -179,9 +178,12 @@ const Path = () => {
 
 export default Path;
 
-const Wrapper = styled(motion.div)`
+const Wrapper = styled(motion.div)<{ bgphoto: string }>`
   width: 100vw;
   padding-bottom: 150px;
+  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), ${(props) => props.bgphoto};
+  background-position: center center;
+  background-size: cover;
 `;
 
 const Container = styled.div`
@@ -196,18 +198,9 @@ const Loader = styled.div`
 `;
 
 const Main = styled.div`
-  padding: 150px 12%;
-  padding-bottom: 50px;
+  padding: 150px 144px;
   display: flex;
   justify-content: space-between;
-  @media screen and (max-width: 1400px) {
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-  }
-  @media screen and (max-width: 500px) {
-    min-height: 100vh;
-  }
 `;
 
 const Header = styled.div`
@@ -216,19 +209,17 @@ const Header = styled.div`
 `;
 
 const MainTitle = styled.h2`
-  font-size: 3rem;
+  font-size: 80px;
   font-weight: 700;
+  line-height: 1.2;
   margin-bottom: 30px;
-  span {
-    font-size: 3rem;
-    font-weight: 700;
-  }
 `;
 
 const Description = styled.h2`
   font-size: 16px;
   font-weight: 500;
-  margin-bottom: 100px;
+  width: 60%;
+  line-height: 2;
 `;
 
 const Question = styled.h2`
@@ -261,43 +252,25 @@ const Area = styled.div<IDragging>`
   flex-grow: 1;
   overflow-y: auto;
   overflow-x: hidden;
-  padding-bottom: 30px;
-`;
-
-const HeaderColumn = styled.div`
-  &:last-child {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-  }
 `;
 
 const JourneyDeck = styled.div`
   display: flex;
   flex-direction: column;
-  @media screen and (max-width: 1400px) {
-    width: 100%;
-    margin-top: 50px;
-  }
+  width: 40%;
 `;
 
 const HiddenListColumn = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
-  @media screen and (max-width: 1400px) {
-    display: none;
-  }
+  width: 8%;
 `;
 
 const InformationColumn = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  width: 45%;
-  @media screen and (max-width: 1400px) {
-    width: 100%;
-  }
+  width: 50%;
 `;
 
 const Card = styled.div`
@@ -306,32 +279,25 @@ const Card = styled.div`
   justify-content: space-between;
   padding: 15px 20px;
   margin-bottom: 5px;
-  width: 400px;
+  width: 100%;
   border-radius: 5px;
-  background-color: transparent;
-  transform-origin: center left;
   cursor: pointer;
-  background-color: ${(props) => props.theme.main.accent};
+  background-color: rgba(0, 0, 0, 0.7);
   color: white;
-  @media screen and (max-width: 1400px) {
-    width: 100%;
-  }
 `;
 
 const CardTitle = styled.h2`
-  font-size: 16px;
-  font-weight: 600;
-  margin-bottom: 10px;
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 5px;
 `;
 
 const CardSubTitle = styled.h2`
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 400;
 `;
 
-const List = styled.div`
-  margin-top: 60px;
-`;
+const List = styled.div``;
 
 const Element = styled.h2`
   margin-bottom: 10px;
@@ -341,7 +307,7 @@ const Element = styled.h2`
 
 const Buttons = styled.div`
   display: flex;
-  padding: 0 12%;
+  padding: 10px 144px;
   justify-content: center;
 `;
 

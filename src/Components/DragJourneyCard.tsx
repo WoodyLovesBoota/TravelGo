@@ -112,72 +112,10 @@ const DragJourneyCard = ({
                         <FontAwesomeIcon icon={faTrashCan} style={{ color: "rgba(0,0,0,0.8)" }} />
                       </Icon>
                     </Delete>
-                    <Color
-                      onClick={() => {
-                        setIsToggleOpen(true);
-                      }}
-                    >
-                      <Icon>
-                        <FontAwesomeIcon icon={faPaintBrush} style={{ color: "rgba(0,0,0,0.8)" }} />
-                      </Icon>
-                    </Color>
                   </HeaderButtons>
                 </Header>
                 <Name>{journeyName}</Name>
                 <Address>{journeyAddress}</Address>
-                {isToggleOpen ? (
-                  <ToggleBox variants={toggleVar} initial="initial" animate="animate" exit="exit">
-                    <ToggleButton
-                      onClick={() => {
-                        changeColor(Colors.RED);
-                      }}
-                    >
-                      <ColorBox bgColor="red" />
-                    </ToggleButton>
-                    <ToggleButton
-                      onClick={() => {
-                        changeColor(Colors.ORANGE);
-                      }}
-                    >
-                      <ColorBox bgColor="orange" />
-                    </ToggleButton>
-                    <ToggleButton
-                      onClick={() => {
-                        changeColor(Colors.YELLOW);
-                      }}
-                    >
-                      <ColorBox bgColor="yellow" />
-                    </ToggleButton>
-                    <ToggleButton
-                      onClick={() => {
-                        changeColor(Colors.GREEN);
-                      }}
-                    >
-                      <ColorBox bgColor="lightgreen" />
-                    </ToggleButton>
-                    <ToggleButton
-                      onClick={() => {
-                        changeColor(Colors.BLUE);
-                      }}
-                    >
-                      <ColorBox bgColor="skyblue" />
-                    </ToggleButton>
-                    <ToggleButton
-                      onClick={() => {
-                        changeColor(Colors.PURPLE);
-                      }}
-                    >
-                      <ColorBox bgColor="violet" />
-                    </ToggleButton>
-                    <ToggleButton
-                      onClick={() => {
-                        changeColor(Colors.BLACK);
-                      }}
-                    >
-                      <ColorBox bgColor="black" />
-                    </ToggleButton>
-                  </ToggleBox>
-                ) : null}
               </Card>
             )}
           </Draggable>
@@ -199,15 +137,8 @@ const Card = styled.div<{
   padding: 10px;
   padding-top: 5px;
   margin-bottom: 10px;
-  color: black;
   position: relative;
-  background-image: linear-gradient(
-      to right,
-      rgba(255, 255, 255, 0.8),
-      rgba(255, 255, 255, 0.4),
-      transparent,
-      transparent
-    ),
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4), transparent),
     ${(props) => props.bgPhoto};
   background-size: cover;
   background-position: center center;
@@ -216,15 +147,6 @@ const Card = styled.div<{
 const Header = styled.div`
   display: flex;
   justify-content: space-between;
-`;
-
-const Color = styled.div`
-  width: 25px;
-  height: 25px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
 `;
 
 const Detail = styled.div`
@@ -275,37 +197,8 @@ const Address = styled.h3`
 
 const Icon = styled.span`
   font-size: 13px;
+  color: white;
 `;
-
-const ToggleBox = styled(motion.div)`
-  position: absolute;
-  top: 20px;
-  right: 10px;
-  display: flex;
-  transform-origin: top right;
-  border-radius: 5px;
-  z-index: 2;
-`;
-
-const ToggleButton = styled.div`
-  height: 25px;
-  font-weight: 500;
-  cursor: pointer;
-  span {
-    font-size: 12px;
-  }
-`;
-
-const ColorBox = styled.div<{ bgColor: string }>`
-  height: 20px;
-  width: 20px;
-  background-color: ${(props) => props.bgColor};
-`;
-
-const toggleVar = {
-  initial: { scale: 0 },
-  animate: { scale: 1 },
-};
 
 interface IDragJourneyCardProps {
   journeyId: string | undefined;

@@ -9,6 +9,7 @@ import { faLeftLong } from "@fortawesome/free-solid-svg-icons";
 import { useForm } from "react-hook-form";
 import { useRef } from "react";
 import NavigationBar from "../Components/NavigationBar";
+import imageList from "../imageData.json";
 
 const City = () => {
   const [users, setUsers] = useRecoilState(userState);
@@ -20,48 +21,40 @@ const City = () => {
 
   const { ref, ...rest } = register("destination");
 
-  const onOverlayClicked = () => {
-    navigate("/trip");
-  };
-
   const onValid = (data: IForm) => {
     navigate(`/search/${currentTrip}?destination=${data.destination}`);
   };
 
   return (
     <AnimatePresence>
-      <Wrapper variants={inputVar} initial="initial" animate="animate">
-        <Header>
+      <Wrapper>
+        <Header bgphoto={imageList[Math.floor(Math.random() * 10) % imageList.length]}>
           <NavigationBar />
-          <Title>
-            {/* <Button variants={buttonVar} whileHover={"hover"} onClick={onOverlayClicked}>
-              <FontAwesomeIcon icon={faLeftLong}></FontAwesomeIcon>
-            </Button> */}
-            {currentTrip}
-          </Title>
-          <SubTitle>
-            도시 혹은 지역을 검색하여 {currentTrip}에서의 목적지를 추가하세요. 이후 카드를 클릭하여 세부사항을 점검할 수
-            있습니다.
-          </SubTitle>
-          <Form onSubmit={handleSubmit(onValid)}>
-            <Input
-              {...rest}
-              name="destination"
-              ref={(e) => {
-                ref(e);
-                inputRef.current = e;
-              }}
-              placeholder="Enter your destination"
-              autoFocus
-              autoComplete="off"
-              spellCheck={false}
-              required
-            />
-            {/* <SubmitButton type="submit">Add a destination</SubmitButton> */}
-          </Form>
+          <Container variants={inputVar} initial="initial" animate="animate">
+            <Title>{currentTrip}</Title>
+            <SubTitle>
+              도시 혹은 지역을 검색하여 {currentTrip}에서의 목적지를 추가하세요. 이후 카드를 클릭하여 세부사항을 점검할
+              수 있습니다.
+            </SubTitle>
+            <Form onSubmit={handleSubmit(onValid)}>
+              <Input
+                {...rest}
+                name="destination"
+                ref={(e) => {
+                  ref(e);
+                  inputRef.current = e;
+                }}
+                placeholder="Enter your destination"
+                autoFocus
+                autoComplete="off"
+                spellCheck={false}
+                required
+              />
+            </Form>
+          </Container>
         </Header>
-        <Main>
-          <MainTitle>여행지 목록</MainTitle>
+        <Main variants={inputVar} initial="initial" animate="animate">
+          <MainTitle>여행지</MainTitle>
           <MainSubTitle>당신이 선택한 여행지는?</MainSubTitle>
           {users[player.email].trips[currentTrip].length === 0 ? (
             <Loader>There is no destination. Please add your destination</Loader>
@@ -91,8 +84,8 @@ const Wrapper = styled(motion.div)`
   flex-direction: column;
 `;
 
-const Header = styled.div`
-  background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("/banner.png");
+const Header = styled.div<{ bgphoto: string }>`
+  background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${(props) => props.bgphoto});
   background-position: center center;
   background-size: cover;
   width: 100%;
@@ -101,6 +94,14 @@ const Header = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+`;
+
+const Container = styled(motion.div)`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: auto 0;
 `;
 
 const Title = styled.div`
@@ -117,7 +118,7 @@ const SubTitle = styled.h2`
   text-align: center;
 `;
 
-const Main = styled.div`
+const Main = styled(motion.div)`
   width: 100%;
   padding: 150px 72px;
   display: flex;

@@ -56,10 +56,7 @@ export const destinationState = atom<IPlaceDetail | undefined>({
       onSet((newValue: any, _: any, isReset: boolean) => {
         isReset
           ? localStorage.removeItem("currentDestination")
-          : localStorage.setItem(
-              "currentDestination",
-              JSON.stringify(newValue)
-            );
+          : localStorage.setItem("currentDestination", JSON.stringify(newValue));
       });
     },
   ],
@@ -89,9 +86,7 @@ export const journeyState = atom<IJourneys>({
       const savedValue = localStorage.getItem("journey");
       if (savedValue !== null) setSelf(JSON.parse(savedValue));
       onSet((newValue: any, _: any, isReset: boolean) => {
-        isReset
-          ? localStorage.removeItem("journey")
-          : localStorage.setItem("journey", JSON.stringify(newValue));
+        isReset ? localStorage.removeItem("journey") : localStorage.setItem("journey", JSON.stringify(newValue));
       });
     },
   ],
@@ -107,9 +102,7 @@ export const userState = atom<IUser>({
       const savedValue = localStorage.getItem("users");
       if (savedValue !== null) setSelf(JSON.parse(savedValue));
       onSet((newValue: any, _: any, isReset: boolean) => {
-        isReset
-          ? localStorage.removeItem("users")
-          : localStorage.setItem("users", JSON.stringify(newValue));
+        isReset ? localStorage.removeItem("users") : localStorage.setItem("users", JSON.stringify(newValue));
       });
     },
   ],
@@ -117,15 +110,13 @@ export const userState = atom<IUser>({
 
 export const playerState = atom<{ email: string; info: IUserInfo }>({
   key: "player",
-  default: { email: "", info: { name: "", password: "" } },
+  default: { email: "guest$gmail$com", info: { name: "Guest", password: "1111" } },
   effects: [
     ({ setSelf, onSet }: any) => {
       const savedValue = localStorage.getItem("player");
       if (savedValue !== null) setSelf(JSON.parse(savedValue));
       onSet((newValue: any, _: any, isReset: boolean) => {
-        isReset
-          ? localStorage.removeItem("player")
-          : localStorage.setItem("player", JSON.stringify(newValue));
+        isReset ? localStorage.removeItem("player") : localStorage.setItem("player", JSON.stringify(newValue));
       });
     },
   ],

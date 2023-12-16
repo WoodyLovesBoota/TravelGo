@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { tripState } from "../atoms";
 import { motion } from "framer-motion";
+import imageList from "../imageData.json";
 
 const TripCard = ({ title, number }: ITripCardProps) => {
   const navigate = useNavigate();
@@ -13,7 +14,7 @@ const TripCard = ({ title, number }: ITripCardProps) => {
   };
 
   return (
-    <Wrapper onClick={handleTripCardClicked}>
+    <Wrapper onClick={handleTripCardClicked} bgphoto={imageList[Math.floor(Math.random() * 10) % imageList.length]}>
       <Title>{title}</Title>
     </Wrapper>
   );
@@ -21,11 +22,10 @@ const TripCard = ({ title, number }: ITripCardProps) => {
 
 export default TripCard;
 
-const Wrapper = styled(motion.div)`
+const Wrapper = styled(motion.div)<{ bgphoto: string }>`
   width: 270px;
-  height: 360px;
-  padding: 40px;
-  background-color: rgba(255, 255, 255, 0.3);
+  height: 400px;
+  padding: 20px;
   flex: 0 0 auto;
   margin-right: 20px;
   border-radius: 30px;
@@ -33,10 +33,13 @@ const Wrapper = styled(motion.div)`
   display: flex;
   align-items: flex-end;
   cursor: pointer;
+  background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.3)), url(${(props) => props.bgphoto});
+  background-position: center center;
+  background-size: cover;
 `;
 
 const Title = styled.h2`
-  font-size: 36px;
+  font-size: 24px;
   font-weight: 400;
   color: white;
 `;
