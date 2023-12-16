@@ -76,7 +76,7 @@ const BigPath = ({ boardName }: IBigPathProps) => {
         <>
           <Overlay onClick={handleOverlayClicked} />
           <Card layoutId={boardName}>
-            <Title>Route of {boardName}</Title>
+            <Title>{boardName} - 경로</Title>
             <SubTitle>
               {attractionList.map((place) => (
                 <Vortex>{place?.name}</Vortex>
@@ -125,7 +125,6 @@ const BigPath = ({ boardName }: IBigPathProps) => {
               <Column>
                 <DragColumn>
                   <Header>{boardName}</Header>
-                  {/* <Button>Add Hotel to Route</Button> */}
                   <DragDropContext onDragEnd={onDragEnd}>
                     <Droppable droppableId={boardName}>
                       {(provided, snapshot) => (
@@ -172,27 +171,6 @@ const BigPath = ({ boardName }: IBigPathProps) => {
               </Column>
             </Main>
           </Card>
-          {hotelClicked && (
-            <Hidden>
-              <HiddenOverlay></HiddenOverlay>
-              <HiddenHotel>
-                <HiddenTitle>Hotels of {currentDestination?.name}</HiddenTitle>
-                <HotelList>
-                  {userInfo[player.email].trips[currentTrip][
-                    userInfo[player.email].trips[currentTrip].findIndex(
-                      (e) => e.destination?.name === currentDestination?.name
-                    )
-                  ].detail.hotels.map((hotel) => (
-                    <HotelPathCard
-                      name={hotel?.name}
-                      placeId={hotel?.placeId}
-                      timestamp={hotel?.timestamp}
-                    ></HotelPathCard>
-                  ))}
-                </HotelList>
-              </HiddenHotel>
-            </Hidden>
-          )}
         </>
       )}
     </AnimatePresence>
@@ -207,54 +185,19 @@ const Overlay = styled.div`
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(51, 47, 56, 0.9);
+  background-color: rgba(40, 40, 40, 0.9);
   z-index: 98;
-`;
-
-const Hidden = styled.div``;
-
-const HiddenTitle = styled.h2`
-  font-size: 1.125rem;
-  font-weight: 600;
-  margin-bottom: 1.25rem;
-`;
-
-const HotelList = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(16.875rem, 1fr));
-  grid-gap: 0.625rem;
-`;
-
-const HiddenHotel = styled.div`
-  padding: 1.875rem 10%;
-  position: fixed;
-  top: 10vh;
-  left: 0;
-  width: 100vw;
-  height: 80vh;
-  background-color: ${(props) => props.theme.main.hlbg};
-  z-index: 101;
-`;
-
-const HiddenOverlay = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 100;
-  background-color: rgba(0, 0, 0, 0.8);
 `;
 
 const Card = styled(motion.div)`
   position: fixed;
   width: 100vw;
-  height: 90vh;
-  top: 5vh;
+  height: 95vh;
+  top: 2.5vh;
   left: 0vh;
   background-color: ${(props) => props.theme.main.accent};
   z-index: 99;
-  padding: 0 12%;
+  padding: 0 72px;
 `;
 
 const Main = styled.div`
@@ -262,9 +205,6 @@ const Main = styled.div`
   height: 85%;
   display: flex;
   align-items: flex-start;
-  @media screen and (max-width: 74.9375rem) {
-    flex-direction: column;
-  }
 `;
 
 const Column = styled.div`
@@ -273,62 +213,52 @@ const Column = styled.div`
     width: 70%;
   }
   &:last-child {
-    margin-left: 2vw;
+    margin-left: 30px;
     width: 25%;
-  }
-  @media screen and (max-width: 74.9375rem) {
-    &:first-child {
-      width: 100%;
-    }
-    &:last-child {
-      margin: 0;
-      width: 100%;
-      margin-top: 1.875rem;
-    }
   }
 `;
 
 const Vortex = styled.h2`
-  font-size: 1rem;
+  font-size: 16px;
   font-weight: 500;
-  margin-right: 0.75rem;
-  color: gray;
+  margin-right: 10px;
+  color: lightgray;
 `;
 
 const SubTitle = styled.div`
   display: flex;
-  margin-bottom: 1.25rem;
+  margin-bottom: 20px;
 `;
 
 const Header = styled.div`
-  font-size: 1.125rem;
-  font-weight: 700;
-  margin: 1.25rem 0;
+  font-size: 21px;
+  font-weight: 600;
+  margin: 20px 0;
+  color: black;
 `;
 
 const Title = styled.div`
-  font-size: 1.3125rem;
-  font-weight: 700;
-  margin: 1.25rem 0;
+  font-size: 24px;
+  font-weight: 600;
+  margin: 20px 0;
 `;
 
 const DragColumn = styled.div`
-  padding: 1.875rem;
+  padding: 20px;
   height: 100%;
-  padding-top: 0.625rem;
   width: 100%;
   background-color: ${(props) => props.theme.main.bg};
-  border-radius: 0.625rem;
+  border-radius: 10px;
 `;
 
 const DragCard = styled.div<{ isDragging: boolean; bgPhoto: string }>`
-  padding: 1.25rem 0.9375rem;
+  padding: 20px 15px;
   font-weight: 600;
-  font-size: 0.875rem;
+  font-size: 16px;
   display: flex;
   align-items: center;
-  border-radius: 0.3125rem;
-  margin-bottom: 0.4375rem;
+  border-radius: 5px;
+  margin-bottom: 5px;
   color: ${(props) => props.theme.white.normal};
   background-image: linear-gradient(to right, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.3), transparent, transparent),
     ${(props) => props.bgPhoto};
@@ -339,19 +269,19 @@ const DragCard = styled.div<{ isDragging: boolean; bgPhoto: string }>`
 const Area = styled.div<IDragging>`
   background-color: transparent;
   flex-grow: 1;
+  min-height: 50vh;
 `;
 
 const Loader = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 1.125rem;
+  font-size: 16px;
   width: 100%;
   height: 100%;
   font-weight: 600;
+  color: black;
 `;
-
-const Button = styled.button``;
 
 interface IBigPathProps {
   boardName: string;

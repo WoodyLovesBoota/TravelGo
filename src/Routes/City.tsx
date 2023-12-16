@@ -7,7 +7,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLeftLong } from "@fortawesome/free-solid-svg-icons";
 import { useForm } from "react-hook-form";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import NavigationBar from "../Components/NavigationBar";
 import imageList from "../imageData.json";
 
@@ -24,6 +24,10 @@ const City = () => {
   const onValid = (data: IForm) => {
     navigate(`/search/${currentTrip}?destination=${data.destination}`);
   };
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <AnimatePresence>
@@ -127,7 +131,7 @@ const Main = styled(motion.div)`
 `;
 
 const MainTitle = styled.h2`
-  font-size: 32px;
+  font-size: 24px;
   font-weight: 600;
   color: black;
   margin-bottom: 15px;
@@ -135,7 +139,7 @@ const MainTitle = styled.h2`
 
 const MainSubTitle = styled.h2`
   color: gray;
-  font-size: 21px;
+  font-size: 16px;
   font-weight: 400;
   margin-bottom: 50px;
 `;

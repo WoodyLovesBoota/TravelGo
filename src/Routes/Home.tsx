@@ -28,7 +28,9 @@ const Home = () => {
     }
   };
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <Wrapper bgphoto={imageList[Math.floor(Math.random() * 10) % imageList.length]}>

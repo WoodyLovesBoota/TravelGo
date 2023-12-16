@@ -6,7 +6,6 @@ import Overview from "./Routes/Overview";
 import Review from "./Routes/Review";
 import Map from "./Routes/Map";
 import Journeys from "./Routes/Journeys";
-import Path from "./Routes/Path";
 import Home from "./Routes/Home";
 import Summary from "./Routes/Summary";
 
@@ -17,7 +16,6 @@ const App = () => {
         <Routes>
           <Route path="/summary/:title/:destination" element={<Summary />}></Route>
           <Route path="/journey/:title/:destination" element={<Journeys />}>
-            <Route path="/journey/:title/:destination/:boardName" element={<Path />} />
             <Route path="/journey/:title/:destination/:place" element={<Journeys />}>
               <Route path="overview" element={<Overview />}></Route>
               <Route path="review" element={<Review />}></Route>

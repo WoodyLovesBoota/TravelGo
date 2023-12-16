@@ -11,6 +11,7 @@ import BoardNoName from "../Components/BoardNoName";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDownLong, faLeftLong } from "@fortawesome/free-solid-svg-icons";
 import { makeImagePath } from "../utils";
+import { useEffect } from "react";
 
 const Journeys = () => {
   const { register, setValue, handleSubmit } = useForm<IBoardForm>();
@@ -108,6 +109,10 @@ const Journeys = () => {
     });
     setValue("board", "");
   };
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <>
@@ -295,7 +300,7 @@ const DroppableBoards = styled.div`
 
 const MainDescription = styled.h2`
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 400;
   width: 60%;
   line-height: 2;
 `;
@@ -303,9 +308,6 @@ const MainDescription = styled.h2`
 const SubTitle = styled.h2`
   font-size: 16px;
   font-weight: 600;
-  @media screen and (max-width: 800px) {
-    display: none;
-  }
 `;
 
 const Rowtitle = styled.h2`

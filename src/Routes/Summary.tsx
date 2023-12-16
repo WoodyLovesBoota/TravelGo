@@ -36,6 +36,10 @@ const Summary = () => {
     navigate(`/destination/${currentTrip}`);
   };
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <Wrapper>
       <Header bgphoto={imageList[Math.floor(Math.random() * 10) % imageList.length]}>

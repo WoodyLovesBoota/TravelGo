@@ -108,7 +108,7 @@ const Destination = styled.div<{ bgPhoto: string }>`
 `;
 
 const DestinationTitle = styled.h2`
-  font-size: 21px;
+  font-size: 18px;
   font-weight: 600;
   color: black;
   margin-top: 10px;

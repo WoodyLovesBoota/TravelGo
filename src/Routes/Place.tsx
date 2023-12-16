@@ -3,7 +3,7 @@ import { destinationState, userState, playerState, tripState } from "../atoms";
 import styled from "styled-components";
 import { IGeAutoCompletePlacesResult, getAutoCompletePlacesResult } from "../api";
 import { useQuery } from "react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { AnimatePresence, motion } from "framer-motion";
 import PlaceCard from "../Components/PlaceCard";
@@ -87,6 +87,10 @@ const Place = () => {
   const onToggleClicked = () => {
     setIsHotel((current) => !current);
   };
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <AnimatePresence>
@@ -246,8 +250,8 @@ const DateInfo = styled.span`
 
 const Description = styled.h2`
   color: white;
+  font-size: 16px;
   font-weight: 400;
-  font-size: 18px;
   width: 70%;
   line-height: 2;
   margin-bottom: 50px;
@@ -323,7 +327,7 @@ const Toggle = styled(motion.div)<{ isHotel: boolean }>`
   height: 50px;
   padding: 5px 12px;
   cursor: pointer;
-  background-color: ${(props) => (props.isHotel ? props.theme.red.normal + "88" : props.theme.main.accent + "88")};
+  background-color: ${(props) => (props.isHotel ? props.theme.red.accent + "88" : props.theme.main.accent + "88")};
   margin-bottom: 50px;
 `;
 
@@ -422,7 +426,7 @@ const Row = styled.div`
 `;
 
 const RowTitle = styled.h2`
-  font-size: 32px;
+  font-size: 24px;
   font-weight: 600;
   margin-bottom: 50px;
   margin-top: 20px;
@@ -440,7 +444,7 @@ const Last = styled(motion.div)`
 `;
 
 const Question = styled.h2`
-  font-size: 21px;
+  font-size: 16px;
   font-weight: 400;
   margin-bottom: 20px;
   text-align: center;

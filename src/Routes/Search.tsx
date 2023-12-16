@@ -6,7 +6,7 @@ import { makeImagePath } from "../utils";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { playerState, userState, tripState } from "../atoms";
 import GoogleMap from "../Components/GoogleMap";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, Link, PathMatch, useMatch, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
@@ -73,6 +73,10 @@ const Search = () => {
     });
     navigate(`/destination/${currentTrip}`);
   };
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <Wrapper>
