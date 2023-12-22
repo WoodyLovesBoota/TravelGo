@@ -5,8 +5,9 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { destinationState, tripState, userState } from "../atoms";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import GoogleMap from "./GoogleMap";
+import DBHandler from "../firebase/DBHandler";
 
 const DestinationCard = ({ title, destination }: IBigTripCardProps) => {
   const navigate = useNavigate();
@@ -15,19 +16,40 @@ const DestinationCard = ({ title, destination }: IBigTripCardProps) => {
 
   const onAddClick = () => {
     setIsCardClicked(false);
-    setUserInfo((current) => [
-      ...current,
-      {
-        destination: destination,
-        detail: {
-          date: 0 + "|" + 0,
-          attractions: { NoName: [] },
-          hotels: [],
-          wtm: [],
-        },
-      },
-    ]);
+    setUserInfo((current) => {
+      let target = [...current["Trip1"]];
+      let newArr =
+        target.length === 0
+          ? [
+              {
+                destination: destination,
+                detail: {
+                  date: 0 + "|" + 0,
+                  attractions: { NoName: [] },
+                  hotels: [],
+                  wtm: [],
+                },
+              },
+            ]
+          : [
+              ...target,
+              {
+                destination: destination,
+                detail: {
+                  date: 0 + "|" + 0,
+                  attractions: { NoName: [] },
+                  hotels: [],
+                  wtm: [],
+                },
+              },
+            ];
+      return { ...current, ["Trip1"]: newArr };
+    });
   };
+
+  // useEffect(() => {
+  //   DBHandler.addUserInfoPost("destination", "userDestination", userInfo);
+  // }, [userInfo]);
 
   const deleteDestination = (destination: IPlaceDetail | undefined) => {};
 
@@ -38,13 +60,7 @@ const DestinationCard = ({ title, destination }: IBigTripCardProps) => {
   return (
     <>
       <AnimatePresence>
-        <Wrapper
-          onClick={onCardClick}
-          variants={hoverVar}
-          whileHover={"hover"}
-          layoutId={destination?.place_id}
-          key={destination?.place_id}
-        >
+        <Wrapper onClick={onCardClick} layoutId={destination?.place_id} key={destination?.place_id}>
           {destination && (
             <Container>
               <Destination
@@ -52,27 +68,12 @@ const DestinationCard = ({ title, destination }: IBigTripCardProps) => {
                   destination?.photos ? destination?.photos[0].photo_reference : "",
                   500
                 )})`}
-                // onClick={onDestinationClicked}
               />
               <Description>
-                <DestinationContent>
-                  <DestinationTitle>{destination?.name}</DestinationTitle>
-                  <DestinationSubTitle>
-                    {destination?.formatted_address.split(" ")[0]}
-                    {/* {"(" +
-                        currentTarget.detail.date.split("|")[0] +
-                        " ~ " +
-                        currentTarget.detail.date.split("|")[1] +
-                        ")"} */}
-                  </DestinationSubTitle>
-                </DestinationContent>
-                {/* <Button
-                    onClick={() => {
-                      deleteDestination(destination);
-                    }}
-                  >
-                    삭제
-                  </Button> */}
+                <DestinationTitle>{destination?.name}</DestinationTitle>
+                <DestinationSubTitle>
+                  {destination?.formatted_address.split(" ")[0]}
+                </DestinationSubTitle>
               </Description>
             </Container>
           )}
@@ -118,12 +119,10 @@ export default DestinationCard;
 
 const Wrapper = styled(motion.div)`
   display: flex;
-  /* box-shadow: 2px 2px 4px 2px lightgray; */
   cursor: pointer;
-  width: 300px;
-  box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 0.1);
-  padding: 8px;
-  border-radius: 6px;
+  width: 282px;
+  border-radius: 16px;
+  box-shadow: 0px 2px 12px 0px rgba(0, 0, 0, 0.1);
 `;
 
 const Container = styled.div`
@@ -132,12 +131,12 @@ const Container = styled.div`
   width: 100%;
 `;
 
-const DestinationContent = styled.div``;
-
 const Description = styled.div`
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  padding: 26px 20px;
+  border-bottom-right-radius: 16px;
+  border-bottom-left-radius: 16px;
 `;
 
 const Destination = styled.div<{ bgPhoto: string }>`
@@ -145,16 +144,16 @@ const Destination = styled.div<{ bgPhoto: string }>`
   background-size: cover;
   background-position: center center;
   width: 100%;
-  height: 300px;
-  border-radius: 6px;
+  height: 282px;
+  border-top-right-radius: 16px;
+  border-top-left-radius: 16px;
   cursor: pointer;
 `;
 
 const DestinationTitle = styled.h2`
-  font-size: 21px;
+  font-size: 16px;
   font-weight: 400;
   color: black;
-  margin-top: 5px;
 `;
 
 const DestinationSubTitle = styled.h2`

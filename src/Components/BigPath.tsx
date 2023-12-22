@@ -19,8 +19,8 @@ const BigPath = ({ boardName }: IBigPathProps) => {
   const [hotelClicked, setHotelClicked] = useState(false);
 
   const attractionList =
-    userInfo[userInfo.findIndex((e) => e.destination?.name === currentDestination?.name)].detail
-      .attractions[boardName];
+    userInfo[userInfo[1].findIndex((e) => e.destination?.name === currentDestination?.name)][0]
+      .detail.attractions[boardName];
 
   const bigPathMatch: PathMatch<string> | null = useMatch(
     "/journey/:title/:destination/:boardName"

@@ -94,9 +94,9 @@ export const journeyState = atom<IJourneys>({
   ],
 });
 
-export const userState = atom<ITripDetails[]>({
+export const userState = atom<IUsers>({
   key: "user",
-  default: [],
+  default: { Trip1: [] },
   effects: [
     ({ setSelf, onSet }: any) => {
       const savedValue = localStorage.getItem("users");
@@ -127,6 +127,10 @@ export const endDateState = atom<string>({
 
 interface IJourneys {
   [key: string]: IJourney[];
+}
+
+export interface IUsers {
+  [name: string]: ITripDetails[];
 }
 
 export interface IJourney {

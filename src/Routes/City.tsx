@@ -16,6 +16,7 @@ import {
 } from "../api";
 import { useQuery } from "react-query";
 import Header from "../Components/Header";
+import { ReactComponent as Search } from "../assets/search.svg";
 
 const City = () => {
   const [users, setUsers] = useRecoilState(userState);
@@ -52,8 +53,6 @@ const City = () => {
       <Header />
       <NavigationBar now={1} />
       <Container variants={inputVar} initial="initial" animate="animate">
-        {/* <Title>Title</Title> */}
-        <SubTitle>여행할 도시를 찾아보세요</SubTitle>
         <Form onSubmit={handleSubmit(onValid)}>
           <Input
             {...rest}
@@ -62,12 +61,15 @@ const City = () => {
               ref(e);
               inputRef.current = e;
             }}
-            placeholder="Enter your destination"
+            placeholder="어디로 여행을 떠나시나요?"
             autoFocus
             autoComplete="off"
             spellCheck={false}
             required
           />
+          <Icon>
+            <Search width={23} />
+          </Icon>{" "}
         </Form>
       </Container>
       <Main>
@@ -106,23 +108,6 @@ const Container = styled(motion.div)`
   align-items: center;
 `;
 
-const Card = styled.div``;
-
-const Title = styled.div`
-  font-size: 80px;
-  font-weight: 500;
-  line-height: 1;
-  margin-bottom: 40px;
-  padding-top: 100px;
-`;
-
-const SubTitle = styled.h2`
-  font-size: 21px;
-  font-weight: 400;
-  text-align: center;
-  padding-top: 100px;
-`;
-
 const Main = styled(motion.div)`
   width: 100%;
   padding: 0 72px;
@@ -132,24 +117,11 @@ const Main = styled(motion.div)`
   align-items: center;
 `;
 
-const MainTitle = styled.h2`
-  font-size: 24px;
-  font-weight: 600;
-  color: black;
-  margin-bottom: 15px;
-`;
-
-const MainSubTitle = styled.h2`
-  color: gray;
-  font-size: 16px;
-  font-weight: 400;
-  margin-bottom: 50px;
-`;
-
 const Cards = styled.div`
   display: flex;
   justify-content: center;
   width: 100%;
+  padding: 77px;
 `;
 
 const Loader = styled.div`
@@ -158,61 +130,42 @@ const Loader = styled.div`
   align-items: center;
   font-size: 16px;
   font-weight: 500;
+  padding: 77px;
 `;
 
 const Form = styled(motion.form)`
   display: flex;
   justify-content: center;
-  margin: 70px 0 0 0;
-  width: 100%;
-  @media screen and (max-width: 800px) {
-    flex-direction: column;
-  }
+  margin: 80px 0 0 0;
+  width: 506px;
+  height: 50px;
+  position: relative;
 `;
 
 const Input = styled(motion.input)`
-  width: 700px;
-  padding: 20px;
-  font-size: 18px;
-  border: none;
-  border-radius: 7px;
-  font-weight: 600;
-  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  box-shadow: 0px 2px 12px 0px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  height: 100%;
+  padding: 15px 60px;
+  font-size: 16px;
+  font-weight: 400;
   &:focus {
     outline: none;
   }
   &::placeholder {
-    color: white;
   }
 `;
 
-const SubmitButton = styled.button`
-  margin-left: 40px;
-  border: none;
-  background-color: ${(props) => props.theme.main.button};
-  color: ${(props) => props.theme.main.word};
-  padding: 20px 30px;
-  font-size: 16px;
-  border-radius: 50px;
-  font-weight: 600;
-  cursor: pointer;
-  &:hover {
-    background-color: ${(props) => props.theme.main.accent + "aa"};
-  }
-  @media screen and (max-width: 800px) {
-    width: 100%;
-    margin: 20px 0;
-    border-radius: 7px;
-  }
+const Icon = styled.div`
+  position: absolute;
+  top: 13px;
+  left: 15px;
 `;
 
 const inputVar = {
   initial: { opacity: 0 },
   animate: { opacity: 1, transition: { delay: 0.3 } },
-};
-
-const buttonVar = {
-  hover: { scale: 1.2 },
 };
 
 interface IForm {

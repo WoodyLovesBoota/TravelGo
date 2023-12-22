@@ -19,19 +19,7 @@ import { makeImagePath } from "../utils";
 const Place = () => {
   const [currentDestination, setCurrentDestination] = useRecoilState(destinationState);
   const [userInfo, setUserInfo] = useRecoilState(userState);
-  // const [player, setPlayer] = useRecoilState(playerState);
-  const [currentTrip, setCurrentTrip] = useRecoilState(tripState);
   const [isHotel, setIsHotel] = useState(false);
-
-  // const currentTarget =
-  //   userInfo[player.email].trips[currentTrip][
-  //     userInfo[player.email].trips[currentTrip].findIndex(
-  //       (e) => e.destination?.name === currentDestination?.name
-  //     )
-  //   ];
-
-  // const attractionList = currentTarget.detail.attractions;
-  // const hotelList = currentTarget.detail.hotels;
 
   const destinationMatch: PathMatch<string> | null = useMatch("/travel/:title/:destination");
 

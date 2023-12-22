@@ -16,10 +16,10 @@ const NavigationBar = () => {
   };
 
   const onDeleteClick = (name: string | undefined) => {
-    setUserInfo((prev) => {
-      let index = [...prev].findIndex((e) => e.destination?.name === name);
-      return [...prev.slice(0, index), ...prev.slice(index + 1)];
-    });
+    // setUserInfo((prev) => {
+    //   let index = [...prev].findIndex((e) => e.destination?.name === name);
+    //   return [...prev.slice(0, index), ...prev.slice(index + 1)];
+    // });
   };
 
   const handleNavClick = () => {
@@ -35,7 +35,7 @@ const NavigationBar = () => {
         <Links>
           <Box>
             <Link onClick={onDestinationClicked}>DESTINATIONS</Link>
-            {userInfo.length > 0 && (
+            {/* {userInfo.length > 0 && (
               <Circle
                 key={userInfo.length}
                 variants={numberVar}
@@ -44,13 +44,13 @@ const NavigationBar = () => {
               >
                 {userInfo.length}
               </Circle>
-            )}
+            )} */}
           </Box>
         </Links>
       </Wrapper>
       {openDestination && (
         <Destinations>
-          {userInfo.map((dest) => (
+          {/* {userInfo.map((dest) => (
             <DestItem>
               <DestImg
                 bgphoto={`url(${makeImagePath(
@@ -61,7 +61,7 @@ const NavigationBar = () => {
               <DestTitle>{dest.destination?.name}</DestTitle>
               <DeleteButton onClick={() => onDeleteClick(dest.destination?.name)}>x</DeleteButton>
             </DestItem>
-          ))}
+          ))} */}
         </Destinations>
       )}
     </AnimatePresence>

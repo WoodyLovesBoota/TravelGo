@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import styled from "styled-components";
 
 const NavigationBar = ({ now }: { now: number }) => {
@@ -5,11 +6,23 @@ const NavigationBar = ({ now }: { now: number }) => {
     <Wrapper>
       {["기간 설정", "여행지 설정", "장소 선택", "일정 관리", "최종 여행 계획"].map((e, i) => (
         <Vortex>
-          <Title ispass={i < now} isnow={i === now}>
+          <Title
+            variants={circleVar}
+            initial="initial"
+            animate="animate"
+            ispass={i < now}
+            isnow={i === now}
+          >
             {e}
           </Title>
           <Contents>
-            <Circle ispass={i < now} isnow={i === now} />
+            <Circle
+              variants={circleVar}
+              initial="initial"
+              animate="animate"
+              ispass={i < now}
+              isnow={i === now}
+            />
             {i !== 4 && <Line ispass={i < now} />}
           </Contents>
         </Vortex>
@@ -51,7 +64,7 @@ const Vortex = styled.div`
   flex-direction: column;
 `;
 
-const Circle = styled.div<{ ispass: boolean; isnow: boolean }>`
+const Circle = styled(motion.div)<{ ispass: boolean; isnow: boolean }>`
   width: ${(props) => (props.isnow ? "12px" : "9px")};
   height: ${(props) => (props.isnow ? "12px" : "9px")};
   border-radius: 100px;
@@ -63,7 +76,7 @@ const Circle = styled.div<{ ispass: boolean; isnow: boolean }>`
       : props.theme.gray.blur};
 `;
 
-const Title = styled.h2<{ ispass: boolean; isnow: boolean }>`
+const Title = styled(motion.h2)<{ ispass: boolean; isnow: boolean }>`
   color: ${(props) =>
     props.ispass ? props.theme.gray.normal : props.isnow ? "black" : props.theme.gray.semiblur};
   font-size: ${(props) => (props.isnow ? "14px" : "12px")};
@@ -71,3 +84,8 @@ const Title = styled.h2<{ ispass: boolean; isnow: boolean }>`
   margin-left: -22px;
   margin-bottom: 11px;
 `;
+
+const circleVar = {
+  initial: { scale: 0 },
+  animate: { scale: 1, transition: { duration: 0.3 } },
+};
