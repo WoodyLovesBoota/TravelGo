@@ -18,9 +18,9 @@ const BigPath = ({ boardName }: IBigPathProps) => {
   const [currentTrip, setCurrentTrip] = useRecoilState(tripState);
   const [hotelClicked, setHotelClicked] = useState(false);
 
-  const attractionList =
-    userInfo[userInfo[1].findIndex((e) => e.destination?.name === currentDestination?.name)][0]
-      .detail.attractions[boardName];
+  // const attractionList =
+  //   userInfo[userInfo[1].findIndex((e) => e.destination?.name === currentDestination?.name)][0]
+  //     .detail.attractions[boardName];
 
   const bigPathMatch: PathMatch<string> | null = useMatch(
     "/journey/:title/:destination/:boardName"
@@ -71,7 +71,7 @@ const BigPath = ({ boardName }: IBigPathProps) => {
 
   return (
     <AnimatePresence>
-      {bigPathMatch && bigPathMatch.params.boardName === boardName && (
+      {/* {bigPathMatch && bigPathMatch.params.boardName === boardName && (
         <>
           <Overlay onClick={handleOverlayClicked} />
           <Card layoutId={boardName}>
@@ -175,7 +175,7 @@ const BigPath = ({ boardName }: IBigPathProps) => {
             </Main>
           </Card>
         </>
-      )}
+      )} */}
     </AnimatePresence>
   );
 };

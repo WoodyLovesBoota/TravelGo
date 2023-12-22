@@ -8,18 +8,23 @@ import { useForm } from "react-hook-form";
 import { AnimatePresence, motion } from "framer-motion";
 import PlaceCard from "../Components/PlaceCard";
 import JourneyCard from "../Components/JourneyCard";
-import NavigationBar from "../Components/TempNav";
 import { PathMatch, useMatch, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHotel } from "@fortawesome/free-solid-svg-icons";
 import { faFortAwesome } from "@fortawesome/free-brands-svg-icons";
 import HotelCard from "../Components/HotelCard";
 import { makeImagePath } from "../utils";
+import NavigationBar from "../Components/NavigationBar";
+import Header from "../Components/Header";
+import DestinationCard from "../Components/DestinationCard";
+import CityCard from "../Components/CityCard";
 
 const Place = () => {
   const [currentDestination, setCurrentDestination] = useRecoilState(destinationState);
   const [userInfo, setUserInfo] = useRecoilState(userState);
   const [isHotel, setIsHotel] = useState(false);
+  const [currentTrip, setCurrentTrip] = useRecoilState(tripState);
+  const [isInputOpen, setIsInputOpen] = useState(false);
 
   const destinationMatch: PathMatch<string> | null = useMatch("/travel/:title/:destination");
 
@@ -72,8 +77,16 @@ const Place = () => {
   };
 
   const onValid = (data: IForm) => {
-    setValue(data.keyword);
-    setInputValue("keyword", "");
+    setIsInputOpen(false);
+    const newName = data.keyword;
+    newName &&
+      setUserInfo((current) => {
+        const copy = { ...current[currentTrip] };
+        const temp = { ...current };
+        delete temp[currentTrip];
+        return { ...temp, [newName]: copy };
+      });
+    newName && setCurrentTrip(data.keyword);
   };
 
   const onToggleClicked = () => {
@@ -85,128 +98,190 @@ const Place = () => {
   }, []);
 
   return (
-    <AnimatePresence>
-      <Container>
-        <Wrapper
-          bgphoto={`url(${makeImagePath(
-            currentDestination?.photos ? currentDestination?.photos[0].photo_reference : "",
-            800
-          )})`}
-        >
-          <NavigationBar />
-
-          <Main variants={loadingVar} initial="initial" animate="animate">
-            <Header>
-              <Title isHotel={isHotel} variants={titleVar} initial="initial" animate="animate">
-                {isHotel ? `Hotels` : `Attractions`}
-                <DateInfo>in {currentDestination?.name}</DateInfo>
-              </Title>
-              <Description>
-                {currentDestination?.name}에서의 일정을 추가해 보세요. 방문하고싶은 관광 명소나
-                식당, 머물 예정인 호텔 등을 추가하여 세부적인 여행 계획을 세우세요. 먼저 관광지나
-                호텔의 이름을 검색한 후, 정확한 장소를 선택하세요.
-              </Description>
-              <Toggle isHotel={isHotel} onClick={onToggleClicked}>
-                <Blank>
-                  {isHotel && (
-                    <Circle layoutId="circle">
-                      <FontAwesomeIcon icon={faHotel}></FontAwesomeIcon>
-                    </Circle>
-                  )}
-                </Blank>
-                <Blank>
-                  {!isHotel && (
-                    <Circle layoutId="circle">
-                      <FontAwesomeIcon icon={faFortAwesome}></FontAwesomeIcon>
-                    </Circle>
-                  )}
-                </Blank>
-              </Toggle>
-              <Form onSubmit={handleSubmit(onValid)}>
-                <Input
-                  {...register("keyword", { required: true })}
+    <Wrapper>
+      <Header />
+      <NavigationBar now={2} />
+      <Main>
+        <Trip>
+          <TitleBox>
+            {isInputOpen ? (
+              <TitleForm onSubmit={handleSubmit(onValid)}>
+                <TitleInput
+                  {...register("keyword")}
                   autoComplete="off"
-                  placeholder={`Enter name of place`}
-                  isHotel={isHotel}
+                  autoFocus
+                  placeholder={currentTrip}
                 />
-                <SubmitButton isHotel={isHotel} type="submit">
-                  Search
-                </SubmitButton>
-              </Form>
-            </Header>
-            <Results>
-              {data ? (
-                isLoading ? (
-                  <Loader> ...Loading</Loader>
-                ) : (
-                  <ResultList>
-                    {data.predictions.map((place) => (
-                      <PlaceCard key={place.place_id + "card"} place={place} isHotel={isHotel} />
-                    ))}
-                  </ResultList>
-                )
-              ) : null}
-            </Results>
-          </Main>
-        </Wrapper>
-        <Column variants={loadingVar} initial="initial" animate="animate">
-          <SubTitle>{currentDestination?.name}</SubTitle>
-          <Row>
-            {/* <RowTitle>Attractions ({attractionList["NoName"].length})</RowTitle>
-            {attractionList["NoName"].length === 0 ? (
-              <Loader>There is no selected place.. Please add your places.</Loader>
+              </TitleForm>
             ) : (
-              <Selected>
-                {attractionList["NoName"].map(
-                  (jCard) =>
-                    jCard && (
-                      <JourneyCard
-                        key={jCard.timestamp}
-                        name={jCard.name}
-                        placeId={jCard.placeId}
-                        timestamp={jCard.timestamp}
-                      />
-                    )
-                )}
-              </Selected>
-            )} */}
-          </Row>
-          <Row>
-            {/* <RowTitle>Hotels ({hotelList.length})</RowTitle>
-            {hotelList.length === 0 ? (
-              <Loader>There is no selected place.. Please add your places.</Loader>
-            ) : (
-              <Selected>
-                {hotelList.map(
-                  (jCard) =>
-                    jCard && (
-                      <HotelCard
-                        key={jCard.timestamp}
-                        name={jCard.name}
-                        placeId={jCard.placeId}
-                        timestamp={jCard.timestamp}
-                      />
-                    )
-                )}
-              </Selected>
-            )} */}
-          </Row>
-        </Column>
-        <Last variants={loadingVar} initial="initial" animate="animate">
-          <Question>{currentDestination?.name}에서의 일정을 모두 추가하셨나요?</Question>
-          <Buttons>
-            <Button onClick={goBack}>
-              <span>아니요</span>
-              <span>목적지를 변경합니다.</span>
-            </Button>
-            <Button onClick={goForward}>
-              <span>네</span>
-              <span>다음 단계로 이동합니다.</span>
-            </Button>
-          </Buttons>
-        </Last>
-      </Container>
-    </AnimatePresence>
+              <Title>{currentTrip}</Title>
+            )}
+            <PencilIcon
+              onClick={() => {
+                isInputOpen ? setIsInputOpen(false) : setIsInputOpen(true);
+              }}
+            />
+          </TitleBox>
+          <TripDuration
+            onClick={() => {
+              isInputOpen && setIsInputOpen(false);
+            }}
+          >
+            {userInfo[currentTrip].date
+              .split("|")[0]
+              .slice(0, userInfo[currentTrip].date.split("|")[0].length - 2)}
+            (
+            {
+              ["일", "월", "화", "수", "목", "금", "토"][
+                Number(userInfo[currentTrip].date.split("|")[0].split(".")[3])
+              ]
+            }
+            ){" ~ "}
+            {userInfo[currentTrip].date
+              .split("|")[1]
+              .slice(0, userInfo[currentTrip].date.split("|")[0].length - 2)}
+            (
+            {
+              ["일", "월", "화", "수", "목", "금", "토"][
+                Number(userInfo[currentTrip].date.split("|")[1].split(".")[3])
+              ]
+            }
+            )
+          </TripDuration>
+        </Trip>
+        <Citys>
+          {userInfo[currentTrip].trips.map((city, index) => (
+            <CityCard
+              key={city.destination?.name && city.destination?.name + index}
+              destination={city.destination}
+            />
+          ))}
+        </Citys>
+      </Main>
+    </Wrapper>
+
+    // <AnimatePresence>
+    //   <Container>
+    //     <Wrapper
+    //       bgphoto={`url(${makeImagePath(
+    //         currentDestination?.photos ? currentDestination?.photos[0].photo_reference : "",
+    //         800
+    //       )})`}
+    //     >
+    //       <NavigationBar />
+
+    //       <Main variants={loadingVar} initial="initial" animate="animate">
+    //         <Header>
+    //           <Title isHotel={isHotel} variants={titleVar} initial="initial" animate="animate">
+    //             {isHotel ? `Hotels` : `Attractions`}
+    //             <DateInfo>in {currentDestination?.name}</DateInfo>
+    //           </Title>
+    //           <Description>
+    //             {currentDestination?.name}에서의 일정을 추가해 보세요. 방문하고싶은 관광 명소나
+    //             식당, 머물 예정인 호텔 등을 추가하여 세부적인 여행 계획을 세우세요. 먼저 관광지나
+    //             호텔의 이름을 검색한 후, 정확한 장소를 선택하세요.
+    //           </Description>
+    //           <Toggle isHotel={isHotel} onClick={onToggleClicked}>
+    //             <Blank>
+    //               {isHotel && (
+    //                 <Circle layoutId="circle">
+    //                   <FontAwesomeIcon icon={faHotel}></FontAwesomeIcon>
+    //                 </Circle>
+    //               )}
+    //             </Blank>
+    //             <Blank>
+    //               {!isHotel && (
+    //                 <Circle layoutId="circle">
+    //                   <FontAwesomeIcon icon={faFortAwesome}></FontAwesomeIcon>
+    //                 </Circle>
+    //               )}
+    //             </Blank>
+    //           </Toggle>
+    //           <Form onSubmit={handleSubmit(onValid)}>
+    //             <Input
+    //               {...register("keyword", { required: true })}
+    //               autoComplete="off"
+    //               placeholder={`Enter name of place`}
+    //               isHotel={isHotel}
+    //             />
+    //             <SubmitButton isHotel={isHotel} type="submit">
+    //               Search
+    //             </SubmitButton>
+    //           </Form>
+    //         </Header>
+    //         <Results>
+    //           {data ? (
+    //             isLoading ? (
+    //               <Loader> ...Loading</Loader>
+    //             ) : (
+    //               <ResultList>
+    //                 {data.predictions.map((place) => (
+    //                   <PlaceCard key={place.place_id + "card"} place={place} isHotel={isHotel} />
+    //                 ))}
+    //               </ResultList>
+    //             )
+    //           ) : null}
+    //         </Results>
+    //       </Main>
+    //     </Wrapper>
+    //     <Column variants={loadingVar} initial="initial" animate="animate">
+    //       <SubTitle>{currentDestination?.name}</SubTitle>
+    //       <Row>
+    //         {/* <RowTitle>Attractions ({attractionList["NoName"].length})</RowTitle>
+    //         {attractionList["NoName"].length === 0 ? (
+    //           <Loader>There is no selected place.. Please add your places.</Loader>
+    //         ) : (
+    //           <Selected>
+    //             {attractionList["NoName"].map(
+    //               (jCard) =>
+    //                 jCard && (
+    //                   <JourneyCard
+    //                     key={jCard.timestamp}
+    //                     name={jCard.name}
+    //                     placeId={jCard.placeId}
+    //                     timestamp={jCard.timestamp}
+    //                   />
+    //                 )
+    //             )}
+    //           </Selected>
+    //         )} */}
+    //       </Row>
+    //       <Row>
+    //         {/* <RowTitle>Hotels ({hotelList.length})</RowTitle>
+    //         {hotelList.length === 0 ? (
+    //           <Loader>There is no selected place.. Please add your places.</Loader>
+    //         ) : (
+    //           <Selected>
+    //             {hotelList.map(
+    //               (jCard) =>
+    //                 jCard && (
+    //                   <HotelCard
+    //                     key={jCard.timestamp}
+    //                     name={jCard.name}
+    //                     placeId={jCard.placeId}
+    //                     timestamp={jCard.timestamp}
+    //                   />
+    //                 )
+    //             )}
+    //           </Selected>
+    //         )} */}
+    //       </Row>
+    //     </Column>
+    //     <Last variants={loadingVar} initial="initial" animate="animate">
+    //       <Question>{currentDestination?.name}에서의 일정을 모두 추가하셨나요?</Question>
+    //       <Buttons>
+    //         <Button onClick={goBack}>
+    //           <span>아니요</span>
+    //           <span>목적지를 변경합니다.</span>
+    //         </Button>
+    //         <Button onClick={goForward}>
+    //           <span>네</span>
+    //           <span>다음 단계로 이동합니다.</span>
+    //         </Button>
+    //       </Buttons>
+    //     </Last>
+    //   </Container>
+    // </AnimatePresence>
   );
 };
 
@@ -216,23 +291,69 @@ const Container = styled.div`
   width: 100vw;
 `;
 
-const Wrapper = styled(motion.div)<{ bgphoto: string }>`
-  overflow-x: auto;
-  width: 100%;
+const Wrapper = styled(motion.div)`
+  width: 100vw;
   min-height: 100vh;
-  background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
-    ${(props) => props.bgphoto};
-  background-size: cover;
-  background-position: center center;
+  padding: 0 300px;
 `;
 
-const Title = styled(motion.h2)<{ isHotel: boolean }>`
-  font-size: 80px;
-  font-weight: 500;
-  margin-bottom: 50px;
-  line-height: 1;
-  color: white;
-  padding-top: 150px;
+const Trip = styled.div`
+  width: 500px;
+  padding: 30px 35px;
+  box-shadow: 0px 2px 12px 0px rgba(0, 0, 0, 0.1);
+  margin-top: 60px;
+  border-radius: 10px;
+`;
+
+const TitleBox = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const Title = styled.h2`
+  font-size: 24px;
+  font-weight: 400;
+  margin-bottom: 16px;
+  min-width: 100px;
+  padding: 3px 5px;
+`;
+
+const PencilIcon = styled.div`
+  background: url("./pencil.png");
+  background-position: center center;
+  background-size: cover;
+  width: 14px;
+  height: 14px;
+  margin-left: 10px;
+`;
+
+const TitleForm = styled.form`
+  min-width: 100px;
+  margin-bottom: 14px;
+`;
+
+const TitleInput = styled.input`
+  width: 100px;
+  font-size: 24px;
+  font-weight: 400;
+  border-bottom: 2px solid ${(props) => props.theme.gray.blur};
+  padding: 3px 5px;
+  &:focus {
+    outline: none;
+    border-bottom: 2px solid ${(props) => props.theme.blue.accent};
+  }
+`;
+
+const TripDuration = styled.h2`
+  font-size: 16px;
+  font-weight: 400;
+`;
+
+const Citys = styled.div`
+  margin-top: 36px;
+  width: 506px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
 `;
 
 const DateInfo = styled.span`
@@ -251,10 +372,6 @@ const Description = styled.h2`
   margin-bottom: 50px;
 `;
 
-const Header = styled(motion.div)`
-  width: 45%;
-`;
-
 const Results = styled(motion.div)`
   width: 45%;
   padding-top: 100px;
@@ -266,13 +383,7 @@ const ResultList = styled.div`
   grid-gap: 10px;
 `;
 
-const Main = styled(motion.div)`
-  padding: 0 140px;
-  padding-bottom: 200px;
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-`;
+const Main = styled(motion.div)``;
 
 const Loader = styled.div`
   display: flex;

@@ -1,11 +1,16 @@
 import { motion } from "framer-motion";
+import { useRecoilState } from "recoil";
 import styled from "styled-components";
+import { tripState, userState } from "../atoms";
 
 const Header = () => {
+  const [userInfo, setUserInfo] = useRecoilState(userState);
+  const [currentTrip, setCurrentTrip] = useRecoilState(tripState);
+
   return (
     <Wrapper>
       <Title>TravelGo</Title>
-      <Bag>가방</Bag>
+      <Bag>가방{userInfo[currentTrip].trips.length}</Bag>
     </Wrapper>
   );
 };

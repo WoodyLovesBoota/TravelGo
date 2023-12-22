@@ -13,11 +13,13 @@ const DestinationCard = ({ title, destination }: IBigTripCardProps) => {
   const navigate = useNavigate();
   const [isCardClicked, setIsCardClicked] = useState(false);
   const [userInfo, setUserInfo] = useRecoilState(userState);
+  const [currentTrip, setCurrentTrip] = useRecoilState(tripState);
 
   const onAddClick = () => {
     setIsCardClicked(false);
     setUserInfo((current) => {
-      let target = [...current["Trip1"]];
+      let copy = { ...current[currentTrip] };
+      let target = [...current[currentTrip].trips];
       let newArr =
         target.length === 0
           ? [
@@ -43,7 +45,7 @@ const DestinationCard = ({ title, destination }: IBigTripCardProps) => {
                 },
               },
             ];
-      return { ...current, ["Trip1"]: newArr };
+      return { ...current, [currentTrip]: { ...copy, ["trips"]: newArr } };
     });
   };
 
@@ -188,6 +190,7 @@ const BigDestination = styled(motion.div)`
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 2;
 `;
 
 const BigOverlay = styled.div`

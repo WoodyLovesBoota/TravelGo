@@ -64,7 +64,7 @@ export const destinationState = atom<IPlaceDetail | undefined>({
 
 export const tripState = atom<string>({
   key: "currentTrip",
-  default: "",
+  default: "Trip1",
   effects: [
     ({ setSelf, onSet }: any) => {
       const savedValue = localStorage.getItem("currentTrip");
@@ -96,7 +96,7 @@ export const journeyState = atom<IJourneys>({
 
 export const userState = atom<IUsers>({
   key: "user",
-  default: { Trip1: [] },
+  default: { Trip1: { date: "", trips: [] } },
   effects: [
     ({ setSelf, onSet }: any) => {
       const savedValue = localStorage.getItem("users");
@@ -130,7 +130,7 @@ interface IJourneys {
 }
 
 export interface IUsers {
-  [name: string]: ITripDetails[];
+  [name: string]: { date: string; trips: ITripDetails[] };
 }
 
 export interface IJourney {
