@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { IJourney, destinationState, userState, playerState, tripState } from "../atoms";
+import { IJourney, destinationState, userState, tripState } from "../atoms";
 import { Droppable } from "react-beautiful-dnd";
 import DragJourneyCard from "./DragJourneyCard";
 import { useRecoilState } from "recoil";
@@ -15,7 +15,7 @@ const BoardJourney = ({ journey, boardId }: IJourneyBoardProps) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [currentDestination, setCurrentDestination] = useRecoilState(destinationState);
   const [userInfo, setUserInfo] = useRecoilState(userState);
-  const [player, setPlayer] = useRecoilState(playerState);
+  // const [player, setPlayer] = useRecoilState(playerState);
   const [currentTrip, setCurrentTrip] = useRecoilState(tripState);
   const [clickedCard, setClickedCard] = useState("");
   const navigate = useNavigate();
@@ -28,53 +28,49 @@ const BoardJourney = ({ journey, boardId }: IJourneyBoardProps) => {
   };
 
   const deleteBoard = () => {
-    setUserInfo((current) => {
-      const userCopy = { ...current[player.email] };
-      const copy = { ...current[player.email].trips };
-      const target = [...copy[currentTrip]];
-      const index = target.findIndex((e) => e.destination?.name === currentDestination?.name);
-      const arrayCopy = { ...target[index] };
-      const detailCopy = { ...target[index].detail };
-
-      const temp = {
-        ...detailCopy.attractions,
-      };
-      delete temp[boardId];
-
-      const newOne = { ...detailCopy, ["attractions"]: temp };
-      const newDestination = { ...arrayCopy, ["detail"]: newOne };
-      const newTarget = [...target.slice(0, index), newDestination, ...target.slice(index + 1)];
-      const newTrip = { ...copy, [currentTrip]: newTarget };
-      const newUser = { ...userCopy, ["trips"]: newTrip };
-
-      return { ...current, [player.email]: newUser };
-    });
+    // setUserInfo((current) => {
+    //   const userCopy = { ...current[player.email] };
+    //   const copy = { ...current[player.email].trips };
+    //   const target = [...copy[currentTrip]];
+    //   const index = target.findIndex((e) => e.destination?.name === currentDestination?.name);
+    //   const arrayCopy = { ...target[index] };
+    //   const detailCopy = { ...target[index].detail };
+    //   const temp = {
+    //     ...detailCopy.attractions,
+    //   };
+    //   delete temp[boardId];
+    //   const newOne = { ...detailCopy, ["attractions"]: temp };
+    //   const newDestination = { ...arrayCopy, ["detail"]: newOne };
+    //   const newTarget = [...target.slice(0, index), newDestination, ...target.slice(index + 1)];
+    //   const newTrip = { ...copy, [currentTrip]: newTarget };
+    //   const newUser = { ...userCopy, ["trips"]: newTrip };
+    //   return { ...current, [player.email]: newUser };
+    // });
   };
 
   const renameBoard = () => {
-    const newName = inputRef && inputRef.current && inputRef.current?.value;
-    newName &&
-      setUserInfo((current) => {
-        const userCopy = { ...current[player.email] };
-        const copy = { ...current[player.email].trips };
-        const target = [...copy[currentTrip]];
-        const index = target.findIndex((e) => e.destination?.name === currentDestination?.name);
-        const arrayCopy = { ...target[index] };
-        const detailCopy = { ...target[index].detail };
-        const temp = {
-          ...detailCopy.attractions,
-        };
-        const newData = [...temp[boardId]];
-        delete temp[boardId];
-        const newBoard = { ...temp, [newName]: newData };
-        const newOne = { ...detailCopy, ["attractions"]: newBoard };
-        const newDestination = { ...arrayCopy, ["detail"]: newOne };
-        const newTarget = [...target.slice(0, index), newDestination, ...target.slice(index + 1)];
-        const newTrip = { ...copy, [currentTrip]: newTarget };
-        const newUser = { ...userCopy, ["trips"]: newTrip };
-
-        return { ...current, [player.email]: newUser };
-      });
+    // const newName = inputRef && inputRef.current && inputRef.current?.value;
+    // newName &&
+    //   setUserInfo((current) => {
+    //     const userCopy = { ...current[player.email] };
+    //     const copy = { ...current[player.email].trips };
+    //     const target = [...copy[currentTrip]];
+    //     const index = target.findIndex((e) => e.destination?.name === currentDestination?.name);
+    //     const arrayCopy = { ...target[index] };
+    //     const detailCopy = { ...target[index].detail };
+    //     const temp = {
+    //       ...detailCopy.attractions,
+    //     };
+    //     const newData = [...temp[boardId]];
+    //     delete temp[boardId];
+    //     const newBoard = { ...temp, [newName]: newData };
+    //     const newOne = { ...detailCopy, ["attractions"]: newBoard };
+    //     const newDestination = { ...arrayCopy, ["detail"]: newOne };
+    //     const newTarget = [...target.slice(0, index), newDestination, ...target.slice(index + 1)];
+    //     const newTrip = { ...copy, [currentTrip]: newTarget };
+    //     const newUser = { ...userCopy, ["trips"]: newTrip };
+    //     return { ...current, [player.email]: newUser };
+    //   });
   };
 
   return (

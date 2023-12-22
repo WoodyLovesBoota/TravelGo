@@ -86,40 +86,43 @@ export const journeyState = atom<IJourneys>({
       const savedValue = localStorage.getItem("journey");
       if (savedValue !== null) setSelf(JSON.parse(savedValue));
       onSet((newValue: any, _: any, isReset: boolean) => {
-        isReset ? localStorage.removeItem("journey") : localStorage.setItem("journey", JSON.stringify(newValue));
+        isReset
+          ? localStorage.removeItem("journey")
+          : localStorage.setItem("journey", JSON.stringify(newValue));
       });
     },
   ],
 });
 
-export const userState = atom<IUser>({
+export const userState = atom<ITripDetails[]>({
   key: "user",
-  default: {
-    guest$gmail$com: { info: { name: "Guest", password: "1111" }, trips: {} },
-  },
+  default: [],
   effects: [
     ({ setSelf, onSet }: any) => {
       const savedValue = localStorage.getItem("users");
       if (savedValue !== null) setSelf(JSON.parse(savedValue));
       onSet((newValue: any, _: any, isReset: boolean) => {
-        isReset ? localStorage.removeItem("users") : localStorage.setItem("users", JSON.stringify(newValue));
+        isReset
+          ? localStorage.removeItem("users")
+          : localStorage.setItem("users", JSON.stringify(newValue));
       });
     },
   ],
 });
 
-export const playerState = atom<{ email: string; info: IUserInfo }>({
-  key: "player",
-  default: { email: "guest$gmail$com", info: { name: "Guest", password: "1111" } },
-  effects: [
-    ({ setSelf, onSet }: any) => {
-      const savedValue = localStorage.getItem("player");
-      if (savedValue !== null) setSelf(JSON.parse(savedValue));
-      onSet((newValue: any, _: any, isReset: boolean) => {
-        isReset ? localStorage.removeItem("player") : localStorage.setItem("player", JSON.stringify(newValue));
-      });
-    },
-  ],
+export const choiceState = atom<number>({
+  key: "choice",
+  default: 0,
+});
+
+export const startDateState = atom<string>({
+  key: "startDate",
+  default: "출발 날짜",
+});
+
+export const endDateState = atom<string>({
+  key: "endDate",
+  default: "도착 날짜",
 });
 
 interface IJourneys {
@@ -134,19 +137,6 @@ export interface IJourney {
   image: (string | undefined)[];
   overview: string | undefined;
   timestamp: number | undefined;
-}
-
-interface IUser {
-  [email: string]: { info: IUserInfo; trips: ITrips };
-}
-
-interface IUserInfo {
-  name: string;
-  password: string;
-}
-
-interface ITrips {
-  [title: string]: ITripDetails[];
 }
 
 export interface ITripDetails {

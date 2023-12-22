@@ -2,7 +2,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useMatch, PathMatch, useNavigate } from "react-router-dom";
 import { useRecoilValue, useRecoilState } from "recoil";
 import styled from "styled-components";
-import { destinationState, userState, playerState, tripState } from "../atoms";
+import { destinationState, userState, tripState } from "../atoms";
 import GoogleRouteMap from "./GoogleRouteMap";
 import { DragDropContext, Draggable, DropResult, Droppable } from "react-beautiful-dnd";
 import { makeImagePath } from "../utils";
@@ -14,60 +14,59 @@ const BigPath = ({ boardName }: IBigPathProps) => {
   const currentDestination = useRecoilValue(destinationState);
   const destination = currentDestination?.name;
   const [userInfo, setUserInfo] = useRecoilState(userState);
-  const [player, setPlayer] = useRecoilState(playerState);
+  // const [player, setPlayer] = useRecoilState(playerState);
   const [currentTrip, setCurrentTrip] = useRecoilState(tripState);
   const [hotelClicked, setHotelClicked] = useState(false);
 
   const attractionList =
-    userInfo[player.email].trips[currentTrip][
-      userInfo[player.email].trips[currentTrip].findIndex((e) => e.destination?.name === currentDestination?.name)
-    ].detail.attractions[boardName];
+    userInfo[userInfo.findIndex((e) => e.destination?.name === currentDestination?.name)].detail
+      .attractions[boardName];
 
-  const bigPathMatch: PathMatch<string> | null = useMatch("/journey/:title/:destination/:boardName");
+  const bigPathMatch: PathMatch<string> | null = useMatch(
+    "/journey/:title/:destination/:boardName"
+  );
 
   const handleOverlayClicked = () => {
     navigate(`/journey/${currentTrip}/${destination}`);
   };
 
   const onDragEnd = (info: DropResult) => {
-    const { destination, source } = info;
-    if (!destination) return;
-    else {
-      setUserInfo((current) => {
-        const index = [...{ ...current[player.email].trips }[currentTrip]].findIndex(
-          (e) => e.destination?.name === currentDestination?.name
-        );
-
-        const newCopy = [...current[player.email].trips[currentTrip][index].detail.attractions[source.droppableId]];
-        const newBoard = newCopy[source.index];
-        newCopy.splice(source.index, 1);
-        newCopy.splice(destination.index, 0, newBoard);
-
-        return {
-          ...current,
-          [player.email]: {
-            ...current[player.email],
-            ["trips"]: {
-              ...current[player.email].trips,
-              [currentTrip]: [
-                ...current[player.email].trips[currentTrip].slice(0, index),
-                {
-                  ...current[player.email].trips[currentTrip][index],
-                  ["detail"]: {
-                    ...current[player.email].trips[currentTrip][index].detail,
-                    ["attractions"]: {
-                      ...current[player.email].trips[currentTrip][index].detail.attractions,
-                      [source.droppableId]: newCopy,
-                    },
-                  },
-                },
-                ...current[player.email].trips[currentTrip].slice(index + 1),
-              ],
-            },
-          },
-        };
-      });
-    }
+    // const { destination, source } = info;
+    // if (!destination) return;
+    // else {
+    //   setUserInfo((current) => {
+    //     const index = [...current].findIndex(
+    //       (e) => e.destination?.name === currentDestination?.name
+    //     );
+    //     const newCopy = [...current[index].detail.attractions[source.droppableId]];
+    //     const newBoard = newCopy[source.index];
+    //     newCopy.splice(source.index, 1);
+    //     newCopy.splice(destination.index, 0, newBoard);
+    //     return [
+    //       ...current,
+    //       [player.email]: {
+    //         ...current[player.email],
+    //         ["trips"]: {
+    //           ...current[player.email].trips,
+    //           [currentTrip]: [
+    //             ...current[player.email].trips[currentTrip].slice(0, index),
+    //             {
+    //               ...current[player.email].trips[currentTrip][index],
+    //               ["detail"]: {
+    //                 ...current[player.email].trips[currentTrip][index].detail,
+    //                 ["attractions"]: {
+    //                   ...current[player.email].trips[currentTrip][index].detail.attractions,
+    //                   [source.droppableId]: newCopy,
+    //                 },
+    //               },
+    //             },
+    //             ...current[player.email].trips[currentTrip].slice(index + 1),
+    //           ],
+    //         },
+    //       },
+    //     };
+    //   );
+    // }
   };
 
   return (
@@ -89,7 +88,9 @@ const BigPath = ({ boardName }: IBigPathProps) => {
                     attractionList.length > 2 ? (
                       <GoogleRouteMap
                         origin={`place_id:${attractionList[0]?.placeId}`}
-                        destination={`place_id:${attractionList[attractionList.length - 1]?.placeId}`}
+                        destination={`place_id:${
+                          attractionList[attractionList.length - 1]?.placeId
+                        }`}
                         waypoints={attractionList.map((e, i) => {
                           if (e && i > 0 && i < attractionList.length - 1) return e.placeId;
                           else return;
@@ -101,7 +102,9 @@ const BigPath = ({ boardName }: IBigPathProps) => {
                     ) : (
                       <GoogleRouteMap
                         origin={`place_id:${attractionList[0]?.placeId}`}
-                        destination={`place_id:${attractionList[attractionList.length - 1]?.placeId}`}
+                        destination={`place_id:${
+                          attractionList[attractionList.length - 1]?.placeId
+                        }`}
                         waypoints={[]}
                         width="100%"
                         height="100%"
@@ -260,7 +263,13 @@ const DragCard = styled.div<{ isDragging: boolean; bgPhoto: string }>`
   border-radius: 5px;
   margin-bottom: 5px;
   color: ${(props) => props.theme.white.normal};
-  background-image: linear-gradient(to right, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.3), transparent, transparent),
+  background-image: linear-gradient(
+      to right,
+      rgba(0, 0, 0, 0.7),
+      rgba(0, 0, 0, 0.3),
+      transparent,
+      transparent
+    ),
     ${(props) => props.bgPhoto};
   background-position: center center;
   background-size: cover;

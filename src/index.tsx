@@ -28,8 +28,8 @@ const GlobalStyle = createGlobalStyle`
     font-weight: 300;
     line-height: 1.5;
     vertical-align: baseline;
-    font-family: "Noto sans KR", sans-serif;
-    color: white;
+    font-family: Inter,"Noto sans KR", sans-serif;
+    color: black;
     @media screen and (max-width: 1000px) {
       font-size: 12px;
     }

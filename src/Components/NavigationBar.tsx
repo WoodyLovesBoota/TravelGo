@@ -1,147 +1,73 @@
-import { useNavigate } from "react-router-dom";
-import { useRecoilState } from "recoil";
 import styled from "styled-components";
-import { playerState, destinationState, userState, tripState, navState, STATUS } from "../atoms";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser, faCaretDown } from "@fortawesome/free-solid-svg-icons";
-import { useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import { IPlaceDetail } from "../api";
 
-const NavigationBar = () => {
-  const navigate = useNavigate();
-  const [player, setPlayer] = useRecoilState(playerState);
-  const [isUserInfoOpen, setIsUserInfoOpen] = useState(false);
-  const [currentDestination, setCurrentDestination] = useRecoilState(destinationState);
-  const [userInfo, setUserInfo] = useRecoilState(userState);
-  const [currentTrip, setCurrentTrip] = useRecoilState(tripState);
-  const [openJourney, setOpenJourney] = useRecoilState(navState);
-  const [openSingleJourney, setOpenSingleJourney] = useState(currentTrip);
-
-  const handleHomeClicked = () => {
-    const isHome = window.confirm("홈 화면으로 돌아가시겠습니까?");
-    if (isHome) {
-      setCurrentDestination({
-        formatted_address: "string",
-        international_phone_number: "string",
-        rating: 0,
-        photos: [{ photo_reference: "string" }],
-        geometry: {
-          location: {
-            lat: 0,
-            lng: 0,
-          },
-        },
-        name: "string",
-        editorial_summary: { overview: "string" },
-        reviews: {
-          rating: 0,
-          text: "string",
-          relative_time_description: "string",
-          author_name: "string",
-        },
-        place_id: "string",
-      });
-      setCurrentTrip("");
-      navigate("/");
-    }
-  };
-
-  const onDestinationClicked = () => {
-    if (currentTrip !== "") {
-      setCurrentDestination({
-        formatted_address: "string",
-        international_phone_number: "string",
-        rating: 0,
-        photos: [{ photo_reference: "string" }],
-        geometry: {
-          location: {
-            lat: 0,
-            lng: 0,
-          },
-        },
-        name: "string",
-        editorial_summary: { overview: "string" },
-        reviews: {
-          rating: 0,
-          text: "string",
-          relative_time_description: "string",
-          author_name: "string",
-        },
-        place_id: "string",
-      });
-      navigate(`/destination/${currentTrip}`);
-    }
-  };
-
-  const onPlaceClicked = () => {
-    currentTrip !== "" &&
-      currentDestination?.name !== "string" &&
-      navigate(`/travel/${currentTrip}/${currentDestination?.name}`);
-  };
-
-  const onJourneyClicked = () => {
-    currentTrip !== "" &&
-      currentDestination?.name !== "string" &&
-      navigate(`/journey/${currentTrip}/${currentDestination?.name}`);
-  };
-
-  const onSummaryClicked = () => {
-    currentTrip !== "" &&
-      currentDestination?.name !== "string" &&
-      navigate(`/summary/${currentTrip}/${currentDestination?.name}`);
-  };
-
+const NavigationBar = ({ now }: { now: number }) => {
   return (
-    <AnimatePresence>
-      <Wrapper>
-        <Title onClick={handleHomeClicked}>
-          <Capital>B</Capital>EEE
-        </Title>
-        <Links>
-          <Link onClick={onDestinationClicked}>DESTINATIONS</Link>
-          <Link onClick={onPlaceClicked}>PLACES</Link>
-          <Link onClick={onJourneyClicked}>JOURNEYS</Link>
-          <Link onClick={onSummaryClicked}>SUMMARY</Link>
-        </Links>
-      </Wrapper>
-    </AnimatePresence>
+    <Wrapper>
+      {["기간 설정", "여행지 설정", "장소 선택", "일정 관리", "최종 여행 계획"].map((e, i) => (
+        <Vortex>
+          <Title ispass={i < now} isnow={i === now}>
+            {e}
+          </Title>
+          <Contents>
+            <Circle ispass={i < now} isnow={i === now} />
+            {i !== 4 && <Line ispass={i < now} />}
+          </Contents>
+        </Vortex>
+      ))}
+    </Wrapper>
   );
 };
 
 export default NavigationBar;
 
 const Wrapper = styled.div`
-  width: 100vw;
-  z-index: 50;
-  padding: 0 144px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  margin-top: 60px;
+`;
+
+const Line = styled.div<{ ispass: boolean }>`
+  width: 136px;
+  height: 1.5px;
+  background-image: linear-gradient(
+    to right,
+    ${(props) => (props.ispass ? "black 40%" : "black 10%")},
+    rgba(255, 255, 255, 0) 0%
+  );
+  background-position: center;
+  background-size: 4px 1px;
+  background-repeat: repeat-x;
+`;
+
+const Contents = styled.div`
   display: flex;
   align-items: center;
-  height: 100px;
-  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0));
+  height: 20px;
 `;
 
-const Title = styled.h2`
-  font-weight: 600;
-  font-size: 21px;
-  cursor: pointer;
-`;
-
-const Capital = styled.span`
-  color: white;
-  font-weight: 600;
-  font-size: 21px;
-  cursor: pointer;
-`;
-
-const Links = styled.div`
-  margin-left: auto;
+const Vortex = styled.div`
   display: flex;
+  flex-direction: column;
 `;
 
-const Link = styled.h2`
-  font-weight: 600;
-  font-size: 16px;
-  cursor: pointer;
-  margin-left: 30px;
+const Circle = styled.div<{ ispass: boolean; isnow: boolean }>`
+  width: ${(props) => (props.isnow ? "12px" : "9px")};
+  height: ${(props) => (props.isnow ? "12px" : "9px")};
+  border-radius: 100px;
+  background-color: ${(props) =>
+    props.ispass
+      ? props.theme.gray.accent
+      : props.isnow
+      ? props.theme.gray.accent
+      : props.theme.gray.blur};
+`;
+
+const Title = styled.h2<{ ispass: boolean; isnow: boolean }>`
+  color: ${(props) =>
+    props.ispass ? props.theme.gray.normal : props.isnow ? "black" : props.theme.gray.semiblur};
+  font-size: ${(props) => (props.isnow ? "14px" : "12px")};
+  font-weight: ${(props) => (props.isnow ? "400" : "300")};
+  margin-left: -22px;
+  margin-bottom: 11px;
 `;

@@ -1,5 +1,5 @@
 import { useRecoilState } from "recoil";
-import { destinationState, userState, playerState, tripState } from "../atoms";
+import { destinationState, userState, tripState } from "../atoms";
 import styled from "styled-components";
 import { IGeAutoCompletePlacesResult, getAutoCompletePlacesResult } from "../api";
 import { useQuery } from "react-query";
@@ -8,7 +8,7 @@ import { useForm } from "react-hook-form";
 import { AnimatePresence, motion } from "framer-motion";
 import PlaceCard from "../Components/PlaceCard";
 import JourneyCard from "../Components/JourneyCard";
-import NavigationBar from "../Components/NavigationBar";
+import NavigationBar from "../Components/TempNav";
 import { PathMatch, useMatch, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHotel } from "@fortawesome/free-solid-svg-icons";
@@ -19,17 +19,19 @@ import { makeImagePath } from "../utils";
 const Place = () => {
   const [currentDestination, setCurrentDestination] = useRecoilState(destinationState);
   const [userInfo, setUserInfo] = useRecoilState(userState);
-  const [player, setPlayer] = useRecoilState(playerState);
+  // const [player, setPlayer] = useRecoilState(playerState);
   const [currentTrip, setCurrentTrip] = useRecoilState(tripState);
   const [isHotel, setIsHotel] = useState(false);
 
-  const currentTarget =
-    userInfo[player.email].trips[currentTrip][
-      userInfo[player.email].trips[currentTrip].findIndex((e) => e.destination?.name === currentDestination?.name)
-    ];
+  // const currentTarget =
+  //   userInfo[player.email].trips[currentTrip][
+  //     userInfo[player.email].trips[currentTrip].findIndex(
+  //       (e) => e.destination?.name === currentDestination?.name
+  //     )
+  //   ];
 
-  const attractionList = currentTarget.detail.attractions;
-  const hotelList = currentTarget.detail.hotels;
+  // const attractionList = currentTarget.detail.attractions;
+  // const hotelList = currentTarget.detail.hotels;
 
   const destinationMatch: PathMatch<string> | null = useMatch("/travel/:title/:destination");
 
@@ -43,7 +45,9 @@ const Place = () => {
       getAutoCompletePlacesResult(
         value,
         currentDestination
-          ? currentDestination.geometry.location.lat + "%2C" + currentDestination.geometry.location.lng
+          ? currentDestination.geometry.location.lat +
+              "%2C" +
+              currentDestination.geometry.location.lng
           : "37.579617%2C126.977041",
         500
       ),
@@ -110,9 +114,9 @@ const Place = () => {
                 <DateInfo>in {currentDestination?.name}</DateInfo>
               </Title>
               <Description>
-                {currentDestination?.name}에서의 일정을 추가해 보세요. 방문하고싶은 관광 명소나 식당, 머물 예정인 호텔
-                등을 추가하여 세부적인 여행 계획을 세우세요. 먼저 관광지나 호텔의 이름을 검색한 후, 정확한 장소를
-                선택하세요.
+                {currentDestination?.name}에서의 일정을 추가해 보세요. 방문하고싶은 관광 명소나
+                식당, 머물 예정인 호텔 등을 추가하여 세부적인 여행 계획을 세우세요. 먼저 관광지나
+                호텔의 이름을 검색한 후, 정확한 장소를 선택하세요.
               </Description>
               <Toggle isHotel={isHotel} onClick={onToggleClicked}>
                 <Blank>
@@ -160,7 +164,7 @@ const Place = () => {
         <Column variants={loadingVar} initial="initial" animate="animate">
           <SubTitle>{currentDestination?.name}</SubTitle>
           <Row>
-            <RowTitle>Attractions ({attractionList["NoName"].length})</RowTitle>
+            {/* <RowTitle>Attractions ({attractionList["NoName"].length})</RowTitle>
             {attractionList["NoName"].length === 0 ? (
               <Loader>There is no selected place.. Please add your places.</Loader>
             ) : (
@@ -177,10 +181,10 @@ const Place = () => {
                     )
                 )}
               </Selected>
-            )}
+            )} */}
           </Row>
           <Row>
-            <RowTitle>Hotels ({hotelList.length})</RowTitle>
+            {/* <RowTitle>Hotels ({hotelList.length})</RowTitle>
             {hotelList.length === 0 ? (
               <Loader>There is no selected place.. Please add your places.</Loader>
             ) : (
@@ -197,7 +201,7 @@ const Place = () => {
                     )
                 )}
               </Selected>
-            )}
+            )} */}
           </Row>
         </Column>
         <Last variants={loadingVar} initial="initial" animate="animate">
@@ -228,15 +232,17 @@ const Wrapper = styled(motion.div)<{ bgphoto: string }>`
   overflow-x: auto;
   width: 100%;
   min-height: 100vh;
-  background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), ${(props) => props.bgphoto};
+  background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+    ${(props) => props.bgphoto};
   background-size: cover;
   background-position: center center;
 `;
 
 const Title = styled(motion.h2)<{ isHotel: boolean }>`
-  font-size: 72px;
-  font-weight: 600;
+  font-size: 80px;
+  font-weight: 500;
   margin-bottom: 50px;
+  line-height: 1;
   color: white;
   padding-top: 150px;
 `;
@@ -250,9 +256,9 @@ const DateInfo = styled.span`
 
 const Description = styled.h2`
   color: white;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 400;
-  width: 70%;
+  width: 90%;
   line-height: 2;
   margin-bottom: 50px;
 `;
@@ -327,7 +333,8 @@ const Toggle = styled(motion.div)<{ isHotel: boolean }>`
   height: 50px;
   padding: 5px 12px;
   cursor: pointer;
-  background-color: ${(props) => (props.isHotel ? props.theme.red.accent + "88" : props.theme.main.accent + "88")};
+  background-color: ${(props) =>
+    props.isHotel ? props.theme.red.accent + "88" : props.theme.main.accent + "88"};
   margin-bottom: 50px;
 `;
 
@@ -403,14 +410,16 @@ const Input = styled(motion.input)<{ isHotel: boolean }>`
 const SubmitButton = styled.button<{ isHotel: boolean }>`
   margin-left: 20px;
   border: none;
-  background-color: ${(props) => (props.isHotel ? props.theme.red.accent : props.theme.main.accent)};
+  background-color: ${(props) =>
+    props.isHotel ? props.theme.red.accent : props.theme.main.accent};
   padding: 20px 25px;
   font-size: 16px;
   border-radius: 50px;
   font-weight: 700;
   cursor: pointer;
   &:hover {
-    background-color: ${(props) => (props.isHotel ? props.theme.red.accent + "aa" : props.theme.main.accent + "aa")};
+    background-color: ${(props) =>
+      props.isHotel ? props.theme.red.accent + "aa" : props.theme.main.accent + "aa"};
   }
 `;
 

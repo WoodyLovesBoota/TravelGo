@@ -18,7 +18,7 @@ export const theme: DefaultTheme = {
   red: { accent: "#fc675f", normal: "#f49a23" },
   purple: { accent: "#C478E2", normal: "#E8BBF2" },
   green: { accent: "#43B97F", normal: "#D0F0C1" },
-  gray: { accent: "#7CC56E", normal: "#D0F0C1" },
+  gray: { accent: "#727272", normal: "#4A4A4A", blur: "#D9D9D9", semiblur: "#7F7F7F" },
 
   main: {
     accent: "#054E67",
@@ -30,4 +30,7 @@ export const theme: DefaultTheme = {
     point: "#80461B",
     button: "#fed745",
   },
+
+  blur: "#D9D9D9",
+  normal: "#727272",
 };

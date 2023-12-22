@@ -1,10 +1,15 @@
 import { useQuery } from "react-query";
-import { IGetPlaceResult, getPlaceResult, IGetPlaceDetailResult, getPlaceDetailResult } from "../api";
+import {
+  IGetPlaceResult,
+  getPlaceResult,
+  IGetPlaceDetailResult,
+  getPlaceDetailResult,
+} from "../api";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import { makeImagePath } from "../utils";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { playerState, userState, tripState } from "../atoms";
+import { userState, tripState } from "../atoms";
 import GoogleMap from "../Components/GoogleMap";
 import { useEffect, useState } from "react";
 import { useLocation, Link, PathMatch, useMatch, useNavigate } from "react-router-dom";
@@ -16,7 +21,6 @@ const Search = () => {
   const navigate = useNavigate();
   const [clickedImage, setClickedImage] = useState("");
   const [userInfo, setUserInfo] = useRecoilState(userState);
-  const player = useRecoilValue(playerState);
   const currentTrip = useRecoilValue(tripState);
   const { register, handleSubmit } = useForm<IDateForm>();
 
@@ -40,38 +44,37 @@ const Search = () => {
   };
 
   const onValid = ({ start, end }: IDateForm) => {
-    setUserInfo((current) => {
-      if (destinationMatch && destinationMatch?.params.title) {
-        const userCopy = { ...current[player.email] };
-        const copy = { ...current[player.email].trips };
-        const target = copy[destinationMatch?.params.title];
-
-        const temp = [
-          ...target,
-          {
-            destination: detailData?.result,
-            detail: {
-              date: start + "|" + end,
-              attractions: { NoName: [] },
-              hotels: [],
-              wtm: [],
-            },
-          },
-        ];
-        temp.sort((a, b) => {
-          return (
-            Number(a.detail.date.split("|")[0].split("-").join("")) -
-            Number(b.detail.date.split("|")[0].split("-").join(""))
-          );
-        });
-        const last = { ...copy, [destinationMatch?.params.title]: temp };
-        const targetTrip = { ...userCopy, ["trips"]: last };
-        return { ...current, [player.email]: targetTrip };
-      } else {
-        return { ...current };
-      }
-    });
-    navigate(`/destination/${currentTrip}`);
+    // setUserInfo((current) => {
+    //   if (destinationMatch && destinationMatch?.params.title) {
+    //     const userCopy = { ...current[player.email] };
+    //     const copy = { ...current[player.email].trips };
+    //     const target = copy[destinationMatch?.params.title];
+    //     const temp = [
+    //       ...target,
+    //       {
+    //         destination: detailData?.result,
+    //         detail: {
+    //           date: start + "|" + end,
+    //           attractions: { NoName: [] },
+    //           hotels: [],
+    //           wtm: [],
+    //         },
+    //       },
+    //     ];
+    //     temp.sort((a, b) => {
+    //       return (
+    //         Number(a.detail.date.split("|")[0].split("-").join("")) -
+    //         Number(b.detail.date.split("|")[0].split("-").join(""))
+    //       );
+    //     });
+    //     const last = { ...copy, [destinationMatch?.params.title]: temp };
+    //     const targetTrip = { ...userCopy, ["trips"]: last };
+    //     return { ...current, [player.email]: targetTrip };
+    //   } else {
+    //     return { ...current };
+    //   }
+    // });
+    // navigate(`/destination/${currentTrip}`);
   };
 
   useEffect(() => {
@@ -156,7 +159,12 @@ const Search = () => {
                       <Button variants={buttonVar} whileHover={"hover"} onClick={onNoClicked}>
                         아니오
                       </Button>
-                      <Button variants={buttonVar} whileHover={"hover"} type="submit" onClick={onYesClicked}>
+                      <Button
+                        variants={buttonVar}
+                        whileHover={"hover"}
+                        type="submit"
+                        onClick={onYesClicked}
+                      >
                         네
                       </Button>
                     </Buttons>
@@ -257,7 +265,8 @@ const Image = styled(motion.div)<{ bgPhoto: string }>`
 const Card = styled(motion.div)<{ bgPhoto: string }>`
   width: 100vw;
   height: 100vh;
-  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${(props) => props.bgPhoto});
+  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+    url(${(props) => props.bgPhoto});
   background-size: cover;
   background-position: center;
   display: flex;

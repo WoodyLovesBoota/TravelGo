@@ -37,6 +37,13 @@ declare module "styled-components" {
       accent: string;
       normal: string;
     };
+    gray: {
+      accent: string;
+      normal: string;
+      semiblur: string;
+      blur: string;
+    };
+
     main: {
       accent: string;
       normal: string;
@@ -47,5 +54,7 @@ declare module "styled-components" {
       hlbg: string;
       button: string;
     };
+    blur: string;
+    normal: string;
   }
 }

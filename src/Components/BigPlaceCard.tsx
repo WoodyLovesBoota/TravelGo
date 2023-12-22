@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Link, PathMatch, useMatch, useNavigate } from "react-router-dom";
 import { IGetPlaceDetailResult } from "../api";
 import StarRate from "./StarRate";
-import { destinationState, tripState, userState, playerState } from "../atoms";
+import { destinationState, tripState, userState } from "../atoms";
 import { useRecoilValue, useRecoilState } from "recoil";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot, faPhone } from "@fortawesome/free-solid-svg-icons";
@@ -19,16 +19,26 @@ const BigPlaceCard = ({ place, placeId, isHotel }: IBigPlaceProps) => {
   const destination = destinationData?.name;
   const [currentTrip, setCurrentTrip] = useRecoilState(tripState);
   const [userInfo, setUserInfo] = useRecoilState(userState);
-  const [player, setPlayer] = useRecoilState(playerState);
+  // const [player, setPlayer] = useRecoilState(playerState);
 
   const bigPlaceMatch: PathMatch<string> | null = useMatch("/travel/:title/:destination/:place");
-  const overviewMatch: PathMatch<string> | null = useMatch("/travel/:title/:destination/:place/overview");
-  const reviewMatch: PathMatch<string> | null = useMatch("/travel/:title/:destination/:place/review");
+  const overviewMatch: PathMatch<string> | null = useMatch(
+    "/travel/:title/:destination/:place/overview"
+  );
+  const reviewMatch: PathMatch<string> | null = useMatch(
+    "/travel/:title/:destination/:place/review"
+  );
   const mapMatch: PathMatch<string> | null = useMatch("/travel/:title/:destination/:place/map");
   const journeyMatch: PathMatch<string> | null = useMatch("/journey/:title/:destination/:place");
-  const overviewJourneyMatch: PathMatch<string> | null = useMatch("/journey/:title/:destination/:place/overview");
-  const reviewJourneyMatch: PathMatch<string> | null = useMatch("/journey/:title/:destination/:place/review");
-  const mapJourneyMatch: PathMatch<string> | null = useMatch("/journey/:title/:destination/:place/map");
+  const overviewJourneyMatch: PathMatch<string> | null = useMatch(
+    "/journey/:title/:destination/:place/overview"
+  );
+  const reviewJourneyMatch: PathMatch<string> | null = useMatch(
+    "/journey/:title/:destination/:place/review"
+  );
+  const mapJourneyMatch: PathMatch<string> | null = useMatch(
+    "/journey/:title/:destination/:place/map"
+  );
 
   const onOverlayClick = () => {
     journeyMatch || mapJourneyMatch || overviewJourneyMatch || reviewJourneyMatch
@@ -37,92 +47,92 @@ const BigPlaceCard = ({ place, placeId, isHotel }: IBigPlaceProps) => {
   };
 
   const handleAddButtonClicked = () => {
-    isHotel
-      ? setUserInfo((current) => {
-          const index = [...{ ...current[player.email].trips }[currentTrip]].findIndex(
-            (e) => e.destination?.name === destination
-          );
+    // isHotel
+    //   ? setUserInfo((current) => {
+    //       const index = [...{ ...current[player.email].trips }[currentTrip]].findIndex(
+    //         (e) => e.destination?.name === destination
+    //       );
 
-          const hotelTarget = [...current[player.email].trips[currentTrip][index].detail.hotels];
+    //       const hotelTarget = [...current[player.email].trips[currentTrip][index].detail.hotels];
 
-          const newHotel = [
-            ...hotelTarget,
-            {
-              name: place?.result.name,
-              placeId: placeId,
-              address: place?.result.formatted_address ? place?.result.formatted_address : "",
-              geo: place?.result.geometry.location ? place?.result.geometry.location : { lat: 0, lng: 0 },
-              image: place?.result.photos ? place?.result.photos.map((photo) => photo.photo_reference) : [""],
-              overview: place?.result.editorial_summary ? place?.result.editorial_summary.overview : "",
-              timestamp: new Date().getTime(),
-            },
-          ];
+    //       const newHotel = [
+    //         ...hotelTarget,
+    //         {
+    //           name: place?.result.name,
+    //           placeId: placeId,
+    //           address: place?.result.formatted_address ? place?.result.formatted_address : "",
+    //           geo: place?.result.geometry.location ? place?.result.geometry.location : { lat: 0, lng: 0 },
+    //           image: place?.result.photos ? place?.result.photos.map((photo) => photo.photo_reference) : [""],
+    //           overview: place?.result.editorial_summary ? place?.result.editorial_summary.overview : "",
+    //           timestamp: new Date().getTime(),
+    //         },
+    //       ];
 
-          return {
-            ...current,
-            [player.email]: {
-              ...current[player.email],
-              ["trips"]: {
-                ...current[player.email].trips,
-                [currentTrip]: [
-                  ...current[player.email].trips[currentTrip].slice(0, index),
-                  {
-                    ...current[player.email].trips[currentTrip][index],
-                    ["detail"]: {
-                      ...current[player.email].trips[currentTrip][index].detail,
-                      ["hotels"]: newHotel,
-                    },
-                  },
-                  ...current[player.email].trips[currentTrip].slice(index + 1),
-                ],
-              },
-            },
-          };
-        })
-      : setUserInfo((current) => {
-          const index = [...{ ...current[player.email].trips }[currentTrip]].findIndex(
-            (e) => e.destination?.name === destination
-          );
+    //       return {
+    //         ...current,
+    //         [player.email]: {
+    //           ...current[player.email],
+    //           ["trips"]: {
+    //             ...current[player.email].trips,
+    //             [currentTrip]: [
+    //               ...current[player.email].trips[currentTrip].slice(0, index),
+    //               {
+    //                 ...current[player.email].trips[currentTrip][index],
+    //                 ["detail"]: {
+    //                   ...current[player.email].trips[currentTrip][index].detail,
+    //                   ["hotels"]: newHotel,
+    //                 },
+    //               },
+    //               ...current[player.email].trips[currentTrip].slice(index + 1),
+    //             ],
+    //           },
+    //         },
+    //       };
+    //     })
+    //   : setUserInfo((current) => {
+    //       const index = [...{ ...current[player.email].trips }[currentTrip]].findIndex(
+    //         (e) => e.destination?.name === destination
+    //       );
 
-          const attractionTarget = [...current[player.email].trips[currentTrip][index].detail?.attractions["NoName"]];
+    //       const attractionTarget = [...current[player.email].trips[currentTrip][index].detail?.attractions["NoName"]];
 
-          const newAttraction = [
-            ...attractionTarget,
-            {
-              name: place?.result.name,
-              placeId: placeId,
-              address: place?.result.formatted_address ? place?.result.formatted_address : "",
-              geo: place?.result.geometry.location ? place?.result.geometry.location : { lat: 0, lng: 0 },
-              image: place?.result.photos ? place?.result.photos.map((photo) => photo.photo_reference) : [""],
-              overview: place?.result.editorial_summary ? place?.result.editorial_summary.overview : "",
-              timestamp: new Date().getTime(),
-            },
-          ];
+    //       const newAttraction = [
+    //         ...attractionTarget,
+    //         {
+    //           name: place?.result.name,
+    //           placeId: placeId,
+    //           address: place?.result.formatted_address ? place?.result.formatted_address : "",
+    //           geo: place?.result.geometry.location ? place?.result.geometry.location : { lat: 0, lng: 0 },
+    //           image: place?.result.photos ? place?.result.photos.map((photo) => photo.photo_reference) : [""],
+    //           overview: place?.result.editorial_summary ? place?.result.editorial_summary.overview : "",
+    //           timestamp: new Date().getTime(),
+    //         },
+    //       ];
 
-          return {
-            ...current,
-            [player.email]: {
-              ...current[player.email],
-              ["trips"]: {
-                ...current[player.email].trips,
-                [currentTrip]: [
-                  ...current[player.email].trips[currentTrip].slice(0, index),
-                  {
-                    ...current[player.email].trips[currentTrip][index],
-                    ["detail"]: {
-                      ...current[player.email].trips[currentTrip][index].detail,
-                      ["attractions"]: {
-                        ...current[player.email].trips[currentTrip][index].detail?.attractions,
-                        ["NoName"]: newAttraction,
-                      },
-                    },
-                  },
-                  ...current[player.email].trips[currentTrip].slice(index + 1),
-                ],
-              },
-            },
-          };
-        });
+    //       return {
+    //         ...current,
+    //         [player.email]: {
+    //           ...current[player.email],
+    //           ["trips"]: {
+    //             ...current[player.email].trips,
+    //             [currentTrip]: [
+    //               ...current[player.email].trips[currentTrip].slice(0, index),
+    //               {
+    //                 ...current[player.email].trips[currentTrip][index],
+    //                 ["detail"]: {
+    //                   ...current[player.email].trips[currentTrip][index].detail,
+    //                   ["attractions"]: {
+    //                     ...current[player.email].trips[currentTrip][index].detail?.attractions,
+    //                     ["NoName"]: newAttraction,
+    //                   },
+    //                 },
+    //               },
+    //               ...current[player.email].trips[currentTrip].slice(index + 1),
+    //             ],
+    //           },
+    //         },
+    //       };
+    //     });
 
     navigate(`/travel/${currentTrip}/${destination}`);
   };
@@ -160,7 +170,12 @@ const BigPlaceCard = ({ place, placeId, isHotel }: IBigPlaceProps) => {
                     })`,
                   }}
                 />
-                <BigOverview variants={bigOverviewVar} initial="initial" animate="animate" whileHover="hover">
+                <BigOverview
+                  variants={bigOverviewVar}
+                  initial="initial"
+                  animate="animate"
+                  whileHover="hover"
+                >
                   <BigTitle>
                     <p>{place?.result.name}</p>
                   </BigTitle>
@@ -193,7 +208,10 @@ const BigPlaceCard = ({ place, placeId, isHotel }: IBigPlaceProps) => {
                   <Tabs>
                     <Link
                       to={
-                        journeyMatch || mapJourneyMatch || overviewJourneyMatch || reviewJourneyMatch
+                        journeyMatch ||
+                        mapJourneyMatch ||
+                        overviewJourneyMatch ||
+                        reviewJourneyMatch
                           ? `/journey/${currentTrip}/${destination}/${placeId}/overview`
                           : `/travel/${currentTrip}/${destination}/${placeId}/overview`
                       }
@@ -205,14 +223,22 @@ const BigPlaceCard = ({ place, placeId, isHotel }: IBigPlaceProps) => {
                             },
                       }}
                     >
-                      <Tab isActive={(overviewMatch || overviewJourneyMatch) !== null} isHotel={isHotel}>
+                      <Tab
+                        isActive={(overviewMatch || overviewJourneyMatch) !== null}
+                        isHotel={isHotel}
+                      >
                         Overview
-                        {(overviewMatch || overviewJourneyMatch) && <Circle isHotel={isHotel} layoutId="circle2" />}
+                        {(overviewMatch || overviewJourneyMatch) && (
+                          <Circle isHotel={isHotel} layoutId="circle2" />
+                        )}
                       </Tab>
                     </Link>
                     <Link
                       to={
-                        journeyMatch || mapJourneyMatch || overviewJourneyMatch || reviewJourneyMatch
+                        journeyMatch ||
+                        mapJourneyMatch ||
+                        overviewJourneyMatch ||
+                        reviewJourneyMatch
                           ? `/journey/${currentTrip}/${destination}/${placeId}/review`
                           : `/travel/${currentTrip}/${destination}/${placeId}/review`
                       }
@@ -220,14 +246,22 @@ const BigPlaceCard = ({ place, placeId, isHotel }: IBigPlaceProps) => {
                         review: place?.result.reviews,
                       }}
                     >
-                      <Tab isHotel={isHotel} isActive={(reviewMatch || reviewJourneyMatch) !== null}>
+                      <Tab
+                        isHotel={isHotel}
+                        isActive={(reviewMatch || reviewJourneyMatch) !== null}
+                      >
                         Review
-                        {(reviewJourneyMatch || reviewMatch) && <Circle isHotel={isHotel} layoutId="circle2" />}
+                        {(reviewJourneyMatch || reviewMatch) && (
+                          <Circle isHotel={isHotel} layoutId="circle2" />
+                        )}
                       </Tab>
                     </Link>
                     <Link
                       to={
-                        journeyMatch || mapJourneyMatch || overviewJourneyMatch || reviewJourneyMatch
+                        journeyMatch ||
+                        mapJourneyMatch ||
+                        overviewJourneyMatch ||
+                        reviewJourneyMatch
                           ? `/journey/${currentTrip}/${destination}/${placeId}/map`
                           : `/travel/${currentTrip}/${destination}/${placeId}/map`
                       }
@@ -235,7 +269,9 @@ const BigPlaceCard = ({ place, placeId, isHotel }: IBigPlaceProps) => {
                     >
                       <Tab isHotel={isHotel} isActive={(mapMatch || mapJourneyMatch) !== null}>
                         Map
-                        {(mapMatch || mapJourneyMatch) && <Circle isHotel={isHotel} layoutId="circle2" />}
+                        {(mapMatch || mapJourneyMatch) && (
+                          <Circle isHotel={isHotel} layoutId="circle2" />
+                        )}
                       </Tab>
                     </Link>
                   </Tabs>
@@ -249,7 +285,10 @@ const BigPlaceCard = ({ place, placeId, isHotel }: IBigPlaceProps) => {
                     ) : null}
                   </Nested>
                 </BigOverview>
-                {journeyMatch || overviewJourneyMatch || reviewJourneyMatch || mapJourneyMatch ? null : (
+                {journeyMatch ||
+                overviewJourneyMatch ||
+                reviewJourneyMatch ||
+                mapJourneyMatch ? null : (
                   <Button isHotel={isHotel} onClick={handleAddButtonClicked}>
                     추가하기
                   </Button>
@@ -378,7 +417,8 @@ const Button = styled.div<{ isHotel: boolean }>`
   width: 90%;
   font-size: 16px;
   font-weight: 600;
-  background-color: ${(props) => (props.isHotel ? props.theme.red.accent : props.theme.main.accent)};
+  background-color: ${(props) =>
+    props.isHotel ? props.theme.red.accent : props.theme.main.accent};
   border-radius: 30px;
   height: 50px;
   position: absolute;
@@ -400,7 +440,11 @@ const Tab = styled.div<{ isActive: boolean; isHotel: boolean }>`
   flex-direction: column;
   position: relative;
   color: ${(props) =>
-    props.isActive ? (props.isHotel ? props.theme.red.accent : props.theme.main.accent) : "lightgray"};
+    props.isActive
+      ? props.isHotel
+        ? props.theme.red.accent
+        : props.theme.main.accent
+      : "lightgray"};
   font-size: 16px;
   transition: color 0.5s ease-in-out;
   font-weight: 600;
@@ -410,7 +454,8 @@ const Circle = styled(motion.span)<{ isHotel: boolean }>`
   position: absolute;
   width: 5px;
   height: 5px;
-  background-color: ${(props) => (props.isHotel ? props.theme.red.accent : props.theme.main.accent)};
+  background-color: ${(props) =>
+    props.isHotel ? props.theme.red.accent : props.theme.main.accent};
   border-radius: 2.5008px;
   bottom: -10px;
   left: 0;

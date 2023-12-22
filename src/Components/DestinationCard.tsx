@@ -4,73 +4,113 @@ import { IPlaceDetail } from "../api";
 import { AnimatePresence, motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
-import { destinationState, playerState, tripState, userState } from "../atoms";
+import { destinationState, tripState, userState } from "../atoms";
+import { useState } from "react";
+import GoogleMap from "./GoogleMap";
 
 const DestinationCard = ({ title, destination }: IBigTripCardProps) => {
   const navigate = useNavigate();
-  const [currentDestination, setCurrentDestination] = useRecoilState(destinationState);
+  const [isCardClicked, setIsCardClicked] = useState(false);
+  const [userInfo, setUserInfo] = useRecoilState(userState);
 
-  const onDestinationClicked = () => {
-    navigate(`/travel/${title}/${destination?.name}`);
-    setCurrentDestination(destination);
+  const onAddClick = () => {
+    setIsCardClicked(false);
+    setUserInfo((current) => [
+      ...current,
+      {
+        destination: destination,
+        detail: {
+          date: 0 + "|" + 0,
+          attractions: { NoName: [] },
+          hotels: [],
+          wtm: [],
+        },
+      },
+    ]);
   };
 
-  const [userInfo, setUserInfo] = useRecoilState(userState);
-  const [player, setPlayer] = useRecoilState(playerState);
-  const [currentTrip, setCurrentTrip] = useRecoilState(tripState);
+  const deleteDestination = (destination: IPlaceDetail | undefined) => {};
 
-  const currentTarget =
-    userInfo[player.email].trips[currentTrip][
-      userInfo[player.email].trips[currentTrip].findIndex((e) => e.destination?.name === destination?.name)
-    ];
-
-  const deleteDestination = (destination: IPlaceDetail | undefined) => {
-    setUserInfo((current) => {
-      const userCopy = { ...current[player.email] };
-      const copy = { ...current[player.email].trips };
-      const target = [...copy[currentTrip]];
-      const index = target.findIndex((e) => e.destination?.name === destination?.name);
-      const newTarget = [...target.slice(0, index), ...target.slice(index + 1)];
-      const newTrip = { ...copy, [currentTrip]: newTarget };
-      const newUser = { ...userCopy, ["trips"]: newTrip };
-      return { ...current, [player.email]: newUser };
-    });
+  const onCardClick = () => {
+    setIsCardClicked(true);
   };
 
   return (
-    <AnimatePresence>
-      <Wrapper>
-        {destination && (
-          <Container>
-            <Destination
-              bgPhoto={`url(${makeImagePath(destination?.photos ? destination?.photos[0].photo_reference : "", 500)})`}
-              onClick={onDestinationClicked}
-            />
-            <Description>
-              <DestinationContent onClick={onDestinationClicked}>
-                <DestinationTitle>
-                  {destination?.name} {destination?.formatted_address.split(" ")[0]}
-                </DestinationTitle>
-                <DestinationSubTitle>
-                  {"(" +
-                    currentTarget.detail.date.split("|")[0] +
-                    " ~ " +
-                    currentTarget.detail.date.split("|")[1] +
-                    ")"}
-                </DestinationSubTitle>
-              </DestinationContent>
-              <Button
-                onClick={() => {
-                  deleteDestination(destination);
-                }}
-              >
-                삭제
-              </Button>
-            </Description>
-          </Container>
+    <>
+      <AnimatePresence>
+        <Wrapper
+          onClick={onCardClick}
+          variants={hoverVar}
+          whileHover={"hover"}
+          layoutId={destination?.place_id}
+          key={destination?.place_id}
+        >
+          {destination && (
+            <Container>
+              <Destination
+                bgPhoto={`url(${makeImagePath(
+                  destination?.photos ? destination?.photos[0].photo_reference : "",
+                  500
+                )})`}
+                // onClick={onDestinationClicked}
+              />
+              <Description>
+                <DestinationContent>
+                  <DestinationTitle>{destination?.name}</DestinationTitle>
+                  <DestinationSubTitle>
+                    {destination?.formatted_address.split(" ")[0]}
+                    {/* {"(" +
+                        currentTarget.detail.date.split("|")[0] +
+                        " ~ " +
+                        currentTarget.detail.date.split("|")[1] +
+                        ")"} */}
+                  </DestinationSubTitle>
+                </DestinationContent>
+                {/* <Button
+                    onClick={() => {
+                      deleteDestination(destination);
+                    }}
+                  >
+                    삭제
+                  </Button> */}
+              </Description>
+            </Container>
+          )}
+        </Wrapper>
+      </AnimatePresence>
+      <AnimatePresence>
+        {isCardClicked && (
+          <BigDestination>
+            <BigOverlay onClick={() => setIsCardClicked(false)} />
+            <BigCard layoutId={destination?.place_id}>
+              <Column>
+                <Card
+                  bgPhoto={makeImagePath(
+                    destination?.photos ? destination.photos[0]?.photo_reference : "",
+                    800
+                  )}
+                />
+              </Column>
+              <Column>
+                <DestinationInfo>
+                  <CardTitle>{destination?.name}</CardTitle>
+                  <CardAddress>{destination?.formatted_address}</CardAddress>
+
+                  {/* <CardDescription>{destination?.editorial_summary?.overview}</CardDescription> */}
+                </DestinationInfo>
+                <GoogleMap
+                  destination={destination?.formatted_address}
+                  width="100%"
+                  height="68%"
+                  zoom={11}
+                />
+                <CardButton onClick={onAddClick}>추가하기</CardButton>
+              </Column>
+            </BigCard>
+          </BigDestination>
         )}
-      </Wrapper>
-    </AnimatePresence>
+      </AnimatePresence>
+    </>
   );
 };
 
@@ -80,7 +120,10 @@ const Wrapper = styled(motion.div)`
   display: flex;
   /* box-shadow: 2px 2px 4px 2px lightgray; */
   cursor: pointer;
-  width: 100%;
+  width: 300px;
+  box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 0.1);
+  padding: 8px;
+  border-radius: 6px;
 `;
 
 const Container = styled.div`
@@ -102,22 +145,21 @@ const Destination = styled.div<{ bgPhoto: string }>`
   background-size: cover;
   background-position: center center;
   width: 100%;
-  height: 18vw;
-  border-radius: 20px;
+  height: 300px;
+  border-radius: 6px;
   cursor: pointer;
 `;
 
 const DestinationTitle = styled.h2`
-  font-size: 18px;
-  font-weight: 600;
+  font-size: 21px;
+  font-weight: 400;
   color: black;
-  margin-top: 10px;
+  margin-top: 5px;
 `;
 
 const DestinationSubTitle = styled.h2`
   font-size: 16px;
   font-weight: 400;
-  margin-top: 5px;
   color: gray;
 `;
 
@@ -138,7 +180,100 @@ const Button = styled(motion.button)`
   }
 `;
 
+const BigDestination = styled(motion.div)`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const BigOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4);
+`;
+
+const BigCard = styled(motion.div)`
+  width: 1200px;
+  height: 600px;
+  z-index: 2;
+  border-radius: 6px;
+  background-color: white;
+  display: flex;
+  justify-content: space-between;
+  padding: 40px;
+  box-shadow: 12px 12px 0 rgba(0, 0, 0, 0.2);
+`;
+
+const Card = styled(motion.div)<{ bgPhoto: string }>`
+  width: 100%;
+  height: 100%;
+  background-image: url(${(props) => props.bgPhoto});
+  background-size: cover;
+  background-position: center;
+  border-radius: 4px;
+`;
+
+const CardTitle = styled(motion.h2)`
+  font-size: 18px;
+  color: gray;
+  font-weight: 400;
+`;
+
+const CardDescription = styled.h2`
+  font-size: 16px;
+  font-weight: 500;
+`;
+
+const CardAddress = styled.h2`
+  font-size: 24px;
+  font-weight: 500;
+`;
+
+const DestinationInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+`;
+
+const Column = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 48%;
+`;
+
+const CardButton = styled.button`
+  margin-top: auto;
+  padding: 20px;
+  background-color: #8eb1f9;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 4px;
+  cursor: pointer;
+  box-shadow: 3px 3px 0px 0px rgba(0, 0, 0, 0.25);
+  &:hover {
+    background-color: #8eb1f9dd;
+  }
+  &:active {
+    background-color: #8eb1f9bb;
+    box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 0.25) inset;
+  }
+`;
+
+const hoverVar = {
+  initial: { y: 0 },
+  hover: { y: -16, boxShadow: "12px 16px 0 0 rgba(0,0,0,0.1)" },
+};
+
 interface IBigTripCardProps {
-  title: string;
+  title: string | undefined;
   destination: IPlaceDetail | undefined;
 }

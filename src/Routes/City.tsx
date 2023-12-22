@@ -1,28 +1,46 @@
 import styled from "styled-components";
 import DestinationCard from "../Components/DestinationCard";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { playerState, tripState, userState } from "../atoms";
+import { tripState, userState } from "../atoms";
 import { useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLeftLong } from "@fortawesome/free-solid-svg-icons";
 import { useForm } from "react-hook-form";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import NavigationBar from "../Components/NavigationBar";
 import imageList from "../imageData.json";
+import {
+  IGetPlaceResult,
+  getPlaceResult,
+  IGetPlaceDetailResult,
+  getPlaceDetailResult,
+} from "../api";
+import { useQuery } from "react-query";
+import Header from "../Components/Header";
 
 const City = () => {
   const [users, setUsers] = useRecoilState(userState);
-  const [player, setPlayer] = useRecoilState(playerState);
   const navigate = useNavigate();
-  const { register, handleSubmit } = useForm<IForm>();
+  const { register, handleSubmit, setValue } = useForm<IForm>();
   const currentTrip = useRecoilValue(tripState);
   const inputRef = useRef<HTMLInputElement | null>(null);
-
+  const [searchData, setSearchData] = useState("");
   const { ref, ...rest } = register("destination");
 
+  const { data: destinationData, isLoading: isDestinationLoading } = useQuery<IGetPlaceResult>(
+    ["getDestination", searchData],
+    () => getPlaceResult(searchData || ""),
+    { enabled: !!searchData }
+  );
+
+  const { data: detailData, isLoading: isDetailLoading } = useQuery<IGetPlaceDetailResult>(
+    ["getPlaceDetail", destinationData],
+    () => getPlaceDetailResult(destinationData?.candidates[0].place_id),
+    { enabled: !!destinationData }
+  );
+
   const onValid = (data: IForm) => {
-    navigate(`/search/${currentTrip}?destination=${data.destination}`);
+    setSearchData(data.destination);
+    setValue("destination", "");
   };
 
   useEffect(() => {
@@ -30,52 +48,44 @@ const City = () => {
   }, []);
 
   return (
-    <AnimatePresence>
-      <Wrapper>
-        <Header bgphoto={imageList[Math.floor(Math.random() * 10) % imageList.length]}>
-          <NavigationBar />
-          <Container variants={inputVar} initial="initial" animate="animate">
-            <Title>{currentTrip}</Title>
-            <SubTitle>
-              도시 혹은 지역을 검색하여 {currentTrip}에서의 목적지를 추가하세요. 이후 카드를 클릭하여 세부사항을 점검할
-              수 있습니다.
-            </SubTitle>
-            <Form onSubmit={handleSubmit(onValid)}>
-              <Input
-                {...rest}
-                name="destination"
-                ref={(e) => {
-                  ref(e);
-                  inputRef.current = e;
-                }}
-                placeholder="Enter your destination"
-                autoFocus
-                autoComplete="off"
-                spellCheck={false}
-                required
-              />
-            </Form>
-          </Container>
-        </Header>
-        <Main variants={inputVar} initial="initial" animate="animate">
-          <MainTitle>여행지</MainTitle>
-          <MainSubTitle>당신이 선택한 여행지는?</MainSubTitle>
-          {users[player.email].trips[currentTrip].length === 0 ? (
-            <Loader>There is no destination. Please add your destination</Loader>
-          ) : (
+    <Wrapper>
+      <Header />
+      <NavigationBar now={1} />
+      <Container variants={inputVar} initial="initial" animate="animate">
+        {/* <Title>Title</Title> */}
+        <SubTitle>여행할 도시를 찾아보세요</SubTitle>
+        <Form onSubmit={handleSubmit(onValid)}>
+          <Input
+            {...rest}
+            name="destination"
+            ref={(e) => {
+              ref(e);
+              inputRef.current = e;
+            }}
+            placeholder="Enter your destination"
+            autoFocus
+            autoComplete="off"
+            spellCheck={false}
+            required
+          />
+        </Form>
+      </Container>
+      <Main>
+        {isDestinationLoading || isDetailLoading ? (
+          <Loader>Loading...</Loader>
+        ) : (
+          detailData && (
             <Cards>
-              {users[player.email].trips[currentTrip].map((element) => (
-                <DestinationCard
-                  key={element.destination?.formatted_address}
-                  title={currentTrip}
-                  destination={element.destination}
-                />
-              ))}
+              <DestinationCard
+                key={detailData?.result.place_id}
+                title={detailData?.result.name}
+                destination={detailData?.result}
+              />
             </Cards>
-          )}
-        </Main>
-      </Wrapper>
-    </AnimatePresence>
+          )
+        )}
+      </Main>
+    </Wrapper>
   );
 };
 
@@ -86,17 +96,6 @@ const Wrapper = styled(motion.div)`
   color: ${(props) => props.theme.main.word};
   display: flex;
   flex-direction: column;
-`;
-
-const Header = styled.div<{ bgphoto: string }>`
-  background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${(props) => props.bgphoto});
-  background-position: center center;
-  background-size: cover;
-  width: 100%;
-  min-height: 100vh;
-  padding-bottom: 100px;
-  display: flex;
-  flex-direction: column;
   align-items: center;
 `;
 
@@ -105,26 +104,29 @@ const Container = styled(motion.div)`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: auto 0;
 `;
 
+const Card = styled.div``;
+
 const Title = styled.div`
-  font-size: 72px;
-  font-weight: 600;
+  font-size: 80px;
+  font-weight: 500;
+  line-height: 1;
   margin-bottom: 40px;
   padding-top: 100px;
 `;
 
 const SubTitle = styled.h2`
-  font-size: 18px;
+  font-size: 21px;
   font-weight: 400;
-  width: 25%;
   text-align: center;
+  padding-top: 100px;
 `;
 
 const Main = styled(motion.div)`
   width: 100%;
-  padding: 150px 72px;
+  padding: 0 72px;
+  padding-bottom: 50px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -145,10 +147,8 @@ const MainSubTitle = styled.h2`
 `;
 
 const Cards = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-gap: 30px;
-  grid-row-gap: 60px;
+  display: flex;
+  justify-content: center;
   width: 100%;
 `;
 
@@ -163,7 +163,7 @@ const Loader = styled.div`
 const Form = styled(motion.form)`
   display: flex;
   justify-content: center;
-  margin: 70px 0;
+  margin: 70px 0 0 0;
   width: 100%;
   @media screen and (max-width: 800px) {
     flex-direction: column;
@@ -177,7 +177,7 @@ const Input = styled(motion.input)`
   border: none;
   border-radius: 7px;
   font-weight: 600;
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: rgba(0, 0, 0, 0.2);
   &:focus {
     outline: none;
   }

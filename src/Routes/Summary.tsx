@@ -1,7 +1,7 @@
 import styled from "styled-components";
-import NavigationBar from "../Components/NavigationBar";
+import NavigationBar from "../Components/TempNav";
 import { useRecoilState } from "recoil";
-import { destinationState, playerState, tripState, userState } from "../atoms";
+import { destinationState, tripState, userState } from "../atoms";
 import { useEffect, useState } from "react";
 import { makeImagePath } from "../utils";
 import GoogleRouteMap from "../Components/GoogleRouteMap";
@@ -12,17 +12,19 @@ import imageList from "../imageData.json";
 const Summary = () => {
   const [currentDestination, setCurrentDestination] = useRecoilState(destinationState);
   const [userInfo, setUserInfo] = useRecoilState(userState);
-  const [player, setPlayer] = useRecoilState(playerState);
+  // const [player, setPlayer] = useRecoilState(playerState);
   const [currentTrip, setCurrentTrip] = useRecoilState(tripState);
   const [clickedCategory, setClickedCategory] = useState("");
 
   const destination = currentDestination?.name;
   const navigate = useNavigate();
 
-  const currentTarget =
-    userInfo[player.email].trips[currentTrip][
-      userInfo[player.email].trips[currentTrip].findIndex((e) => e.destination?.name === destination)
-    ];
+  // const currentTarget =
+  //   userInfo[player.email].trips[currentTrip][
+  //     userInfo[player.email].trips[currentTrip].findIndex(
+  //       (e) => e.destination?.name === destination
+  //     )
+  //   ];
 
   const onCategoryClick = (boardName: string) => {
     setClickedCategory(boardName);
@@ -48,13 +50,14 @@ const Summary = () => {
       </Header>
       <Main variants={loadingVar} initial="initial" animate="animate">
         <MainTitle>Scehdule of {currentDestination?.name}</MainTitle>
-        <MainSubtitle>
-          {currentTarget.detail.date.split("|")[0]} 부터 {currentTarget.detail.date.split("|")[1]} 까지의{" "}
-          {currentDestination?.name}에서의 일정을 확인해 보세요. 아래의 카테고리를 클릭하여 각각의 일정을 점검하세요.
-        </MainSubtitle>
+        {/* <MainSubtitle>
+          {currentTarget.detail.date.split("|")[0]} 부터 {currentTarget.detail.date.split("|")[1]}{" "}
+          까지의 {currentDestination?.name}에서의 일정을 확인해 보세요. 아래의 카테고리를 클릭하여
+          각각의 일정을 점검하세요.
+        </MainSubtitle> */}
         <MainContent>
           <List>
-            {Object.keys(
+            {/* {Object.keys(
               userInfo[player.email].trips[currentTrip][
                 userInfo[player.email].trips[currentTrip].findIndex(
                   (e) => e.destination?.name === currentDestination?.name
@@ -73,10 +76,10 @@ const Summary = () => {
                   </Category>
                 )
               );
-            })}
+            })} */}
           </List>
           <Info>
-            {userInfo[player.email].trips[currentTrip][
+            {/* {userInfo[player.email].trips[currentTrip][
               userInfo[player.email].trips[currentTrip].findIndex(
                 (e) => e.destination?.name === currentDestination?.name
               )
@@ -255,7 +258,7 @@ const Summary = () => {
                   ))}
                 </Hotels>
               </>
-            )}
+            )} */}
           </Info>
         </MainContent>
       </Main>
@@ -281,7 +284,8 @@ export default Summary;
 const Wrapper = styled.div``;
 
 const Header = styled.div<{ bgphoto: string }>`
-  background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${(props) => props.bgphoto});
+  background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+    url(${(props) => props.bgphoto});
   background-position: center center;
   background-size: cover;
   width: 100%;
