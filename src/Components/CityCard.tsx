@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { destinationState } from "../atoms";
 import AttractionScreen from "./AttractionScreen";
+import ScheduleScreen from "./ScheduleScreen";
 
 const CityCard = ({ destination }: IBigTripCardProps) => {
   const navigate = useNavigate();
@@ -36,6 +37,7 @@ const CityCard = ({ destination }: IBigTripCardProps) => {
         )}
       </Wrapper>
       <AttractionScreen destination={destination} />
+      <ScheduleScreen destination={destination} />
     </>
   );
 };

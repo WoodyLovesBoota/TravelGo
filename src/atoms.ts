@@ -6,6 +6,21 @@ export enum STATUS {
   "JOURNEYS",
 }
 
+export const isSecondPhaseState = atom<boolean>({
+  key: "isSecondPhase",
+  default: false,
+});
+
+export const isCalendarState = atom<boolean>({
+  key: "isCalendarOpen",
+  default: false,
+});
+
+export const isClickedState = atom<string | undefined>({
+  key: "isClickedState",
+  default: "",
+});
+
 export const navState = atom<STATUS>({
   key: "navState",
   default: STATUS.DEFAULT,

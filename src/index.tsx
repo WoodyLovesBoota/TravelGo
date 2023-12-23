@@ -4,10 +4,9 @@ import { ThemeProvider, createGlobalStyle } from "styled-components";
 import { theme } from "./theme";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { RecoilRoot } from "recoil";
-import "./assets/fonts/font.css";
+import { ReactQueryDevtools } from "react-query/devtools";
 
 const GlobalStyle = createGlobalStyle`
-  @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400&display=swap');
   html, body, div, span, applet, object, iframe,
   h1, h2, h3, h4, h5, h6, p, blockquote, pre,
   a, abbr, acronym, address, big, cite, code,
@@ -28,7 +27,7 @@ const GlobalStyle = createGlobalStyle`
     font-weight: 300;
     line-height: 1.5;
     vertical-align: baseline;
-    font-family: Inter,"Noto sans KR", sans-serif;
+    font-family: Inter, sans-serif;
     color: black;
     @media screen and (max-width: 1000px) {
       font-size: 12px;
@@ -68,7 +67,6 @@ const GlobalStyle = createGlobalStyle`
 
   body {
     font-weight: 300;
-    font-family: 'Source Sans Pro', sans-serif;
   }
 
   a {
@@ -106,5 +104,6 @@ root.render(
         <App />
       </ThemeProvider>
     </RecoilRoot>
+    <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
   </QueryClientProvider>
 );

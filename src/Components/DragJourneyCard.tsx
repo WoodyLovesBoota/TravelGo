@@ -118,7 +118,7 @@ const DragJourneyCard = ({
               </Card>
             )}
           </Draggable>
-          <BigPlaceCard key={journeyId} place={data} placeId={placeId} isHotel={false} />
+          {/* <BigPlaceCard key={journeyId} place={data} placeId={placeId} isHotel={false} /> */}
         </>
       ) : null}
     </AnimatePresence>

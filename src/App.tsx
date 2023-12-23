@@ -15,6 +15,7 @@ import { firebaseDB } from "./firebase/firebase";
 import { useRecoilState } from "recoil";
 import { userState } from "./atoms";
 import AttractionScreen from "./Components/AttractionScreen";
+import ScheduleScreen from "./Components/ScheduleScreen";
 
 const App = () => {
   const [userInfo, setUserInfo] = useRecoilState(userState);
@@ -54,11 +55,18 @@ const App = () => {
             </Route>
           </Route>
           <Route path="/search/:title" element={<Search />}></Route>
-          {/* <Route path="/destination/:title" element={<City />}></Route> */}
-          <Route path="/place" element={<Place />}>
-            <Route path="/place/:city" element={<Place />} />
+          <Route path="/schedule" element={<Place />}>
+            <Route path="/schedule/:city" element={<Place />} />
           </Route>
-
+          <Route path="/place" element={<Place />}>
+            <Route path="/place/:city" element={<Place />}>
+              <Route path="/place/:city/:place" element={<Place />}>
+                <Route path="overview" element={<Overview />}></Route>
+                <Route path="review" element={<Review />}></Route>
+                <Route path="map" element={<Map />}></Route>
+              </Route>
+            </Route>
+          </Route>
           <Route path="/city" element={<City />}></Route>
           <Route path="/" element={<Date />} />
         </Routes>

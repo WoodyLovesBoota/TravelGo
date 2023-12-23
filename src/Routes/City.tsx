@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import DestinationCard from "../Components/DestinationCard";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { tripState, userState } from "../atoms";
+import { isSecondPhaseState, tripState, userState } from "../atoms";
 import { useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { useForm } from "react-hook-form";
@@ -28,6 +28,7 @@ const City = () => {
   const [currentTrip, setCurrentTrip] = useRecoilState(tripState);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [searchData, setSearchData] = useState("");
+  const [isSecond, setIsSecond] = useRecoilState(isSecondPhaseState);
   const { ref, ...rest } = register("destination");
 
   const { data: destinationData, isLoading: isDestinationLoading } = useQuery<IGetPlaceResult>(
