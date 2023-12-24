@@ -78,18 +78,15 @@ const GlobalStyle = createGlobalStyle`
     background-color: transparent;
     width: 5px;
     height: 5px;     
-    display: none;
   }
 
   &::-webkit-scrollbar-track {
     background-color: transparent;    
-    display: none;
   }
 
   &::-webkit-scrollbar-thumb {
-    background-color: transparent;
-    border-radius: 10px;
-    display: none;
+    background-color: #D9D9D9;
+    border-radius: 20px;
   }
 `;
 const queryClient = new QueryClient();

@@ -1,15 +1,7 @@
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 import { useRecoilState } from "recoil";
-import {
-  IJourney,
-  choiceState,
-  endDateState,
-  isCalendarState,
-  startDateState,
-  tripState,
-  userState,
-} from "../atoms";
+import { IJourney, isCalendarState, tripState, userState } from "../atoms";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import { ReactComponent as Arrow } from "../assets/arrow.svg";
@@ -24,6 +16,7 @@ const SmallCalender = ({ destination }: { destination: IPlaceDetail | undefined 
   const [endDate, setEndDate] = useState("도착 날짜");
   const [currentTrip, setCurrentTrip] = useRecoilState(tripState);
   const [isCalendarOpen, setIsCalendarOpen] = useRecoilState(isCalendarState);
+  const [isSubmit, setIsSubmit] = useState(1);
 
   const WEEKDAY = ["일", "월", "화", "수", "목", "금", "토"];
   const firstDay = new Date(startYear, startMonth - 1, 1).getDay();
@@ -81,87 +74,46 @@ const SmallCalender = ({ destination }: { destination: IPlaceDetail | undefined 
   };
 
   useEffect(() => {
-    setUserInfo((current) => {
-      const one = { ...current };
-      const two = { ...one[currentTrip] };
-      const three = [...two.trips];
-      const index = three.findIndex((e) => e.destination?.name === destination?.name);
-      const four = { ...three[index] };
-      const five = { ...four.detail };
-      const six = { ...five.attractions };
+    return () => {
+      setUserInfo((current) => {
+        if (startDate === "출발 날짜" || endDate === "도착 날짜") return current;
+        const one = { ...current };
+        const two = { ...one[currentTrip] };
+        const three = [...two.trips];
+        const index = three.findIndex((e) => e.destination?.name === destination?.name);
+        const four = { ...three[index] };
+        const five = { ...four.detail };
+        const six = { ...five.attractions };
+        let newObj: { [key: string]: (IJourney | undefined)[] } = { ["NoName"]: six["NoName"] };
+        for (
+          let i = 0;
+          i <=
+          daysSinceSpecificDate(
+            [
+              Number(startDate.split(".")[0]),
+              Number(startDate.split(".")[1]),
+              Number(startDate.split(".")[2]),
+            ],
+            [
+              Number(endDate.split(".")[0]),
+              Number(endDate.split(".")[1]),
+              Number(endDate.split(".")[2]),
+            ]
+          );
+          i++
+        ) {
+          newObj[i + 1 + "일차"] = [];
+        }
+        const newFive = { ...five, ["attractions"]: newObj };
+        const newFour = { ...four, ["detail"]: newFive };
+        const newThree = [...three.slice(0, index), newFour, ...three.slice(index + 1)];
+        const newTwo = { ...two, ["trips"]: newThree };
+        const newOne = { ...current, [currentTrip]: newTwo };
 
-      let newObj: { [key: string]: (IJourney | undefined)[] } = { ["NoName"]: six["NoName"] };
-      for (
-        let i = 0;
-        i <
-        daysSinceSpecificDate(
-          [
-            Number(
-              userInfo[currentTrip].trips[
-                userInfo[currentTrip].trips.findIndex(
-                  (e) => e.destination?.name === destination?.name
-                )
-              ].detail.date.split(".")[0]
-            ),
-            Number(
-              userInfo[currentTrip].trips[
-                userInfo[currentTrip].trips.findIndex(
-                  (e) => e.destination?.name === destination?.name
-                )
-              ].detail.date.split(".")[1]
-            ),
-            Number(
-              userInfo[currentTrip].trips[
-                userInfo[currentTrip].trips.findIndex(
-                  (e) => e.destination?.name === destination?.name
-                )
-              ].detail.date.split(".")[2]
-            ),
-          ],
-          [
-            Number(
-              userInfo[currentTrip].trips[
-                userInfo[currentTrip].trips.findIndex(
-                  (e) => e.destination?.name === destination?.name
-                )
-              ].detail.date
-                .split("|")[1]
-                .split(".")[0]
-            ),
-            Number(
-              userInfo[currentTrip].trips[
-                userInfo[currentTrip].trips.findIndex(
-                  (e) => e.destination?.name === destination?.name
-                )
-              ].detail.date
-                .split("|")[1]
-                .split(".")[1]
-            ),
-            Number(
-              userInfo[currentTrip].trips[
-                userInfo[currentTrip].trips.findIndex(
-                  (e) => e.destination?.name === destination?.name
-                )
-              ].detail.date
-                .split("|")[1]
-                .split(".")[2]
-            ),
-          ]
-        );
-        i++
-      ) {
-        newObj[i + 1 + "일차"] = [];
-      }
-
-      const newFive = { ...five, ["attractions"]: newObj };
-      const newFour = { ...four, ["detail"]: newFive };
-      const newThree = [...three.slice(0, index), newFour, ...three.slice(index + 1)];
-      const newTwo = { ...two, ["trips"]: newThree };
-      const newOne = { ...current, [currentTrip]: newTwo };
-
-      return newOne;
-    });
-  }, [isCalendarOpen]);
+        return newOne;
+      });
+    };
+  }, [startDate, endDate]);
 
   const onButtonClick = () => {
     if (startDate !== "출발 날짜" && endDate !== "도착 날짜") {

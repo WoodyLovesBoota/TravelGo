@@ -25,12 +25,15 @@ const JourneyCard = ({ name, placeId, timestamp, destination }: IJourneyCardProp
       const four = { ...three[index] };
       const five = { ...four.detail };
       const six = { ...five.attractions };
-      const seven = [...six["NoName"]];
+      const target = Object.values({ ...six }).findIndex((e) =>
+        e.some((ele) => ele?.placeId === placeId)
+      );
+      const seven = [...six[Object.keys({ ...six })[target]]];
 
       const targetIndex = seven.findIndex((e) => e?.placeId === placeId);
       const newArray = [...seven.slice(0, targetIndex), ...seven.slice(targetIndex + 1)];
 
-      const newSix = { ...six, ["NoName"]: newArray };
+      const newSix = { ...six, [Object.keys({ ...six })[target]]: newArray };
       const newFive = { ...five, ["attractions"]: newSix };
       const newFour = { ...four, ["detail"]: newFive };
       const newThree = [...three.slice(0, index), newFour, ...three.slice(index + 1)];

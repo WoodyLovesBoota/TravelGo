@@ -47,7 +47,7 @@ export default CityCard;
 const Wrapper = styled.div`
   display: flex;
   cursor: pointer;
-  width: 151px;
+  width: 200px;
   border-radius: 16px;
   box-shadow: 0px 2px 12px 0px rgba(0, 0, 0, 0.1);
 `;
@@ -71,7 +71,7 @@ const Destination = styled.div<{ bgPhoto: string }>`
   background-size: cover;
   background-position: center center;
   width: 100%;
-  height: 151px;
+  height: 200px;
   border-top-right-radius: 16px;
   border-top-left-radius: 16px;
   cursor: pointer;

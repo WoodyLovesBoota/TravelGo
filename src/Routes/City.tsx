@@ -29,6 +29,7 @@ const City = () => {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [searchData, setSearchData] = useState("");
   const [isSecond, setIsSecond] = useRecoilState(isSecondPhaseState);
+
   const { ref, ...rest } = register("destination");
 
   const { data: destinationData, isLoading: isDestinationLoading } = useQuery<IGetPlaceResult>(
@@ -124,7 +125,7 @@ const City = () => {
           )
         )}
       </Main>
-      {users[currentTrip].trips.length > 0 && (
+      {users[currentTrip] && users[currentTrip].trips && users[currentTrip].trips.length > 0 && (
         <SideBar>
           <DropArea>
             <DragDropContext onDragEnd={onDragEnd}>

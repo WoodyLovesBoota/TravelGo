@@ -10,7 +10,6 @@ const Header = () => {
   return (
     <Wrapper>
       <Title>TravelGo</Title>
-      <Bag>가방{userInfo[currentTrip].trips.length}</Bag>
     </Wrapper>
   );
 };
@@ -28,22 +27,4 @@ const Title = styled.h2`
   margin: 0 auto;
   font-size: 20px;
   font-weight: 500;
-`;
-
-const Bag = styled.div``;
-
-const Circle = styled(motion.h2)`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: red;
-  width: 20px;
-  height: 20px;
-  border-radius: 100px;
-  color: white;
-  font-size: 12px;
-  font-weight: 500;
-  position: absolute;
-  top: -10px;
-  right: -20px;
 `;

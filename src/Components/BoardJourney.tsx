@@ -9,81 +9,129 @@ import { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import BigPath from "../Components/BigPath";
 import { useNavigate } from "react-router-dom";
+import { IPlaceDetail } from "../api";
 
-const BoardJourney = ({ journey, boardId }: IJourneyBoardProps) => {
-  const [isToggleOpen, setIsToggleOpen] = useState(false);
-  const inputRef = useRef<HTMLInputElement | null>(null);
-  const [currentDestination, setCurrentDestination] = useRecoilState(destinationState);
+const BoardJourney = ({ journey, boardId, destination, index }: IJourneyBoardProps) => {
   const [userInfo, setUserInfo] = useRecoilState(userState);
-  // const [player, setPlayer] = useRecoilState(playerState);
   const [currentTrip, setCurrentTrip] = useRecoilState(tripState);
-  const [clickedCard, setClickedCard] = useState("");
-  const navigate = useNavigate();
-  const destination = currentDestination?.name;
 
-  const onCardClicked = (boardName: string) => {
-    setClickedCard(boardName);
-    setIsToggleOpen(false);
-    navigate(`/journey/${currentTrip}/${destination}/${boardName}`);
-  };
-
-  const deleteBoard = () => {
-    // setUserInfo((current) => {
-    //   const userCopy = { ...current[player.email] };
-    //   const copy = { ...current[player.email].trips };
-    //   const target = [...copy[currentTrip]];
-    //   const index = target.findIndex((e) => e.destination?.name === currentDestination?.name);
-    //   const arrayCopy = { ...target[index] };
-    //   const detailCopy = { ...target[index].detail };
-    //   const temp = {
-    //     ...detailCopy.attractions,
-    //   };
-    //   delete temp[boardId];
-    //   const newOne = { ...detailCopy, ["attractions"]: temp };
-    //   const newDestination = { ...arrayCopy, ["detail"]: newOne };
-    //   const newTarget = [...target.slice(0, index), newDestination, ...target.slice(index + 1)];
-    //   const newTrip = { ...copy, [currentTrip]: newTarget };
-    //   const newUser = { ...userCopy, ["trips"]: newTrip };
-    //   return { ...current, [player.email]: newUser };
-    // });
-  };
-
-  const renameBoard = () => {
-    // const newName = inputRef && inputRef.current && inputRef.current?.value;
-    // newName &&
-    //   setUserInfo((current) => {
-    //     const userCopy = { ...current[player.email] };
-    //     const copy = { ...current[player.email].trips };
-    //     const target = [...copy[currentTrip]];
-    //     const index = target.findIndex((e) => e.destination?.name === currentDestination?.name);
-    //     const arrayCopy = { ...target[index] };
-    //     const detailCopy = { ...target[index].detail };
-    //     const temp = {
-    //       ...detailCopy.attractions,
-    //     };
-    //     const newData = [...temp[boardId]];
-    //     delete temp[boardId];
-    //     const newBoard = { ...temp, [newName]: newData };
-    //     const newOne = { ...detailCopy, ["attractions"]: newBoard };
-    //     const newDestination = { ...arrayCopy, ["detail"]: newOne };
-    //     const newTarget = [...target.slice(0, index), newDestination, ...target.slice(index + 1)];
-    //     const newTrip = { ...copy, [currentTrip]: newTarget };
-    //     const newUser = { ...userCopy, ["trips"]: newTrip };
-    //     return { ...current, [player.email]: newUser };
-    //   });
+  const calcDate = (year: number, month: number, day: number, daysToAdd: number): Date => {
+    const baseDate = new Date(year, month - 1, day); // month는 0부터 시작하므로 -1 해줍니다.
+    const resultDate = new Date(baseDate);
+    resultDate.setDate(baseDate.getDate() + daysToAdd);
+    return resultDate;
   };
 
   return (
     <Wrapper>
-      <Header
-        onClick={() => {
-          isToggleOpen && setIsToggleOpen(false);
-        }}
-      >
+      <Header>
         <Title>{boardId}</Title>
-        <Button onClick={() => setIsToggleOpen(true)}>
-          {boardId !== "NoName" && <FontAwesomeIcon icon={faEllipsis} style={{ color: "gray" }} />}
-        </Button>
+        <Subtitle>
+          {calcDate(
+            Number(
+              userInfo[currentTrip].trips[
+                userInfo[currentTrip].trips.findIndex(
+                  (e) => e.destination?.name === destination?.name
+                )
+              ].detail.date.split(".")[0]
+            ),
+            Number(
+              userInfo[currentTrip].trips[
+                userInfo[currentTrip].trips.findIndex(
+                  (e) => e.destination?.name === destination?.name
+                )
+              ].detail.date.split(".")[1]
+            ),
+            Number(
+              userInfo[currentTrip].trips[
+                userInfo[currentTrip].trips.findIndex(
+                  (e) => e.destination?.name === destination?.name
+                )
+              ].detail.date.split(".")[2]
+            ),
+            index - 1
+          ).getFullYear()}
+          .
+          {calcDate(
+            Number(
+              userInfo[currentTrip].trips[
+                userInfo[currentTrip].trips.findIndex(
+                  (e) => e.destination?.name === destination?.name
+                )
+              ].detail.date.split(".")[0]
+            ),
+            Number(
+              userInfo[currentTrip].trips[
+                userInfo[currentTrip].trips.findIndex(
+                  (e) => e.destination?.name === destination?.name
+                )
+              ].detail.date.split(".")[1]
+            ),
+            Number(
+              userInfo[currentTrip].trips[
+                userInfo[currentTrip].trips.findIndex(
+                  (e) => e.destination?.name === destination?.name
+                )
+              ].detail.date.split(".")[2]
+            ),
+            index - 1
+          ).getMonth() + 1}
+          .
+          {calcDate(
+            Number(
+              userInfo[currentTrip].trips[
+                userInfo[currentTrip].trips.findIndex(
+                  (e) => e.destination?.name === destination?.name
+                )
+              ].detail.date.split(".")[0]
+            ),
+            Number(
+              userInfo[currentTrip].trips[
+                userInfo[currentTrip].trips.findIndex(
+                  (e) => e.destination?.name === destination?.name
+                )
+              ].detail.date.split(".")[1]
+            ),
+            Number(
+              userInfo[currentTrip].trips[
+                userInfo[currentTrip].trips.findIndex(
+                  (e) => e.destination?.name === destination?.name
+                )
+              ].detail.date.split(".")[2]
+            ),
+            index - 1
+          ).getDate()}
+          (
+          {
+            ["일", "월", "화", "수", "목", "금", "토"][
+              calcDate(
+                Number(
+                  userInfo[currentTrip].trips[
+                    userInfo[currentTrip].trips.findIndex(
+                      (e) => e.destination?.name === destination?.name
+                    )
+                  ].detail.date.split(".")[0]
+                ),
+                Number(
+                  userInfo[currentTrip].trips[
+                    userInfo[currentTrip].trips.findIndex(
+                      (e) => e.destination?.name === destination?.name
+                    )
+                  ].detail.date.split(".")[1]
+                ),
+                Number(
+                  userInfo[currentTrip].trips[
+                    userInfo[currentTrip].trips.findIndex(
+                      (e) => e.destination?.name === destination?.name
+                    )
+                  ].detail.date.split(".")[2]
+                ),
+                index - 1
+              ).getDay()
+            ]
+          }
+          )
+        </Subtitle>
       </Header>
       <Droppable droppableId={boardId}>
         {(provided, snapshot) => (
@@ -103,8 +151,8 @@ const BoardJourney = ({ journey, boardId }: IJourneyBoardProps) => {
                       journeyId={j.timestamp + ""}
                       journeyName={j.name}
                       journeyAddress={j.address}
-                      boardId={boardId}
-                      placeId={j.placeId}
+                      journeyPhoto={j.image[0]}
+                      destination={destination}
                     />
                   )
               )}
@@ -112,33 +160,7 @@ const BoardJourney = ({ journey, boardId }: IJourneyBoardProps) => {
           </Area>
         )}
       </Droppable>
-      {isToggleOpen ? (
-        <ToggleBox variants={toggleVar} initial="initial" animate="animate" exit="exit">
-          <RenameForm>
-            <input placeholder={boardId} ref={inputRef} required autoComplete="off" />
-            <ToggleButton onClick={renameBoard}>
-              <span>
-                <FontAwesomeIcon icon={faPen} style={{ color: "white" }} />
-              </span>
-            </ToggleButton>
-          </RenameForm>
-          <Buttons>
-            <ToggleButton
-              onClick={() => {
-                onCardClicked(boardId);
-              }}
-            >
-              <FontAwesomeIcon icon={faRoute} style={{ color: "white" }} />
-              <p>Path</p>
-            </ToggleButton>
-            <ToggleButton onClick={deleteBoard}>
-              <FontAwesomeIcon icon={faTrashCan} style={{ color: "white" }} />
-              <p>Delete</p>
-            </ToggleButton>
-          </Buttons>
-        </ToggleBox>
-      ) : null}
-      <BigPath boardName={clickedCard} />
+      {/* <BigPath boardName={clickedCard} /> */}
     </Wrapper>
   );
 };
@@ -147,118 +169,48 @@ export default BoardJourney;
 
 const Wrapper = styled.div`
   border-radius: 4px;
-  width: min(330px, 100%);
-  min-height: 180px;
+  width: 330px;
+  height: 100%;
   margin-right: 10px;
   padding: 20px 25px;
-  padding-bottom: 10px;
   display: flex;
   flex-direction: column;
-  margin-left: 5px;
   position: relative;
   color: ${(props) => props.theme.main.word};
   background-color: white;
   flex: 0 0 auto;
+  box-shadow: 4px 12px 0 0 rgba(0, 0, 0, 0.1);
 `;
 
 const Header = styled.div`
   display: flex;
-  justify-content: space-between;
-  align-items: center;
   margin-bottom: 20px;
-  margin-left: 5px;
+  align-items: center;
+  justify-content: space-between;
 `;
 
 const Title = styled.h2`
-  text-align: center;
-  color: black;
   font-weight: 600;
   font-size: 18px;
+`;
+
+const Subtitle = styled.h2`
+  font-size: 14px;
+  font-weight: 400;
+  color: ${(props) => props.theme.gray.blur};
 `;
 
 const Area = styled.div<IDragging>`
   background-color: transparent;
   flex-grow: 1;
+  height: 100%;
 `;
-
-const Button = styled.button`
-  border: none;
-  background-color: transparent;
-  cursor: pointer;
-`;
-
-const ToggleBox = styled(motion.div)`
-  position: absolute;
-  width: 200px;
-  height: 170px;
-  top: 10px;
-  right: 10px;
-  background-color: ${(props) => props.theme.main.accent + "dd"};
-  display: flex;
-  flex-direction: column;
-  transform-origin: top right;
-  padding: 10px 15px;
-  border-radius: 5px;
-  z-index: 3;
-`;
-
-const RenameForm = styled.form`
-  height: 40px;
-  margin-bottom: 10px;
-  width: 90%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  input {
-    height: 80%;
-    width: 100%;
-    background-color: transparent;
-    border: none;
-    border-bottom: 1.5px solid white;
-    padding-left: 5px;
-    font-size: 16px;
-    &:focus {
-      outline: none;
-    }
-    &::placeholder {
-      color: lightgray;
-    }
-    color: white;
-  }
-`;
-
-const Buttons = styled.div`
-  margin-top: auto;
-`;
-
-const ToggleButton = styled.div`
-  height: 25px;
-  margin-left: 5px;
-  font-weight: 500;
-  margin-bottom: 10px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-
-  p {
-    margin-left: 10px;
-    font-size: 16px;
-    color: white;
-  }
-  span {
-    font-size: 16px;
-  }
-`;
-
-const toggleVar = {
-  initial: { opacity: 0 },
-  animate: { opacity: 1 },
-  exit: { opacity: 0 },
-};
 
 interface IJourneyBoardProps {
   boardId: string;
   journey: (IJourney | undefined)[];
+  destination: IPlaceDetail | undefined;
+  index: number;
 }
 
 interface IDragging {

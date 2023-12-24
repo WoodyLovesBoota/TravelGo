@@ -1,11 +1,11 @@
 import styled from "styled-components";
-import { motion, AnimatePresence } from "framer-motion";
-import { Link, PathMatch, useMatch, useNavigate } from "react-router-dom";
+import { AnimatePresence } from "framer-motion";
+import { PathMatch, useMatch, useNavigate } from "react-router-dom";
 
-import { isCalendarState, isSecondPhaseState, tripState, userState } from "../atoms";
-import { useRecoilValue, useRecoilState } from "recoil";
+import { ITripDetails, isCalendarState, isSecondPhaseState, tripState, userState } from "../atoms";
+import { useRecoilState } from "recoil";
 import { IPlaceDetail } from "../api";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { IGeAutoCompletePlacesResult, getAutoCompletePlacesResult } from "../api";
 import { useQuery } from "react-query";
@@ -23,9 +23,16 @@ const AttractionScreen = ({ destination }: IAttractionScreenProps) => {
   const [isCalendarOpen, setIsCalendarOpen] = useRecoilState(isCalendarState);
   const [value, setValue] = useState("");
   const [isHotel, setIsHotel] = useState(false);
-  const [isSecond, setIsSecond] = useRecoilState(isSecondPhaseState);
-
+  const [currentDestination, setCurrentDestination] = useState<ITripDetails>();
   const { register, handleSubmit, setValue: setInputValue } = useForm<IForm>();
+
+  useEffect(() => {
+    setCurrentDestination(
+      userInfo[currentTrip].trips[
+        userInfo[currentTrip].trips.findIndex((e) => e.destination?.name === destination?.name)
+      ]
+    );
+  }, []);
 
   const { data, isLoading } = useQuery<IGeAutoCompletePlacesResult>(
     ["multiPlace", value],
@@ -48,18 +55,20 @@ const AttractionScreen = ({ destination }: IAttractionScreenProps) => {
     navigate(`/schedule/${destination?.name}`);
   };
 
-  const onPrevClick = () => {};
+  const onPrevClick = () => {
+    navigate("/place");
+  };
 
   return (
     <AnimatePresence>
       {attractionMatch && attractionMatch?.params.city === destination?.name && (
         <Wrapper>
           <NavColumn>
-            <NavBox isnow={!isHotel}>
-              <NavTitle onClick={() => setIsHotel(false)}>장소 선택</NavTitle>
+            <NavBox isnow={!isHotel} onClick={() => setIsHotel(false)}>
+              <NavTitle>장소 선택</NavTitle>
             </NavBox>
-            <NavBox isnow={isHotel}>
-              <NavTitle onClick={() => setIsHotel(true)}>숙소 선택</NavTitle>
+            <NavBox isnow={isHotel} onClick={() => setIsHotel(true)}>
+              <NavTitle>숙소 선택</NavTitle>
             </NavBox>
             <NavButtons>
               <NavPrevButton onClick={onPrevClick}>이전</NavPrevButton>
@@ -77,8 +86,8 @@ const AttractionScreen = ({ destination }: IAttractionScreenProps) => {
                 userInfo[currentTrip].trips.findIndex(
                   (e) => e.destination?.name === destination?.name
                 )
-              ].detail.date === "" ? (
-                "날짜를 선택해 주세요."
+              ].detail.date === "0|0" ? (
+                "날짜를 선택해 주세요"
               ) : (
                 <>
                   {userInfo[currentTrip].trips[
@@ -172,33 +181,39 @@ const AttractionScreen = ({ destination }: IAttractionScreenProps) => {
           <AttractionColumn>
             <Title>
               {
+                Object.values(
+                  userInfo[currentTrip].trips[
+                    userInfo[currentTrip].trips.findIndex(
+                      (e) => e.destination?.name === destination?.name
+                    )
+                  ].detail.attractions
+                ).flat().length
+              }
+            </Title>
+            <Attractions>
+              {Object.values(
                 userInfo[currentTrip].trips[
                   userInfo[currentTrip].trips.findIndex(
                     (e) => e.destination?.name === destination?.name
                   )
-                ].detail.attractions["NoName"].length
-              }
-            </Title>
-            <Attractions>
-              {userInfo[currentTrip].trips[
-                userInfo[currentTrip].trips.findIndex(
-                  (e) => e.destination?.name === destination?.name
-                )
-              ].detail.attractions["NoName"].map(
-                (attraction, index) =>
-                  attraction && (
-                    <Card>
-                      <Num>{index + 1}</Num>
-                      <JourneyCard
-                        key={attraction.timestamp}
-                        name={attraction.name}
-                        placeId={attraction.placeId}
-                        timestamp={attraction.timestamp}
-                        destination={destination}
-                      />
-                    </Card>
-                  )
-              )}
+                ].detail.attractions
+              )
+                .flat()
+                .map(
+                  (attraction, index) =>
+                    attraction && (
+                      <Card>
+                        <Num>{index + 1}</Num>
+                        <JourneyCard
+                          key={attraction.timestamp}
+                          name={attraction.name}
+                          placeId={attraction.placeId}
+                          timestamp={attraction.timestamp}
+                          destination={destination}
+                        />
+                      </Card>
+                    )
+                )}
             </Attractions>
             <Title>
               {
@@ -232,16 +247,22 @@ const AttractionScreen = ({ destination }: IAttractionScreenProps) => {
           </AttractionColumn>
           <HotelColumn>
             <GoogleMapMarker
-              markers={userInfo[currentTrip].trips[
-                userInfo[currentTrip].trips.findIndex(
-                  (e) => e.destination?.name === destination?.name
-                )
-              ].detail.attractions["NoName"].map((e) => {
-                return {
-                  lat: e?.geo.lat ? e?.geo.lat : 0,
-                  lng: e?.geo.lng ? e?.geo.lng : 0,
-                };
-              })}
+              markers={Object.values(
+                userInfo[currentTrip].trips[
+                  userInfo[currentTrip].trips.findIndex(
+                    (e) => e.destination?.name === destination?.name
+                  )
+                ].detail.attractions
+              )
+                .map((e) => {
+                  return e.map((ele) => {
+                    return {
+                      lat: ele?.geo.lat ? ele?.geo.lat : 0,
+                      lng: ele?.geo.lng ? ele?.geo.lng : 0,
+                    };
+                  });
+                })
+                .flat()}
               hotels={userInfo[currentTrip].trips[
                 userInfo[currentTrip].trips.findIndex(
                   (e) => e.destination?.name === destination?.name
@@ -273,12 +294,13 @@ const Wrapper = styled.div`
 `;
 
 const NavColumn = styled.div`
-  width: 8%;
+  width: 150px;
   height: 100%;
   padding: 32px 16px 16px 16px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  border-right: 1px solid ${(props) => props.theme.gray.blur};
 `;
 
 const SearchColumn = styled.div`
@@ -397,9 +419,11 @@ const Icon = styled.div`
 
 const SearchResult = styled.div``;
 
-const Loader = styled.h2``;
-
-const Board = styled.div``;
+const Loader = styled.h2`
+  font-size: 16px;
+  font-weight: 500;
+  color: ${(props) => props.theme.gray.blur};
+`;
 
 const Attractions = styled.div`
   width: 100%;
