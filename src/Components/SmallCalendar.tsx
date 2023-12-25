@@ -16,7 +16,7 @@ const SmallCalender = ({ destination }: { destination: IPlaceDetail | undefined 
   const [endDate, setEndDate] = useState("도착 날짜");
   const [currentTrip, setCurrentTrip] = useRecoilState(tripState);
   const [isCalendarOpen, setIsCalendarOpen] = useRecoilState(isCalendarState);
-  const [isSubmit, setIsSubmit] = useState(1);
+  const [isSubmit, setIsSubmit] = useState(false);
 
   const WEEKDAY = ["일", "월", "화", "수", "목", "금", "토"];
   const firstDay = new Date(startYear, startMonth - 1, 1).getDay();
@@ -76,48 +76,51 @@ const SmallCalender = ({ destination }: { destination: IPlaceDetail | undefined 
   useEffect(() => {
     return () => {
       setUserInfo((current) => {
-        if (startDate === "출발 날짜" || endDate === "도착 날짜") return current;
-        const one = { ...current };
-        const two = { ...one[currentTrip] };
-        const three = [...two.trips];
-        const index = three.findIndex((e) => e.destination?.name === destination?.name);
-        const four = { ...three[index] };
-        const five = { ...four.detail };
-        const six = { ...five.attractions };
-        let newObj: { [key: string]: (IJourney | undefined)[] } = { ["NoName"]: six["NoName"] };
-        for (
-          let i = 0;
-          i <=
-          daysSinceSpecificDate(
-            [
-              Number(startDate.split(".")[0]),
-              Number(startDate.split(".")[1]),
-              Number(startDate.split(".")[2]),
-            ],
-            [
-              Number(endDate.split(".")[0]),
-              Number(endDate.split(".")[1]),
-              Number(endDate.split(".")[2]),
-            ]
-          );
-          i++
-        ) {
-          newObj[i + 1 + "일차"] = [];
-        }
-        const newFive = { ...five, ["attractions"]: newObj };
-        const newFour = { ...four, ["detail"]: newFive };
-        const newThree = [...three.slice(0, index), newFour, ...three.slice(index + 1)];
-        const newTwo = { ...two, ["trips"]: newThree };
-        const newOne = { ...current, [currentTrip]: newTwo };
+        if (!isSubmit) return current;
+        else {
+          const one = { ...current };
+          const two = { ...one[currentTrip] };
+          const three = [...two.trips];
+          const index = three.findIndex((e) => e.destination?.name === destination?.name);
+          const four = { ...three[index] };
+          const five = { ...four.detail };
+          const six = { ...five.attractions };
+          let newObj: { [key: string]: (IJourney | undefined)[] } = { ["NoName"]: six["NoName"] };
+          for (
+            let i = 0;
+            i <=
+            daysSinceSpecificDate(
+              [
+                Number(startDate.split(".")[0]),
+                Number(startDate.split(".")[1]),
+                Number(startDate.split(".")[2]),
+              ],
+              [
+                Number(endDate.split(".")[0]),
+                Number(endDate.split(".")[1]),
+                Number(endDate.split(".")[2]),
+              ]
+            );
+            i++
+          ) {
+            newObj[i + 1 + "일차"] = [];
+          }
+          const newFive = { ...five, ["attractions"]: newObj };
+          const newFour = { ...four, ["detail"]: newFive };
+          const newThree = [...three.slice(0, index), newFour, ...three.slice(index + 1)];
+          const newTwo = { ...two, ["trips"]: newThree };
+          const newOne = { ...current, [currentTrip]: newTwo };
 
-        return newOne;
+          return newOne;
+        }
       });
     };
   }, [startDate, endDate]);
 
   const onButtonClick = () => {
-    if (startDate !== "출발 날짜" && endDate !== "도착 날짜") {
-      setUserInfo((current) => {
+    setUserInfo((current) => {
+      if (startDate === "출발 날짜" || endDate === "도착 날짜") return current;
+      else {
         const one = { ...current };
         const two = { ...one[currentTrip] };
         const three = [...two.trips];
@@ -132,11 +135,19 @@ const SmallCalender = ({ destination }: { destination: IPlaceDetail | undefined 
         const newOne = { ...current, [currentTrip]: newTwo };
 
         return newOne;
-      });
-      setIsCalendarOpen(false);
-    } else {
+      }
+    });
+    if (startDate === "출발 날짜" || endDate === "도착 날짜")
       alert("여행을 떠나실 날짜를 선택해주세요.");
+    else {
+      setIsCalendarOpen(false);
+      setIsSubmit(true);
     }
+  };
+
+  const onOverlayClick = () => {
+    setIsCalendarOpen(false);
+    setIsSubmit(false);
   };
 
   return (
@@ -435,11 +446,7 @@ const SmallCalender = ({ destination }: { destination: IPlaceDetail | undefined 
           </Column>
         </Main>
       </Wrapper>
-      <Overlay
-        onClick={() => {
-          setIsCalendarOpen(false);
-        }}
-      />
+      <Overlay onClick={onOverlayClick} />
     </Total>
   );
 };

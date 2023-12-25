@@ -114,8 +114,8 @@ const Wrapper = styled(motion.div)`
 `;
 
 const Trip = styled.div`
-  width: 500px;
-  padding: 30px 35px;
+  width: 400px;
+  padding: 20px 30px;
   box-shadow: 0px 2px 12px 0px rgba(0, 0, 0, 0.1);
   margin-top: 60px;
   border-radius: 10px;
@@ -127,9 +127,9 @@ const TitleBox = styled.div`
 `;
 
 const Title = styled.h2`
-  font-size: 24px;
+  font-size: 21px;
   font-weight: 400;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
   min-width: 100px;
   padding: 3px 5px;
 `;
@@ -140,17 +140,17 @@ const PencilIcon = styled.div`
   background-size: cover;
   width: 14px;
   height: 14px;
-  margin-left: 10px;
+  margin-left: 40px;
 `;
 
 const TitleForm = styled.form`
-  min-width: 100px;
-  margin-bottom: 14px;
+  min-width: 120px;
+  margin-bottom: 10px;
 `;
 
 const TitleInput = styled.input`
-  width: 100px;
-  font-size: 24px;
+  width: 120px;
+  font-size: 21px;
   font-weight: 400;
   border-bottom: 2px solid ${(props) => props.theme.gray.blur};
   padding: 3px 5px;
@@ -163,13 +163,15 @@ const TitleInput = styled.input`
 const TripDuration = styled.h2`
   font-size: 16px;
   font-weight: 400;
+  color: ${(props) => props.theme.gray.semiblur};
 `;
 
 const Citys = styled.div`
   margin-top: 36px;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   grid-gap: 15px;
+  padding-bottom: 50px;
 `;
 
 const Main = styled(motion.div)`

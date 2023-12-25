@@ -4,9 +4,11 @@ import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 const GoogleMapMarker = ({
   markers,
   hotels,
+  center,
 }: {
   markers: { lat: number; lng: number }[];
   hotels: { lat: number; lng: number }[];
+  center: { lat: number; lng: number };
 }) => {
   const API_KEY = process.env.REACT_APP_GOOGLE_MAP_API_KEY;
 
@@ -31,7 +33,7 @@ const GoogleMapMarker = ({
         <LoadScript googleMapsApiKey={API_KEY}>
           <GoogleMap
             mapContainerStyle={mapStyles}
-            center={markers[0]}
+            center={center}
             zoom={12}
             onLoad={onLoad}
             onUnmount={onUnmount}

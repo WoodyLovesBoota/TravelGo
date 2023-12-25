@@ -131,7 +131,7 @@ const AttractionScreen = ({ destination }: IAttractionScreenProps) => {
                         userInfo[currentTrip].trips.findIndex(
                           (e) => e.destination?.name === destination?.name
                         )
-                      ].detail.date.split("|")[0].length - 2
+                      ].detail.date.split("|")[1].length - 2
                     )}
                   (
                   {
@@ -180,6 +180,7 @@ const AttractionScreen = ({ destination }: IAttractionScreenProps) => {
           </SearchColumn>
           <AttractionColumn>
             <Title>
+              장소
               {
                 Object.values(
                   userInfo[currentTrip].trips[
@@ -216,6 +217,7 @@ const AttractionScreen = ({ destination }: IAttractionScreenProps) => {
                 )}
             </Attractions>
             <Title>
+              숙소
               {
                 userInfo[currentTrip].trips[
                   userInfo[currentTrip].trips.findIndex(
@@ -246,34 +248,78 @@ const AttractionScreen = ({ destination }: IAttractionScreenProps) => {
             </Hotels>
           </AttractionColumn>
           <HotelColumn>
-            <GoogleMapMarker
-              markers={Object.values(
-                userInfo[currentTrip].trips[
-                  userInfo[currentTrip].trips.findIndex(
-                    (e) => e.destination?.name === destination?.name
-                  )
-                ].detail.attractions
-              )
-                .map((e) => {
-                  return e.map((ele) => {
-                    return {
-                      lat: ele?.geo.lat ? ele?.geo.lat : 0,
-                      lng: ele?.geo.lng ? ele?.geo.lng : 0,
-                    };
-                  });
-                })
-                .flat()}
-              hotels={userInfo[currentTrip].trips[
+            {Object.values(
+              userInfo[currentTrip].trips[
                 userInfo[currentTrip].trips.findIndex(
                   (e) => e.destination?.name === destination?.name
                 )
-              ].detail.hotels.map((e) => {
-                return {
-                  lat: e?.geo.lat ? e?.geo.lat : 0,
-                  lng: e?.geo.lng ? e?.geo.lng : 0,
-                };
-              })}
-            />
+              ].detail.attractions
+            )
+              .map((e) => {
+                return e.map((ele) => {
+                  return {
+                    lat: ele?.geo.lat ? ele?.geo.lat : 0,
+                    lng: ele?.geo.lng ? ele?.geo.lng : 0,
+                  };
+                });
+              })
+              .flat().length === 0 ? (
+              <GoogleMapMarker
+                markers={[]}
+                hotels={[]}
+                center={{
+                  lat: destination?.geometry.location.lat ? destination?.geometry.location.lat : 0,
+                  lng: destination?.geometry.location.lng ? destination?.geometry.location.lng : 0,
+                }}
+              />
+            ) : (
+              <GoogleMapMarker
+                markers={Object.values(
+                  userInfo[currentTrip].trips[
+                    userInfo[currentTrip].trips.findIndex(
+                      (e) => e.destination?.name === destination?.name
+                    )
+                  ].detail.attractions
+                )
+                  .map((e) => {
+                    return e.map((ele) => {
+                      return {
+                        lat: ele?.geo.lat ? ele?.geo.lat : 0,
+                        lng: ele?.geo.lng ? ele?.geo.lng : 0,
+                      };
+                    });
+                  })
+                  .flat()}
+                hotels={userInfo[currentTrip].trips[
+                  userInfo[currentTrip].trips.findIndex(
+                    (e) => e.destination?.name === destination?.name
+                  )
+                ].detail.hotels.map((e) => {
+                  return {
+                    lat: e?.geo.lat ? e?.geo.lat : 0,
+                    lng: e?.geo.lng ? e?.geo.lng : 0,
+                  };
+                })}
+                center={
+                  Object.values(
+                    userInfo[currentTrip].trips[
+                      userInfo[currentTrip].trips.findIndex(
+                        (e) => e.destination?.name === destination?.name
+                      )
+                    ].detail.attractions
+                  )
+                    .map((e) => {
+                      return e.map((ele) => {
+                        return {
+                          lat: ele?.geo.lat ? ele?.geo.lat : 0,
+                          lng: ele?.geo.lng ? ele?.geo.lng : 0,
+                        };
+                      });
+                    })
+                    .flat()[0]
+                }
+              />
+            )}
           </HotelColumn>
         </Wrapper>
       )}
@@ -291,6 +337,7 @@ const Wrapper = styled.div`
   top: 0;
   left: 0;
   display: flex;
+  overflow-y: hidden;
 `;
 
 const NavColumn = styled.div`
@@ -304,19 +351,19 @@ const NavColumn = styled.div`
 `;
 
 const SearchColumn = styled.div`
-  width: 25%;
+  width: 400px;
   height: 100%;
   padding: 32px;
 `;
 
 const AttractionColumn = styled.div`
-  width: 25%;
+  width: 400px;
   height: 100%;
   padding: 32px;
 `;
 
 const HotelColumn = styled.div`
-  width: 42%;
+  width: calc(100% - 950px);
   height: 100%;
 `;
 
@@ -369,7 +416,6 @@ const NavButton = styled.button`
   align-items: center;
   box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.2);
   border-radius: 14px;
-  margin-bottom: 25px;
   cursor: pointer;
   font-size: 16px;
   font-weight: 600;
@@ -423,6 +469,11 @@ const Loader = styled.h2`
   font-size: 16px;
   font-weight: 500;
   color: ${(props) => props.theme.gray.blur};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
 `;
 
 const Attractions = styled.div`

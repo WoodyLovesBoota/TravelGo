@@ -132,6 +132,87 @@ const ScheduleScreen = ({ destination }: IScheduleScreenProps) => {
                     }}
                   >
                     <NavTitle>{title}</NavTitle>
+                    <NavSubtitle>
+                      {calcDate(
+                        Number(
+                          userInfo[currentTrip].trips[
+                            userInfo[currentTrip].trips.findIndex(
+                              (e) => e.destination?.name === destination?.name
+                            )
+                          ].detail.date.split(".")[0]
+                        ),
+                        Number(
+                          userInfo[currentTrip].trips[
+                            userInfo[currentTrip].trips.findIndex(
+                              (e) => e.destination?.name === destination?.name
+                            )
+                          ].detail.date.split(".")[1]
+                        ),
+                        Number(
+                          userInfo[currentTrip].trips[
+                            userInfo[currentTrip].trips.findIndex(
+                              (e) => e.destination?.name === destination?.name
+                            )
+                          ].detail.date.split(".")[2]
+                        ),
+                        ind - 1
+                      ).getMonth() + 1}
+                      .
+                      {calcDate(
+                        Number(
+                          userInfo[currentTrip].trips[
+                            userInfo[currentTrip].trips.findIndex(
+                              (e) => e.destination?.name === destination?.name
+                            )
+                          ].detail.date.split(".")[0]
+                        ),
+                        Number(
+                          userInfo[currentTrip].trips[
+                            userInfo[currentTrip].trips.findIndex(
+                              (e) => e.destination?.name === destination?.name
+                            )
+                          ].detail.date.split(".")[1]
+                        ),
+                        Number(
+                          userInfo[currentTrip].trips[
+                            userInfo[currentTrip].trips.findIndex(
+                              (e) => e.destination?.name === destination?.name
+                            )
+                          ].detail.date.split(".")[2]
+                        ),
+                        ind - 1
+                      ).getDate()}
+                      (
+                      {
+                        ["일", "월", "화", "수", "목", "금", "토"][
+                          calcDate(
+                            Number(
+                              userInfo[currentTrip].trips[
+                                userInfo[currentTrip].trips.findIndex(
+                                  (e) => e.destination?.name === destination?.name
+                                )
+                              ].detail.date.split(".")[0]
+                            ),
+                            Number(
+                              userInfo[currentTrip].trips[
+                                userInfo[currentTrip].trips.findIndex(
+                                  (e) => e.destination?.name === destination?.name
+                                )
+                              ].detail.date.split(".")[1]
+                            ),
+                            Number(
+                              userInfo[currentTrip].trips[
+                                userInfo[currentTrip].trips.findIndex(
+                                  (e) => e.destination?.name === destination?.name
+                                )
+                              ].detail.date.split(".")[2]
+                            ),
+                            ind - 1
+                          ).getDay()
+                        ]
+                      }
+                      )
+                    </NavSubtitle>
                   </NavBox>
                 )
             )}
@@ -151,7 +232,7 @@ const ScheduleScreen = ({ destination }: IScheduleScreenProps) => {
                       userInfo[currentTrip].trips.findIndex(
                         (e) => e.destination?.name === destination?.name
                       )
-                    ].detail.date === "" ? (
+                    ].detail.date === "0|0" ? (
                       "날짜를 선택해 주세요."
                     ) : (
                       <>
@@ -196,7 +277,7 @@ const ScheduleScreen = ({ destination }: IScheduleScreenProps) => {
                               userInfo[currentTrip].trips.findIndex(
                                 (e) => e.destination?.name === destination?.name
                               )
-                            ].detail.date.split("|")[0].length - 2
+                            ].detail.date.split("|")[1].length - 2
                           )}
                         (
                         {
@@ -732,6 +813,7 @@ const NavBox = styled.div<{ isnow: boolean }>`
   padding: 25px;
   width: 100%;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.2);
@@ -747,6 +829,12 @@ const NavBox = styled.div<{ isnow: boolean }>`
 const NavTitle = styled.h2`
   font-size: 16px;
   font-weight: 600;
+`;
+
+const NavSubtitle = styled.h2`
+  font-size: 14px;
+  font-weight: 500;
+  color: ${(props) => props.theme.gray.blur};
 `;
 
 const NavButtons = styled.div`
