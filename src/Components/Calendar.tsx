@@ -56,6 +56,7 @@ const Calendar = () => {
       setIsChoice(0);
     } else if (isChoice === 0) {
       setStartDate(info);
+      setEndDate("도착 시간");
       setIsChoice(2);
     }
   };

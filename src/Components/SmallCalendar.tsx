@@ -16,7 +16,7 @@ const SmallCalender = ({ destination }: { destination: IPlaceDetail | undefined 
   const [endDate, setEndDate] = useState("도착 날짜");
   const [currentTrip, setCurrentTrip] = useRecoilState(tripState);
   const [isCalendarOpen, setIsCalendarOpen] = useRecoilState(isCalendarState);
-  const [isSubmit, setIsSubmit] = useState(false);
+  const [isSubmit, setIsSubmit] = useState("false");
 
   const WEEKDAY = ["일", "월", "화", "수", "목", "금", "토"];
   const firstDay = new Date(startYear, startMonth - 1, 1).getDay();
@@ -70,52 +70,52 @@ const SmallCalender = ({ destination }: { destination: IPlaceDetail | undefined 
     } else if (isChoice === 0) {
       setStartDate(info);
       setIsChoice(2);
+      setEndDate("도착 날짜");
     }
   };
 
   useEffect(() => {
-    return () => {
+    if (isSubmit === "true") {
       setUserInfo((current) => {
-        if (!isSubmit) return current;
-        else {
-          const one = { ...current };
-          const two = { ...one[currentTrip] };
-          const three = [...two.trips];
-          const index = three.findIndex((e) => e.destination?.name === destination?.name);
-          const four = { ...three[index] };
-          const five = { ...four.detail };
-          const six = { ...five.attractions };
-          let newObj: { [key: string]: (IJourney | undefined)[] } = { ["NoName"]: six["NoName"] };
-          for (
-            let i = 0;
-            i <=
-            daysSinceSpecificDate(
-              [
-                Number(startDate.split(".")[0]),
-                Number(startDate.split(".")[1]),
-                Number(startDate.split(".")[2]),
-              ],
-              [
-                Number(endDate.split(".")[0]),
-                Number(endDate.split(".")[1]),
-                Number(endDate.split(".")[2]),
-              ]
-            );
-            i++
-          ) {
-            newObj[i + 1 + "일차"] = [];
-          }
-          const newFive = { ...five, ["attractions"]: newObj };
-          const newFour = { ...four, ["detail"]: newFive };
-          const newThree = [...three.slice(0, index), newFour, ...three.slice(index + 1)];
-          const newTwo = { ...two, ["trips"]: newThree };
-          const newOne = { ...current, [currentTrip]: newTwo };
-
-          return newOne;
+        const one = { ...current };
+        const two = { ...one[currentTrip] };
+        const three = [...two.trips];
+        const index = three.findIndex((e) => e.destination?.name === destination?.name);
+        const four = { ...three[index] };
+        const five = { ...four.detail };
+        const six = { ...five.attractions };
+        let newObj: { [key: string]: (IJourney | undefined)[] } = { ["NoName"]: six["NoName"] };
+        for (
+          let i = 0;
+          i <=
+          daysSinceSpecificDate(
+            [
+              Number(startDate.split(".")[0]),
+              Number(startDate.split(".")[1]),
+              Number(startDate.split(".")[2]),
+            ],
+            [
+              Number(endDate.split(".")[0]),
+              Number(endDate.split(".")[1]),
+              Number(endDate.split(".")[2]),
+            ]
+          );
+          i++
+        ) {
+          newObj[i + 1 + "일차"] = [];
         }
+        const newFive = { ...five, ["attractions"]: newObj };
+        const newFour = { ...four, ["detail"]: newFive };
+        const newThree = [...three.slice(0, index), newFour, ...three.slice(index + 1)];
+        const newTwo = { ...two, ["trips"]: newThree };
+        const newOne = { ...current, [currentTrip]: newTwo };
+
+        return newOne;
       });
-    };
-  }, [startDate, endDate]);
+    }
+
+    if (isSubmit === "true") setIsCalendarOpen(false);
+  }, [isSubmit]);
 
   const onButtonClick = () => {
     setUserInfo((current) => {
@@ -140,27 +140,48 @@ const SmallCalender = ({ destination }: { destination: IPlaceDetail | undefined 
     if (startDate === "출발 날짜" || endDate === "도착 날짜")
       alert("여행을 떠나실 날짜를 선택해주세요.");
     else {
-      setIsCalendarOpen(false);
-      setIsSubmit(true);
+      setIsSubmit("true");
     }
   };
 
   const onOverlayClick = () => {
     setIsCalendarOpen(false);
-    setIsSubmit(false);
+    setIsSubmit("false");
   };
+
+  useEffect(() => {
+    if (startDate !== "출발 날짜" && endDate !== "도착 날짜") {
+      if (
+        daysSinceSpecificDate(
+          [2023, 1, 1],
+          [
+            Number(startDate.split(".")[0]),
+            Number(startDate.split(".")[1]),
+            Number(startDate.split(".")[2]),
+          ]
+        ) >
+        daysSinceSpecificDate(
+          [2023, 1, 1],
+          [
+            Number(endDate.split(".")[0]),
+            Number(endDate.split(".")[1]),
+            Number(endDate.split(".")[2]),
+          ]
+        )
+      ) {
+        let copy = startDate;
+        setStartDate(endDate);
+        setEndDate(copy);
+      }
+    }
+  }, [startDate, endDate]);
 
   return (
     <Total>
       <Wrapper>
         <Title>
           <Duration>
-            <Start
-              isnow={isChoice === 1}
-              onClick={() => {
-                setIsChoice(1);
-              }}
-            >
+            <Start>
               {startDate === "출발 날짜" ? (
                 startDate
               ) : (
@@ -176,12 +197,7 @@ const SmallCalender = ({ destination }: { destination: IPlaceDetail | undefined 
             <Divider>
               <Arrow width={14} fill={"black"} />
             </Divider>
-            <End
-              isnow={isChoice === 2}
-              onClick={() => {
-                setIsChoice(2);
-              }}
-            >
+            <End>
               {endDate === "도착 날짜" ? (
                 endDate
               ) : (
@@ -295,6 +311,32 @@ const SmallCalender = ({ destination }: { destination: IPlaceDetail | undefined 
                                           Number(
                                             userInfo[currentTrip].date.split("|")[1].split(".")[2]
                                           ),
+                                        ]
+                                      )
+                                  }
+                                  isInside={
+                                    daysSinceSpecificDate(
+                                      [2023, 1, 1],
+                                      [startYear, startMonth, secondMonday + (cnt - 2) * 7 + date]
+                                    ) <=
+                                      daysSinceSpecificDate(
+                                        [2023, 1, 1],
+                                        [
+                                          Number(endDate.split(".")[0]),
+                                          Number(endDate.split(".")[1]),
+                                          Number(endDate.split(".")[2]),
+                                        ]
+                                      ) &&
+                                    daysSinceSpecificDate(
+                                      [2023, 1, 1],
+                                      [startYear, startMonth, secondMonday + (cnt - 2) * 7 + date]
+                                    ) >=
+                                      daysSinceSpecificDate(
+                                        [2023, 1, 1],
+                                        [
+                                          Number(startDate.split(".")[0]),
+                                          Number(startDate.split(".")[1]),
+                                          Number(startDate.split(".")[2]),
                                         ]
                                       )
                                   }
@@ -432,6 +474,72 @@ const SmallCalender = ({ destination }: { destination: IPlaceDetail | undefined 
                                       ]
                                     )
                                 }
+                                isInside={
+                                  (daysSinceSpecificDate(
+                                    [2023, 1, 1],
+                                    [
+                                      startMonth === 12 ? startYear + 1 : startYear,
+                                      startMonth === 12 ? 1 : Number(startMonth) + 1,
+                                      secondMondayN + (cnt - 2) * 7 + date,
+                                    ]
+                                  ) <=
+                                    daysSinceSpecificDate(
+                                      [2023, 1, 1],
+                                      [
+                                        Number(endDate.split(".")[0]),
+                                        Number(endDate.split(".")[1]),
+                                        Number(endDate.split(".")[2]),
+                                      ]
+                                    ) &&
+                                    daysSinceSpecificDate(
+                                      [2023, 1, 1],
+                                      [
+                                        startMonth === 12 ? startYear + 1 : startYear,
+                                        startMonth === 12 ? 1 : Number(startMonth) + 1,
+                                        secondMondayN + (cnt - 2) * 7 + date,
+                                      ]
+                                    ) >=
+                                      daysSinceSpecificDate(
+                                        [2023, 1, 1],
+                                        [
+                                          Number(startDate.split(".")[0]),
+                                          Number(startDate.split(".")[1]),
+                                          Number(startDate.split(".")[2]),
+                                        ]
+                                      )) ||
+                                  daysSinceSpecificDate(
+                                    [2023, 1, 1],
+                                    [
+                                      startMonth === 12 ? startYear + 1 : startYear,
+                                      startMonth === 12 ? 1 : Number(startMonth) + 1,
+                                      secondMondayN + (cnt - 2) * 7 + date,
+                                    ]
+                                  ) ===
+                                    daysSinceSpecificDate(
+                                      [2023, 1, 1],
+                                      [
+                                        Number(startDate.split(".")[0]),
+                                        Number(startDate.split(".")[1]),
+                                        Number(startDate.split(".")[2]),
+                                      ]
+                                    ) ||
+                                  daysSinceSpecificDate(
+                                    [2023, 1, 1],
+                                    [
+                                      startMonth === 12 ? startYear + 1 : startYear,
+                                      startMonth === 12 ? 1 : Number(startMonth) + 1,
+                                      secondMondayN + (cnt - 2) * 7 + date,
+                                    ]
+                                  ) ===
+                                    daysSinceSpecificDate(
+                                      [2023, 1, 1],
+                                      [
+                                        Number(endDate.split(".")[0]),
+                                        Number(endDate.split(".")[1]),
+                                        Number(endDate.split(".")[2]),
+                                      ]
+                                    )
+                                }
                               >
                                 {secondMondayN + (cnt - 2) * 7 + date}
                               </DateBox>
@@ -547,7 +655,7 @@ const Day = styled.div`
   align-items: center;
 `;
 
-const DateBox = styled.h2<{ ispass: boolean }>`
+const DateBox = styled.h2<{ ispass: boolean; isInside: boolean }>`
   font-size: 14px;
   font-weight: 400;
   width: 25px;
@@ -557,6 +665,7 @@ const DateBox = styled.h2<{ ispass: boolean }>`
   align-items: center;
   color: ${(props) => (props.ispass ? props.theme.gray.blur : "black")};
   border-radius: 50px;
+  background-color: ${(props) => props.isInside && "purple"};
   cursor: pointer;
 `;
 
@@ -596,10 +705,9 @@ const Duration = styled.div`
   display: flex;
 `;
 
-const Start = styled.h2<{ isnow: boolean }>`
+const Start = styled.h2`
   padding: 5px;
-  border-bottom: 2px solid
-    ${(props) => (props.isnow ? props.theme.blue.accent : props.theme.gray.blur)};
+  border-bottom: 2px solid ${(props) => props.theme.gray.blur};
   width: 150px;
   cursor: pointer;
   display: flex;
@@ -613,9 +721,8 @@ const Divider = styled.h2`
   margin: auto 15px;
 `;
 
-const End = styled.h2<{ isnow: boolean }>`
-  border-bottom: 2px solid
-    ${(props) => (props.isnow ? props.theme.blue.accent : props.theme.gray.blur)};
+const End = styled.h2`
+  border-bottom: 2px solid ${(props) => props.theme.gray.blur};
   width: 150px;
   padding: 5px;
   cursor: pointer;

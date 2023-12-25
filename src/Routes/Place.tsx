@@ -82,7 +82,7 @@ const Place = () => {
             ){" ~ "}
             {userInfo[currentTrip].date
               .split("|")[1]
-              .slice(0, userInfo[currentTrip].date.split("|")[0].length - 2)}
+              .slice(0, userInfo[currentTrip].date.split("|")[1].length - 2)}
             (
             {
               ["일", "월", "화", "수", "목", "금", "토"][
