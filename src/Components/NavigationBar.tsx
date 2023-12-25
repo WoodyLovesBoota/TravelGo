@@ -1,7 +1,17 @@
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const NavigationBar = ({ now }: { now: number }) => {
+  const navigate = useNavigate();
+
+  const handleVortexClick = (num: number) => {
+    if (num <= now) {
+      if (num === 0) navigate("/");
+      else if (num === 1) navigate("/city");
+      else if (num === 2) navigate("/place");
+    }
+  };
   return (
     <Wrapper>
       {["기간 설정", "여행지 설정", "장소 선택", "일정 관리", "최종 여행 계획"].map((e, i) => (
@@ -22,6 +32,9 @@ const NavigationBar = ({ now }: { now: number }) => {
               animate="animate"
               ispass={i < now}
               isnow={i === now}
+              onClick={() => {
+                handleVortexClick(i);
+              }}
             />
             {i !== 4 && <Line ispass={i < now} />}
           </Contents>

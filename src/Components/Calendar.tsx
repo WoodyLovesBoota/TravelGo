@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { choiceState, endDateState, startDateState } from "../atoms";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -60,6 +60,41 @@ const Calendar = () => {
     }
   };
 
+  useEffect(() => {
+    if (startDate !== "출발 날짜" && endDate !== "도착 날짜") {
+      if (
+        daysSinceSpecificDate(
+          [2023, 1, 1],
+          [
+            Number(startDate.split(".")[0]),
+            Number(startDate.split(".")[1]),
+            Number(startDate.split(".")[2]),
+          ]
+        ) >
+        daysSinceSpecificDate(
+          [2023, 1, 1],
+          [
+            Number(endDate.split(".")[0]),
+            Number(endDate.split(".")[1]),
+            Number(endDate.split(".")[2]),
+          ]
+        )
+      ) {
+        let copy = startDate;
+        setStartDate(endDate);
+        setEndDate(copy);
+      }
+    }
+  }, [startDate, endDate]);
+
+  const daysSinceSpecificDate = ([year, month, day]: number[], [endY, endM, endD]: number[]) => {
+    const currentDate: Date = new Date(endY, endM - 1, endD);
+    const specificDate: Date = new Date(year, month - 1, day);
+    const timeDiff: number = currentDate.getTime() - specificDate.getTime();
+    const daysDiff: number = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+    return daysDiff;
+  };
+
   return (
     <Wrapper>
       <Column>
@@ -115,6 +150,32 @@ const Calendar = () => {
                                   : secondMonday + (cnt - 2) * 7 + date > new Date().getDate()
                                   ? false
                                   : true
+                              }
+                              isInside={
+                                daysSinceSpecificDate(
+                                  [2023, 1, 1],
+                                  [startYear, startMonth, secondMonday + (cnt - 2) * 7 + date]
+                                ) <=
+                                  daysSinceSpecificDate(
+                                    [2023, 1, 1],
+                                    [
+                                      Number(endDate.split(".")[0]),
+                                      Number(endDate.split(".")[1]),
+                                      Number(endDate.split(".")[2]),
+                                    ]
+                                  ) &&
+                                daysSinceSpecificDate(
+                                  [2023, 1, 1],
+                                  [startYear, startMonth, secondMonday + (cnt - 2) * 7 + date]
+                                ) >=
+                                  daysSinceSpecificDate(
+                                    [2023, 1, 1],
+                                    [
+                                      Number(startDate.split(".")[0]),
+                                      Number(startDate.split(".")[1]),
+                                      Number(startDate.split(".")[2]),
+                                    ]
+                                  )
                               }
                             >
                               {secondMonday + (cnt - 2) * 7 + date}
@@ -190,9 +251,75 @@ const Calendar = () => {
                                 : (startMonth === 12 ? 1 : Number(startMonth) + 1) <
                                   new Date().getMonth() + 1
                                 ? true
-                                : secondMonday + (cnt - 2) * 7 + date > new Date().getDate()
+                                : secondMondayN + (cnt - 2) * 7 + date > new Date().getDate()
                                 ? false
                                 : true
+                            }
+                            isInside={
+                              (daysSinceSpecificDate(
+                                [2023, 1, 1],
+                                [
+                                  startMonth === 12 ? startYear + 1 : startYear,
+                                  startMonth === 12 ? 1 : Number(startMonth) + 1,
+                                  secondMondayN + (cnt - 2) * 7 + date,
+                                ]
+                              ) <=
+                                daysSinceSpecificDate(
+                                  [2023, 1, 1],
+                                  [
+                                    Number(endDate.split(".")[0]),
+                                    Number(endDate.split(".")[1]),
+                                    Number(endDate.split(".")[2]),
+                                  ]
+                                ) &&
+                                daysSinceSpecificDate(
+                                  [2023, 1, 1],
+                                  [
+                                    startMonth === 12 ? startYear + 1 : startYear,
+                                    startMonth === 12 ? 1 : Number(startMonth) + 1,
+                                    secondMondayN + (cnt - 2) * 7 + date,
+                                  ]
+                                ) >=
+                                  daysSinceSpecificDate(
+                                    [2023, 1, 1],
+                                    [
+                                      Number(startDate.split(".")[0]),
+                                      Number(startDate.split(".")[1]),
+                                      Number(startDate.split(".")[2]),
+                                    ]
+                                  )) ||
+                              daysSinceSpecificDate(
+                                [2023, 1, 1],
+                                [
+                                  startMonth === 12 ? startYear + 1 : startYear,
+                                  startMonth === 12 ? 1 : Number(startMonth) + 1,
+                                  secondMondayN + (cnt - 2) * 7 + date,
+                                ]
+                              ) ===
+                                daysSinceSpecificDate(
+                                  [2023, 1, 1],
+                                  [
+                                    Number(startDate.split(".")[0]),
+                                    Number(startDate.split(".")[1]),
+                                    Number(startDate.split(".")[2]),
+                                  ]
+                                ) ||
+                              daysSinceSpecificDate(
+                                [2023, 1, 1],
+                                [
+                                  startMonth === 12 ? startYear + 1 : startYear,
+                                  startMonth === 12 ? 1 : Number(startMonth) + 1,
+                                  secondMondayN + (cnt - 2) * 7 + date,
+                                ]
+                              ) ===
+                                daysSinceSpecificDate(
+                                  [2023, 1, 1],
+                                  [
+                                    Number(endDate.split(".")[0]),
+                                    Number(endDate.split(".")[1]),
+                                    Number(endDate.split(".")[2]),
+                                  ]
+                                )
                             }
                           >
                             {secondMondayN + (cnt - 2) * 7 + date}
@@ -278,7 +405,7 @@ const Day = styled.div`
   align-items: center;
 `;
 
-const DateBox = styled.h2<{ isnow: boolean; ispass: boolean }>`
+const DateBox = styled.h2<{ isnow: boolean; ispass: boolean; isInside: boolean }>`
   font-size: 14px;
   font-weight: 400;
   width: 25px;
@@ -288,7 +415,8 @@ const DateBox = styled.h2<{ isnow: boolean; ispass: boolean }>`
   align-items: center;
   color: ${(props) =>
     props.isnow ? "white" : (props) => (props.ispass ? props.theme.gray.blur : "black")};
-  background-color: ${(props) => props.isnow && props.theme.blue.accent};
+  background-color: ${(props) =>
+    props.isnow ? props.theme.blue.accent : props.isInside ? "red" : "transparent"};
   border-radius: 50px;
   cursor: pointer;
 `;
