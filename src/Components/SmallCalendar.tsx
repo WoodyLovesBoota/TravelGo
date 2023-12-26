@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import { ReactComponent as Arrow } from "../assets/arrow.svg";
 import { IPlaceDetail } from "../api";
+import { daysSinceSpecificDate } from "../utils";
 
 const SmallCalender = ({ destination }: { destination: IPlaceDetail | undefined }) => {
   const [startYear, setStartYear] = useState(new Date().getFullYear());
@@ -35,14 +36,6 @@ const SmallCalender = ({ destination }: { destination: IPlaceDetail | undefined 
 
   const secondMondayN = 8 - firstDayN;
   const totalWeekCntN = Math.floor((lastDateN - secondMondayN) / 7) + 2;
-
-  const daysSinceSpecificDate = ([year, month, day]: number[], [endY, endM, endD]: number[]) => {
-    const currentDate: Date = new Date(endY, endM - 1, endD);
-    const specificDate: Date = new Date(year, month - 1, day);
-    const timeDiff: number = currentDate.getTime() - specificDate.getTime();
-    const daysDiff: number = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-    return daysDiff;
-  };
 
   const prevMonth = () => {
     if (startMonth > 1) setStartMonth((current) => current - 1);

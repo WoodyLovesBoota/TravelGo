@@ -2,8 +2,8 @@ import axios from "axios";
 
 const API_KEY = process.env.REACT_APP_GOOGLE_MAP_API_KEY;
 
-const google_proxy =
-  window.location.hostname === "localhost" ? "" : "/google_proxy";
+const google_proxy = window.location.hostname === "localhost" ? "" : "/google_proxy";
+const wiki_proxy = window.location.hostname === "localhost" ? "" : "/wiki_proxy";
 
 export interface IGetPlaceResult {
   candidates: IPlaceDetail[];
@@ -75,5 +75,20 @@ export const getPlaceDetailResult = async (id: string | undefined) => {
     .get(
       `${google_proxy}/maps/api/place/details/json?fields=name%2Crating%2Creviews%2Cinternational_phone_number%2Cformatted_address%2Ceditorial_summary%2Cgeometry%2Cphotos&language=ko&place_id=${id}&key=${API_KEY}`
     )
+    .then((res) => res.data);
+};
+
+export const getCityOverview = async (city: string | undefined) => {
+  return await axios
+    .get(`${wiki_proxy}/w/api.php`, {
+      params: {
+        action: "query",
+        format: "json",
+        titles: city,
+        prop: "extracts",
+        exintro: true,
+        explaintext: true,
+      },
+    })
     .then((res) => res.data);
 };

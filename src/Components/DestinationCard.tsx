@@ -65,18 +65,10 @@ const DestinationCard = ({ title, destination }: IBigTripCardProps) => {
         <Wrapper onClick={onCardClick} layoutId={destination?.place_id} key={destination?.place_id}>
           {destination && (
             <Container>
-              <Destination
-                bgPhoto={`url(${makeImagePath(
-                  destination?.photos ? destination?.photos[0].photo_reference : "",
-                  500
-                )})`}
-              />
-              <Description>
-                <DestinationTitle>{destination?.name}</DestinationTitle>
-                <DestinationSubTitle>
-                  {destination?.formatted_address.split(" ")[0]}
-                </DestinationSubTitle>
-              </Description>
+              <DestinationTitle>{destination?.name}</DestinationTitle>
+              <DestinationSubTitle>
+                {destination?.formatted_address.split(" ")[0]}
+              </DestinationSubTitle>
             </Container>
           )}
         </Wrapper>
@@ -86,27 +78,19 @@ const DestinationCard = ({ title, destination }: IBigTripCardProps) => {
           <BigDestination>
             <BigOverlay onClick={() => setIsCardClicked(false)} />
             <BigCard layoutId={destination?.place_id}>
-              <Column>
-                <Card
-                  bgPhoto={makeImagePath(
-                    destination?.photos ? destination.photos[0]?.photo_reference : "",
-                    800
-                  )}
-                />
-              </Column>
+              <Card
+                bgPhoto={makeImagePath(
+                  destination?.photos ? destination.photos[0]?.photo_reference : "",
+                  800
+                )}
+              />
               <Column>
                 <DestinationInfo>
                   <CardTitle>{destination?.name}</CardTitle>
-                  <CardAddress>{destination?.formatted_address}</CardAddress>
-
-                  {/* <CardDescription>{destination?.editorial_summary?.overview}</CardDescription> */}
+                  <CardAddress>{destination?.formatted_address.split(" ")[0]}</CardAddress>
+                  <CardDescription>{destination?.editorial_summary?.overview}</CardDescription>
                 </DestinationInfo>
-                <GoogleMap
-                  destination={destination?.formatted_address}
-                  width="100%"
-                  height="68%"
-                  zoom={11}
-                />
+
                 <CardButton onClick={onAddClick}>추가하기</CardButton>
               </Column>
             </BigCard>
@@ -122,38 +106,21 @@ export default DestinationCard;
 const Wrapper = styled(motion.div)`
   display: flex;
   cursor: pointer;
-  width: 282px;
-  border-radius: 16px;
-  box-shadow: 0px 2px 12px 0px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  /* border-radius: 16px; */
+  /* box-shadow: 0px 2px 12px 0px rgba(0, 0, 0, 0.1); */
 `;
 
 const Container = styled.div`
   display: flex;
-  flex-direction: column;
   width: 100%;
-`;
-
-const Description = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding: 26px 20px;
-  border-bottom-right-radius: 16px;
-  border-bottom-left-radius: 16px;
-`;
-
-const Destination = styled.div<{ bgPhoto: string }>`
-  background-image: ${(props) => props.bgPhoto};
-  background-size: cover;
-  background-position: center center;
-  width: 100%;
-  height: 282px;
-  border-top-right-radius: 16px;
-  border-top-left-radius: 16px;
-  cursor: pointer;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 60px;
 `;
 
 const DestinationTitle = styled.h2`
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 400;
   color: black;
 `;
@@ -199,44 +166,44 @@ const BigOverlay = styled.div`
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgba(0, 0, 0, 0.25);
 `;
 
 const BigCard = styled(motion.div)`
-  width: 1200px;
-  height: 600px;
+  width: 800px;
+  height: 500px;
   z-index: 2;
-  border-radius: 6px;
   background-color: white;
   display: flex;
-  justify-content: space-between;
-  padding: 40px;
-  box-shadow: 12px 12px 0 rgba(0, 0, 0, 0.2);
+  padding: 36px;
+  box-shadow: 0px 2px 12px 0px rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
 `;
 
 const Card = styled(motion.div)<{ bgPhoto: string }>`
-  width: 100%;
-  height: 100%;
+  width: 428px;
+  height: 428px;
   background-image: url(${(props) => props.bgPhoto});
   background-size: cover;
   background-position: center;
-  border-radius: 4px;
+  border-radius: 8px;
 `;
 
 const CardTitle = styled(motion.h2)`
-  font-size: 18px;
-  color: gray;
-  font-weight: 400;
+  font-size: 28px;
+  font-weight: 500;
 `;
 
 const CardDescription = styled.h2`
-  font-size: 16px;
-  font-weight: 500;
+  font-size: 14px;
+  font-weight: 300;
+  margin-top: 30px;
 `;
 
 const CardAddress = styled.h2`
-  font-size: 24px;
-  font-weight: 500;
+  font-size: 18px;
+  font-weight: 400;
+  color: lightgray;
 `;
 
 const DestinationInfo = styled.div`
@@ -248,19 +215,20 @@ const DestinationInfo = styled.div`
 const Column = styled.div`
   display: flex;
   flex-direction: column;
-  width: 48%;
+  padding-top: 44px;
+  padding-left: 36px;
 `;
 
 const CardButton = styled.button`
   margin-top: auto;
-  padding: 20px;
-  background-color: #8eb1f9;
+  padding: 16px;
+  background-color: blue;
   color: white;
   font-size: 16px;
   font-weight: 600;
-  border-radius: 4px;
+  border-radius: 8px;
+  width: 264px;
   cursor: pointer;
-  box-shadow: 3px 3px 0px 0px rgba(0, 0, 0, 0.25);
   &:hover {
     background-color: #8eb1f9dd;
   }

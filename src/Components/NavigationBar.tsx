@@ -50,15 +50,14 @@ const Wrapper = styled.div`
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  margin-top: 60px;
 `;
 
 const Line = styled.div<{ ispass: boolean }>`
-  width: 136px;
+  width: 75px;
   height: 1.5px;
   background-image: linear-gradient(
     to right,
-    ${(props) => (props.ispass ? "black 40%" : "black 10%")},
+    ${(props) => (props.ispass ? "skyblue 30%" : "black 10%")},
     rgba(255, 255, 255, 0) 0%
   );
   background-position: center;
@@ -78,22 +77,16 @@ const Vortex = styled.div`
 `;
 
 const Circle = styled(motion.div)<{ ispass: boolean; isnow: boolean }>`
-  width: ${(props) => (props.isnow ? "12px" : "9px")};
-  height: ${(props) => (props.isnow ? "12px" : "9px")};
+  width: 10px;
+  height: 10px;
   border-radius: 100px;
-  background-color: ${(props) =>
-    props.ispass
-      ? props.theme.gray.accent
-      : props.isnow
-      ? props.theme.gray.accent
-      : props.theme.gray.blur};
+  background-color: ${(props) => (props.ispass ? "skyblue" : props.isnow ? "blue" : "lightgray")};
 `;
 
 const Title = styled(motion.h2)<{ ispass: boolean; isnow: boolean }>`
-  color: ${(props) =>
-    props.ispass ? props.theme.gray.normal : props.isnow ? "black" : props.theme.gray.semiblur};
+  color: ${(props) => (props.ispass ? "skyblue" : props.isnow ? "blue" : "lightgray")};
   font-size: ${(props) => (props.isnow ? "14px" : "12px")};
-  font-weight: ${(props) => (props.isnow ? "400" : "300")};
+  font-weight: ${(props) => (props.isnow ? "500" : "300")};
   margin-left: -22px;
   margin-bottom: 11px;
 `;

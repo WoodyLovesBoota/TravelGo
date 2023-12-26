@@ -6,6 +6,7 @@ import { useRecoilState } from "recoil";
 import { choiceState, startDateState, endDateState, userState, tripState } from "../atoms";
 import { ReactComponent as Arrow } from "../assets/arrow.svg";
 import { useNavigate } from "react-router-dom";
+import TravelOverview from "../Components/TravelOverview";
 
 const Date = () => {
   const [isChoice, setIsChoice] = useRecoilState(choiceState);
@@ -28,56 +29,68 @@ const Date = () => {
 
   return (
     <Wrapper>
-      <Header />
-      <NavigationBar now={0} />
-      <Question>여행을 떠나실 날짜를 선택해주세요</Question>
-      <Main>
-        <Title>
-          <Duration>
-            <Start
-              isnow={isChoice === 1}
-              onClick={() => {
-                setIsChoice(1);
-              }}
-            >
-              {startDate === "출발 날짜" ? (
-                startDate
-              ) : (
-                <>
-                  <DateInfo>{startDate.split(".")[1]}월 </DateInfo>
-                  <DateInfo>{startDate.split(".")[2]}일 </DateInfo>
-                  <DateInfo>
-                    ({["일", "월", "화", "수", "목", "금", "토"][Number(startDate.split(".")[3])]})
-                  </DateInfo>
-                </>
-              )}
-            </Start>
-            <Divider>
-              <Arrow width={14} fill={"black"} />
-            </Divider>
-            <End
-              isnow={isChoice === 2}
-              onClick={() => {
-                setIsChoice(2);
-              }}
-            >
-              {endDate === "도착 날짜" ? (
-                endDate
-              ) : (
-                <>
-                  <DateInfo>{endDate.split(".")[1]}월 </DateInfo>
-                  <DateInfo>{endDate.split(".")[2]}일 </DateInfo>
-                  <DateInfo>
-                    ({["일", "월", "화", "수", "목", "금", "토"][Number(endDate.split(".")[3])]})
-                  </DateInfo>
-                </>
-              )}
-            </End>
-          </Duration>
+      <Header now={0} />
+      <Container>
+        <Overview>
+          <Empty>여행을 계획해보세요!</Empty>
+        </Overview>
+        <Main>
+          <Calendarbox>
+            <Title>
+              <Duration>
+                <Start
+                  isnow={isChoice === 1}
+                  onClick={() => {
+                    setIsChoice(1);
+                  }}
+                >
+                  {startDate === "출발 날짜" ? (
+                    startDate
+                  ) : (
+                    <>
+                      <DateInfo>{startDate.split(".")[1]}월 </DateInfo>
+                      <DateInfo>{startDate.split(".")[2]}일 </DateInfo>
+                      <DateInfo>
+                        (
+                        {
+                          ["일", "월", "화", "수", "목", "금", "토"][
+                            Number(startDate.split(".")[3])
+                          ]
+                        }
+                        )
+                      </DateInfo>
+                    </>
+                  )}
+                </Start>
+                <Divider>
+                  <Arrow width={14} fill={"black"} />
+                </Divider>
+                <End
+                  isnow={isChoice === 2}
+                  onClick={() => {
+                    setIsChoice(2);
+                  }}
+                >
+                  {endDate === "도착 날짜" ? (
+                    endDate
+                  ) : (
+                    <>
+                      <DateInfo>{endDate.split(".")[1]}월 </DateInfo>
+                      <DateInfo>{endDate.split(".")[2]}일 </DateInfo>
+                      <DateInfo>
+                        ({["일", "월", "화", "수", "목", "금", "토"][Number(endDate.split(".")[3])]}
+                        )
+                      </DateInfo>
+                    </>
+                  )}
+                </End>
+              </Duration>
+            </Title>
+            <Calendar />
+          </Calendarbox>
           <Button onClick={onButtonClick}>선택</Button>
-        </Title>
-        <Calendar />
-      </Main>
+        </Main>
+      </Container>
     </Wrapper>
   );
 };
@@ -85,27 +98,51 @@ const Date = () => {
 export default Date;
 
 const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-bottom: 30px;
+  height: 100vh;
+  padding-top: 80px;
 `;
 
-const Question = styled.h1`
-  font-size: 18px;
+const Container = styled.div`
+  display: flex;
+  height: calc(100% - 80px);
+`;
+
+const Overview = styled.div`
+  background-color: lightgray;
+  width: 300px;
+  height: 100vh;
+  padding: 50px 30px;
+  padding-top: 130px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+`;
+
+const Empty = styled.h2`
+  font-size: 20px;
   font-weight: 500;
-  margin-top: 70px;
 `;
 
 const Main = styled.div`
-  padding: 29px 92px;
   border-radius: 20px;
-  box-shadow: 0px 2px 12px 0px rgba(0, 0, 0, 0.1);
-  margin-top: 70px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* box-shadow: 0px 2px 12px 0px rgba(0, 0, 0, 0.1); */
+  margin-top: 75px;
+  width: 100%;
+  padding-left: 300px;
+  padding-bottom: 30px;
+`;
+
+const Calendarbox = styled.div`
+  display: flex;
+  flex-direction: column;
 `;
 
 const Title = styled.div`
-  margin-bottom: 30px;
+  margin-bottom: 50px;
   display: flex;
   justify-content: space-between;
   padding: 0 15px;
@@ -119,11 +156,12 @@ const Duration = styled.div`
 const Button = styled.button`
   font-size: 14px;
   font-weight: 500;
-  padding: 10px 20px;
+  padding: 20px 100px;
   border-radius: 8px;
-  background-color: ${(props) => props.theme.blue.accent};
+  background-color: blue;
   color: white;
   cursor: pointer;
+  margin-top: 75px;
 `;
 
 const Start = styled.h2<{ isnow: boolean }>`

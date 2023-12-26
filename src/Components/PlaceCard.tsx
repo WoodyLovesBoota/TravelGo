@@ -83,25 +83,27 @@ const Loader = styled.div`
 `;
 
 const Container = styled(motion.div)<{ bgPhoto: string }>`
-  width: 100%;
+  width: 321px;
+  height: 321px;
   cursor: pointer;
-  border-radius: 10px;
-  padding: 16px;
+  border-radius: 8px;
   display: flex;
-  box-shadow: 4px 4px 20px 0 rgba(0, 0, 0, 0.1);
-  margin-top: 10px;
+  box-shadow: 0px 2px 12px 0px rgba(0, 0, 0, 0.1);
 `;
-
-const Contents = styled.div``;
 
 const Photo = styled.div<{ bgphoto: string }>`
   background: ${(props) => props.bgphoto};
   background-position: center center;
   background-size: cover;
-  width: 70px;
-  height: 70px;
-  border-radius: 10px;
-  margin-right: 15px;
+  width: 100%;
+  height: 241px;
+  border-radius: 8px;
+`;
+
+const Contents = styled.div`
+  width: 100%;
+  height: 80px;
+  padding: 20px;
 `;
 
 const Name = styled.h2`

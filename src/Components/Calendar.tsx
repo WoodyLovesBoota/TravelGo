@@ -4,6 +4,7 @@ import { useRecoilState } from "recoil";
 import { choiceState, endDateState, startDateState } from "../atoms";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
+import { daysSinceSpecificDate } from "../utils";
 
 const Calendar = () => {
   const [startYear, setStartYear] = useState(new Date().getFullYear());
@@ -87,14 +88,6 @@ const Calendar = () => {
       }
     }
   }, [startDate, endDate]);
-
-  const daysSinceSpecificDate = ([year, month, day]: number[], [endY, endM, endD]: number[]) => {
-    const currentDate: Date = new Date(endY, endM - 1, endD);
-    const specificDate: Date = new Date(year, month - 1, day);
-    const timeDiff: number = currentDate.getTime() - specificDate.getTime();
-    const daysDiff: number = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-    return daysDiff;
-  };
 
   return (
     <Wrapper>
@@ -380,17 +373,17 @@ const DateInfo = styled.h2`
 const Week = styled.div`
   display: flex;
   width: 100%;
-  height: 50px;
+  height: 70px;
 `;
 
 const Days = styled.div`
   display: flex;
   width: 100%;
-  height: 50px;
+  height: 70px;
 `;
 
 const DayBox = styled.div`
-  width: 50px;
+  width: 70px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -399,18 +392,18 @@ const DayBox = styled.div`
 `;
 
 const Day = styled.div`
-  width: 50px;
-  height: 50px;
+  width: 70px;
+  height: 70px;
   display: flex;
   justify-content: center;
   align-items: center;
 `;
 
 const DateBox = styled.h2<{ isnow: boolean; ispass: boolean; isInside: boolean }>`
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 400;
-  width: 25px;
-  height: 25px;
+  width: 35px;
+  height: 35px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -427,8 +420,8 @@ const Button = styled.button`
   border: none;
   font-size: 14px;
   color: ${(props) => props.theme.blue.accent + "60"};
-  width: 25px;
-  height: 25px;
+  width: 35px;
+  height: 35px;
   display: flex;
   justify-content: center;
   align-items: center;

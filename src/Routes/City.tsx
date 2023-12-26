@@ -12,6 +12,7 @@ import {
   getPlaceResult,
   IGetPlaceDetailResult,
   getPlaceDetailResult,
+  getCityOverview,
 } from "../api";
 import { useQuery } from "react-query";
 import Header from "../Components/Header";
@@ -20,6 +21,7 @@ import { makeImagePath } from "../utils";
 import { DragDropContext, Draggable, DropResult, Droppable } from "react-beautiful-dnd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faX } from "@fortawesome/free-solid-svg-icons";
+import { daysSinceSpecificDate } from "../utils";
 
 const City = () => {
   const [users, setUsers] = useRecoilState(userState);
@@ -34,7 +36,7 @@ const City = () => {
 
   const { data: destinationData, isLoading: isDestinationLoading } = useQuery<IGetPlaceResult>(
     ["getDestination", searchData],
-    () => getPlaceResult(searchData + "도시" || ""),
+    () => getPlaceResult(searchData + " 도시" || ""),
     { enabled: !!searchData }
   );
 
@@ -79,7 +81,6 @@ const City = () => {
 
   const onValid = (data: IForm) => {
     setSearchData(data.destination);
-    setValue("destination", "");
   };
 
   useEffect(() => {
@@ -88,8 +89,66 @@ const City = () => {
 
   return (
     <Wrapper>
-      <Header />
-      <NavigationBar now={1} />
+      <Header now={1} />
+      <Overview>
+        <OverviewDuration>
+          {users[currentTrip].date
+            .split("|")[0]
+            .slice(0, users[currentTrip].date.split("|")[0].length - 2)}
+          (
+          {
+            ["일", "월", "화", "수", "목", "금", "토"][
+              Number(users[currentTrip].date.split("|")[0].split(".")[3])
+            ]
+          }
+          ){" ~ "}
+          {users[currentTrip].date
+            .split("|")[1]
+            .slice(0, users[currentTrip].date.split("|")[1].length - 2)}
+          (
+          {
+            ["일", "월", "화", "수", "목", "금", "토"][
+              Number(users[currentTrip].date.split("|")[1].split(".")[3])
+            ]
+          }
+          )
+        </OverviewDuration>
+        <OverviewNight>
+          {daysSinceSpecificDate(
+            [
+              Number(users[currentTrip].date.split("|")[0].split(".")[0]),
+              Number(users[currentTrip].date.split("|")[0].split(".")[1]),
+              Number(users[currentTrip].date.split("|")[0].split(".")[2]),
+            ],
+            [
+              Number(users[currentTrip].date.split("|")[1].split(".")[0]),
+              Number(users[currentTrip].date.split("|")[1].split(".")[1]),
+              Number(users[currentTrip].date.split("|")[1].split(".")[2]),
+            ]
+          )}
+          박{" "}
+          {daysSinceSpecificDate(
+            [
+              Number(users[currentTrip].date.split("|")[0].split(".")[0]),
+              Number(users[currentTrip].date.split("|")[0].split(".")[1]),
+              Number(users[currentTrip].date.split("|")[0].split(".")[2]),
+            ],
+            [
+              Number(users[currentTrip].date.split("|")[1].split(".")[0]),
+              Number(users[currentTrip].date.split("|")[1].split(".")[1]),
+              Number(users[currentTrip].date.split("|")[1].split(".")[2]),
+            ]
+          ) + 1}
+          일
+        </OverviewNight>
+        <Buttons>
+          {users[currentTrip].trips.length > 0 ? (
+            <Button onClick={onNextClick}>완료</Button>
+          ) : (
+            <NoButton>완료</NoButton>
+          )}
+        </Buttons>
+      </Overview>
       <Container variants={inputVar} initial="initial" animate="animate">
         <Form onSubmit={handleSubmit(onValid)}>
           <Input
@@ -108,82 +167,49 @@ const City = () => {
           <Icon>
             <Search width={23} />
           </Icon>
+          {isDestinationLoading || isDetailLoading ? (
+            <Loader>Loading...</Loader>
+          ) : (
+            detailData && (
+              <Cards>
+                <DestinationCard
+                  key={detailData?.result.place_id}
+                  title={detailData?.result.name}
+                  destination={detailData?.result}
+                />
+              </Cards>
+            )
+          )}
         </Form>
       </Container>
-      <Main>
-        {isDestinationLoading || isDetailLoading ? (
-          <Loader>Loading...</Loader>
-        ) : (
-          detailData && (
-            <Cards>
-              <DestinationCard
-                key={detailData?.result.place_id}
-                title={detailData?.result.name}
-                destination={detailData?.result}
-              />
-            </Cards>
-          )
-        )}
-      </Main>
       {users[currentTrip] && users[currentTrip].trips && users[currentTrip].trips.length > 0 && (
-        <SideBar>
+        <Selected>
           <DropArea>
-            <DragDropContext onDragEnd={onDragEnd}>
-              <Droppable droppableId={"Destinations"}>
-                {(provided, snapshot) => (
-                  <Area
-                    isDraggingOver={snapshot.isDraggingOver}
-                    isDraggingFromThis={Boolean(snapshot.draggingFromThisWith)}
-                    ref={provided.innerRef}
-                    {...provided.droppableProps}
+            <Area>
+              {users[currentTrip].trips.map((card) => (
+                <CityCard>
+                  <CardPhoto
+                    bgphoto={`url(${makeImagePath(
+                      card.destination?.photos ? card?.destination.photos[0].photo_reference : "",
+                      500
+                    )})`}
+                  />
+                  <CardContent>
+                    <CardTitle>{card.destination?.name}</CardTitle>
+                    <CardSubtitle>{card.destination?.formatted_address.split(" ")[0]}</CardSubtitle>
+                  </CardContent>
+                  <Delete
+                    onClick={() => {
+                      onDeleteClick(card.destination?.name);
+                    }}
                   >
-                    {users[currentTrip].trips.map((card, index) => (
-                      <Draggable
-                        key={card.destination?.name}
-                        draggableId={card.destination?.name ? card.destination?.name : ""}
-                        index={index}
-                      >
-                        {(provided, snapshot) => (
-                          <CityCard
-                            isDragging={snapshot.isDragging}
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                          >
-                            <CardPhoto
-                              bgphoto={`url(${makeImagePath(
-                                card.destination?.photos
-                                  ? card?.destination.photos[0].photo_reference
-                                  : "",
-                                500
-                              )})`}
-                            />
-                            <CardContent>
-                              <CardTitle>{card.destination?.name}</CardTitle>
-                              <CardSubtitle>{card.destination?.formatted_address}</CardSubtitle>
-                            </CardContent>
-                            <Delete
-                              onClick={() => {
-                                onDeleteClick(card.destination?.name);
-                              }}
-                            >
-                              <FontAwesomeIcon icon={faX} />
-                            </Delete>
-                          </CityCard>
-                        )}
-                      </Draggable>
-                    ))}
-                  </Area>
-                )}
-              </Droppable>
-            </DragDropContext>
+                    <FontAwesomeIcon icon={faX} />
+                  </Delete>
+                </CityCard>
+              ))}
+            </Area>
           </DropArea>
-
-          <Button onClick={onNextClick}>
-            {users[currentTrip].trips[0].destination?.name} 외 {users[currentTrip].trips.length - 1}
-            개 선택 완료
-          </Button>
-        </SideBar>
+        </Selected>
       )}
     </Wrapper>
   );
@@ -197,46 +223,94 @@ const Wrapper = styled(motion.div)`
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding-top: 80px;
 `;
 
-const SideBar = styled.div`
-  position: fixed;
-  width: 500px;
+const Overview = styled.div`
+  background-color: lightgray;
+  width: 300px;
   height: 100vh;
+  padding: 50px 30px;
+  padding-top: 130px;
+  position: fixed;
   top: 0;
-  right: 0;
-  background-color: white;
-  box-shadow: -20px 0 30px 10px rgba(0, 0, 0, 0.3);
-  padding: 40px;
+  left: 0;
+  z-index: 0;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+`;
+
+const OverviewDuration = styled.h2`
+  color: gray;
+  font-size: 14px;
+  font-weight: 400;
+`;
+
+const OverviewNight = styled.h2`
+  color: gray;
+  font-size: 14px;
+  font-weight: 400;
+`;
+
+const Buttons = styled.div`
+  margin-top: auto;
+  z-index: 2;
+`;
+
+const Button = styled.button`
+  width: 90%;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: blue;
+  color: white;
+  font-size: 20px;
+  font-weight: 700;
+  cursor: pointer;
+  z-index: 2;
+`;
+
+const NoButton = styled.button`
+  width: 90%;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: gray;
+  color: white;
+  font-size: 20px;
+  font-weight: 700;
+  cursor: pointer;
+  z-index: 2;
+`;
+
+const Selected = styled.div`
+  width: 100%;
+  padding: 50px 100px;
+  padding-left: 400px;
 `;
 
 const DropArea = styled.div`
-  height: calc(100vh - 100px);
   width: 100%;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
 `;
 
-const Area = styled.div<IDragging>`
+const Area = styled.div`
   background-color: transparent;
   flex-grow: 1;
-  min-height: 50vh;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 24px;
+  justify-content: center;
 `;
 
-const CityCard = styled.div<{ isDragging: boolean }>`
-  display: flex;
-  align-items: center;
-  margin-bottom: 20px;
-  padding: 10px;
-  box-shadow: 4px 4px 0 0 rgba(0, 0, 0, 0.1);
+const CityCard = styled.div`
+  box-shadow: 0px 2px 12px 0px rgba(0, 0, 0, 0.1);
   border-radius: 6px;
-  background-color: ${(props) => props.isDragging && props.theme.gray.blur};
   position: relative;
-  width: 90%;
+  width: 100%;
+  height: 22vw;
+  border-radius: 8px;
 `;
 
 const Delete = styled.button`
@@ -258,9 +332,10 @@ const CardPhoto = styled.div<{ bgphoto: string }>`
   background-image: ${(props) => props.bgphoto};
   background-size: cover;
   background-position: center center;
-  width: 80px;
-  height: 80px;
-  border-radius: 100px;
+  width: 100%;
+  height: 75%;
+  border-top-right-radius: 8px;
+  border-top-left-radius: 8px;
 `;
 
 const CardTitle = styled.h2`
@@ -269,24 +344,17 @@ const CardTitle = styled.h2`
 `;
 
 const CardSubtitle = styled.h2`
-  font-size: 16px;
-  font-weight: 400;
+  font-size: 14px;
+  font-weight: 300;
   color: ${(props) => props.theme.gray.semiblur};
 `;
 
 const CardContent = styled.div`
-  margin-left: 10px;
-`;
-
-const Button = styled.button`
-  width: 90%;
   padding: 20px;
-  border-radius: 10px;
-  background-color: ${(props) => props.theme.blue.accent};
-  color: white;
-  font-size: 16px;
-  font-weight: 400;
-  cursor: pointer;
+  height: 25%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 `;
 
 const Container = styled(motion.div)`
@@ -294,6 +362,8 @@ const Container = styled(motion.div)`
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 50px 100px;
+  padding-left: 400px;
 `;
 
 const Main = styled(motion.div)`
@@ -308,33 +378,39 @@ const Main = styled(motion.div)`
 const Cards = styled.div`
   display: flex;
   justify-content: center;
-  width: 100%;
-  padding: 77px;
+  align-items: center;
+  width: 500px;
+  padding: 10px 0;
+  border-top: 1px solid lightgray;
+  margin-bottom: 10px;
+  &:hover {
+    background-color: lightgray;
+  }
 `;
 
 const Loader = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 500;
-  padding: 77px;
+  color: lightgray;
+  width: 100%;
+  height: 50px;
 `;
 
 const Form = styled(motion.form)`
-  display: flex;
-  justify-content: center;
-  margin: 80px 0 0 0;
-  width: 506px;
-  height: 50px;
+  width: 500px;
+  box-shadow: 0px 2px 12px 0px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  min-height: 50px;
   position: relative;
 `;
 
 const Input = styled(motion.input)`
   border-radius: 10px;
-  box-shadow: 0px 2px 12px 0px rgba(0, 0, 0, 0.1);
   width: 100%;
-  height: 100%;
+  height: 50px;
   padding: 15px 60px;
   font-size: 16px;
   font-weight: 400;
