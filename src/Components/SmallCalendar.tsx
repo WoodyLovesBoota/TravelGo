@@ -174,36 +174,50 @@ const SmallCalender = ({ destination }: { destination: IPlaceDetail | undefined 
       <Wrapper>
         <Title>
           <Duration>
-            <Start>
-              {startDate === "출발 날짜" ? (
-                startDate
-              ) : (
-                <>
-                  <DurInfo>{startDate.split(".")[1]}월 </DurInfo>
-                  <DurInfo>{startDate.split(".")[2]}일 </DurInfo>
-                  <DurInfo>
-                    ({["일", "월", "화", "수", "목", "금", "토"][Number(startDate.split(".")[3])]})
-                  </DurInfo>
-                </>
-              )}
-            </Start>
-            <Divider>
-              <Arrow width={14} fill={"black"} />
-            </Divider>
-            <End>
-              {endDate === "도착 날짜" ? (
-                endDate
-              ) : (
-                <>
-                  <DurInfo>{endDate.split(".")[1]}월 </DurInfo>
-                  <DurInfo>{endDate.split(".")[2]}일 </DurInfo>
-                  <DurInfo>
-                    ({["일", "월", "화", "수", "목", "금", "토"][Number(endDate.split(".")[3])]})
-                  </DurInfo>
-                </>
-              )}
-            </End>
+            {startDate === "출발 날짜" && endDate === "도착 날짜" ? (
+              <Empty>여행 기간을 선택해주세요.</Empty>
+            ) : (
+              <>
+                <Start>
+                  {startDate === "출발 날짜" ? (
+                    startDate
+                  ) : (
+                    <>
+                      <DurInfo>{startDate.split(".")[1]}월 </DurInfo>
+                      <DurInfo>{startDate.split(".")[2]}일 </DurInfo>
+                      <DurInfo>
+                        (
+                        {
+                          ["일", "월", "화", "수", "목", "금", "토"][
+                            Number(startDate.split(".")[3])
+                          ]
+                        }
+                        )
+                      </DurInfo>
+                    </>
+                  )}
+                </Start>
+                <Divider>
+                  <Arrow width={14} fill={"black"} />
+                </Divider>
+                <End>
+                  {endDate === "도착 날짜" ? (
+                    endDate
+                  ) : (
+                    <>
+                      <DurInfo>{endDate.split(".")[1]}월 </DurInfo>
+                      <DurInfo>{endDate.split(".")[2]}일 </DurInfo>
+                      <DurInfo>
+                        ({["일", "월", "화", "수", "목", "금", "토"][Number(endDate.split(".")[3])]}
+                        )
+                      </DurInfo>
+                    </>
+                  )}
+                </End>
+              </>
+            )}
           </Duration>
+
           <SubmitButton onClick={onButtonClick}>선택</SubmitButton>
         </Title>
         <Main>
@@ -275,6 +289,32 @@ const SmallCalender = ({ destination }: { destination: IPlaceDetail | undefined 
                                           date
                                       );
                                   }}
+                                  isnow={
+                                    daysSinceSpecificDate(
+                                      [2023, 1, 1],
+                                      [startYear, startMonth, secondMonday + (cnt - 2) * 7 + date]
+                                    ) ===
+                                      daysSinceSpecificDate(
+                                        [2023, 1, 1],
+                                        [
+                                          Number(endDate.split(".")[0]),
+                                          Number(endDate.split(".")[1]),
+                                          Number(endDate.split(".")[2]),
+                                        ]
+                                      ) ||
+                                    daysSinceSpecificDate(
+                                      [2023, 1, 1],
+                                      [startYear, startMonth, secondMonday + (cnt - 2) * 7 + date]
+                                    ) ===
+                                      daysSinceSpecificDate(
+                                        [2023, 1, 1],
+                                        [
+                                          Number(startDate.split(".")[0]),
+                                          Number(startDate.split(".")[1]),
+                                          Number(startDate.split(".")[2]),
+                                        ]
+                                      )
+                                  }
                                   ispass={
                                     daysSinceSpecificDate(
                                       [2023, 1, 1],
@@ -427,6 +467,40 @@ const SmallCalender = ({ destination }: { destination: IPlaceDetail | undefined 
                                         date
                                     );
                                 }}
+                                isnow={
+                                  daysSinceSpecificDate(
+                                    [2023, 1, 1],
+                                    [
+                                      startMonth === 12 ? startYear + 1 : startYear,
+                                      startMonth === 12 ? 1 : Number(startMonth) + 1,
+                                      secondMondayN + (cnt - 2) * 7 + date,
+                                    ]
+                                  ) ===
+                                    daysSinceSpecificDate(
+                                      [2023, 1, 1],
+                                      [
+                                        Number(startDate.split(".")[0]),
+                                        Number(startDate.split(".")[1]),
+                                        Number(startDate.split(".")[2]),
+                                      ]
+                                    ) ||
+                                  daysSinceSpecificDate(
+                                    [2023, 1, 1],
+                                    [
+                                      startMonth === 12 ? startYear + 1 : startYear,
+                                      startMonth === 12 ? 1 : Number(startMonth) + 1,
+                                      secondMondayN + (cnt - 2) * 7 + date,
+                                    ]
+                                  ) ===
+                                    daysSinceSpecificDate(
+                                      [2023, 1, 1],
+                                      [
+                                        Number(endDate.split(".")[0]),
+                                        Number(endDate.split(".")[1]),
+                                        Number(endDate.split(".")[2]),
+                                      ]
+                                    )
+                                }
                                 ispass={
                                   daysSinceSpecificDate(
                                     [2023, 1, 1],
@@ -648,17 +722,19 @@ const Day = styled.div`
   align-items: center;
 `;
 
-const DateBox = styled.h2<{ ispass: boolean; isInside: boolean }>`
+const DateBox = styled.h2<{ isnow: boolean; ispass: boolean; isInside: boolean }>`
   font-size: 14px;
   font-weight: 400;
-  width: 25px;
-  height: 25px;
+  width: 30px;
+  height: 30px;
   display: flex;
   justify-content: center;
   align-items: center;
-  color: ${(props) => (props.ispass ? props.theme.gray.blur : "black")};
+  color: ${(props) =>
+    props.isnow ? "white" : (props) => (props.ispass ? props.theme.gray.semiblur : "black")};
+  background-color: ${(props) =>
+    props.isnow ? props.theme.blue.accent : props.isInside ? props.theme.blue.mild : "transparent"};
   border-radius: 50px;
-  background-color: ${(props) => props.isInside && "purple"};
   cursor: pointer;
 `;
 
@@ -687,43 +763,51 @@ const Button = styled.button`
 `;
 
 const Title = styled.div`
-  margin-bottom: 30px;
+  margin-bottom: 60px;
   display: flex;
   justify-content: space-between;
-  padding: 0 15px;
   align-items: center;
 `;
 
 const Duration = styled.div`
   display: flex;
+  justify-content: center;
+  width: 100%;
+  width: 500px;
+  height: 50px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.1);
+`;
+
+const Empty = styled.h2`
+  font-size: 16px;
+  font-weight: 400;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: ${(props) => props.theme.gray.normal};
 `;
 
 const Start = styled.h2`
-  padding: 5px;
-  border-bottom: 2px solid ${(props) => props.theme.gray.blur};
-  width: 150px;
-  cursor: pointer;
   display: flex;
   align-items: center;
-  font-size: 18px;
+  justify-content: center;
+  font-size: 16px;
   font-weight: 500;
-  color: ${(props) => props.theme.gray.blur};
+  width: 45%;
 `;
 
 const Divider = styled.h2`
-  margin: auto 15px;
+  margin: auto 0;
 `;
 
 const End = styled.h2`
-  border-bottom: 2px solid ${(props) => props.theme.gray.blur};
-  width: 150px;
-  padding: 5px;
-  cursor: pointer;
   display: flex;
+  justify-content: center;
   align-items: center;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 500;
-  color: ${(props) => props.theme.gray.blur};
+  width: 45%;
 `;
 
 const DurInfo = styled.span`
@@ -738,6 +822,7 @@ const SubmitButton = styled.button`
   font-weight: 500;
   padding: 10px 20px;
   border-radius: 8px;
+  height: 50px;
   background-color: ${(props) => props.theme.blue.accent};
   color: white;
   cursor: pointer;

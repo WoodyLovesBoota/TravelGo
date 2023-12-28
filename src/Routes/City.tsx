@@ -1,23 +1,20 @@
 import styled from "styled-components";
 import DestinationCard from "../Components/DestinationCard";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { isSecondPhaseState, tripState, userState } from "../atoms";
+import { useRecoilState } from "recoil";
+import { tripState, userState } from "../atoms";
 import { useNavigate } from "react-router-dom";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { useEffect, useRef, useState } from "react";
-import NavigationBar from "../Components/NavigationBar";
 import {
   IGetPlaceResult,
   getPlaceResult,
   IGetPlaceDetailResult,
   getPlaceDetailResult,
-  getCityOverview,
 } from "../api";
 import { useQuery } from "react-query";
 import Header from "../Components/Header";
 import { ReactComponent as Search } from "../assets/search.svg";
-import { makeImagePath } from "../utils";
 import { DragDropContext, Draggable, DropResult, Droppable } from "react-beautiful-dnd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faX } from "@fortawesome/free-solid-svg-icons";
@@ -26,17 +23,15 @@ import { daysSinceSpecificDate } from "../utils";
 const City = () => {
   const [userInfo, setUserInfo] = useRecoilState(userState);
   const navigate = useNavigate();
-  const { register, handleSubmit, setValue } = useForm<IForm>();
+  const { register, handleSubmit } = useForm<IForm>();
   const { register: nameRegister, handleSubmit: nameHadleSubmit } = useForm<INameForm>();
 
   const [currentTrip, setCurrentTrip] = useRecoilState(tripState);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [searchData, setSearchData] = useState("");
-  const [isSecond, setIsSecond] = useRecoilState(isSecondPhaseState);
   const [isInputOpen, setIsInputOpen] = useState(false);
 
   const { ref, ...rest } = register("destination");
-  const { ref: nameRef, ...nameRest } = nameRegister("name");
 
   const { data: destinationData, isLoading: isDestinationLoading } = useQuery<IGetPlaceResult>(
     ["getDestination", searchData],
@@ -257,11 +252,7 @@ const City = () => {
         ) : (
           detailData && (
             <Cards>
-              <DestinationCard
-                key={detailData?.result.place_id}
-                title={detailData?.result.name}
-                destination={detailData?.result}
-              />
+              <DestinationCard key={detailData?.result.place_id} destination={detailData?.result} />
             </Cards>
           )
         )}
@@ -370,7 +361,6 @@ const PencilIcon = styled.div`
 
 const TitleForm = styled.form`
   min-width: 100px;
-  /* margin-bottom: 8px; */
 `;
 
 const TitleInput = styled.input`

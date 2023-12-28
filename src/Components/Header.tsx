@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import { tripState, userState } from "../atoms";
@@ -7,9 +6,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 
 const Header = ({ now }: { now: number }) => {
-  const [userInfo, setUserInfo] = useRecoilState(userState);
-  const [currentTrip, setCurrentTrip] = useRecoilState(tripState);
-
   return (
     <Wrapper>
       <Title>TravelGo</Title>

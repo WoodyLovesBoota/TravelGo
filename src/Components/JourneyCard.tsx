@@ -1,20 +1,13 @@
-import { useQuery } from "react-query";
-import { IGetPlaceDetailResult, IPlaceDetail, getPlaceDetailResult } from "../api";
+import { IPlaceDetail } from "../api";
 import styled from "styled-components";
-import { makeImagePath } from "../utils";
-import { useRecoilValue, useSetRecoilState, useRecoilState } from "recoil";
-import { destinationState, journeyState, tripState, userState } from "../atoms";
-import { motion } from "framer-motion";
+import { useRecoilState } from "recoil";
+import { tripState, userState } from "../atoms";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faX } from "@fortawesome/free-solid-svg-icons";
 
-const JourneyCard = ({ name, placeId, timestamp, destination }: IJourneyCardProps) => {
+const JourneyCard = ({ name, placeId, destination }: IJourneyCardProps) => {
   const [currentTrip, setCurrentTrip] = useRecoilState(tripState);
   const [userInfo, setUserInfo] = useRecoilState(userState);
-  const setJourney = useSetRecoilState(journeyState);
-  const { data, isLoading } = useQuery<IGetPlaceDetailResult>(["getPlaceDetail", placeId], () =>
-    getPlaceDetailResult(placeId)
-  );
 
   const deleteJourney = () => {
     setUserInfo((current) => {
@@ -46,16 +39,12 @@ const JourneyCard = ({ name, placeId, timestamp, destination }: IJourneyCardProp
 
   return (
     <Wrapper>
-      {isLoading ? (
-        <Loader>loading...</Loader>
-      ) : (
-        <Container>
-          <Title>{name}</Title>
-          <Button onClick={deleteJourney}>
-            <FontAwesomeIcon icon={faX} />
-          </Button>
-        </Container>
-      )}
+      <Container>
+        <Title>{name}</Title>
+        <Button onClick={deleteJourney}>
+          <FontAwesomeIcon icon={faX} />
+        </Button>
+      </Container>
     </Wrapper>
   );
 };
@@ -64,12 +53,6 @@ export default JourneyCard;
 
 const Wrapper = styled.div`
   width: 100%;
-`;
-
-const Loader = styled.div`
-  padding: 13px 0;
-  font-size: 14px;
-  color: ${(props) => props.theme.gray.blur};
 `;
 
 const Container = styled.div`
@@ -94,6 +77,5 @@ const Button = styled.h2`
 interface IJourneyCardProps {
   name: string | undefined;
   placeId: string | undefined;
-  timestamp: number | undefined;
   destination: IPlaceDetail | undefined;
 }

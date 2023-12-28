@@ -2,7 +2,6 @@ import { AnimatePresence } from "framer-motion";
 import { Draggable } from "react-beautiful-dnd";
 import styled from "styled-components";
 import { IPlaceDetail } from "../api";
-import { makeImagePath } from "../utils";
 import { tripState, userState } from "../atoms";
 import { useRecoilState } from "recoil";
 
@@ -10,7 +9,6 @@ const DragCardSmall = ({
   journeyId,
   journeyName,
   index,
-  journeyAddress,
   journeyPhoto,
   destination,
 }: IDragJourneyCardProps) => {
@@ -68,7 +66,6 @@ const Title = styled.h2`
 const NormalCard = styled.div`
   width: 100%;
   padding: 0 44px;
-
   background-color: ${(props) => props.theme.blue.light};
 `;
 
@@ -76,7 +73,6 @@ interface IDragJourneyCardProps {
   journeyId: string | undefined;
   index: number;
   journeyName: string | undefined;
-  journeyAddress: string | undefined;
   destination: IPlaceDetail | undefined;
   journeyPhoto: string | undefined;
 }

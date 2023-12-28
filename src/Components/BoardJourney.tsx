@@ -1,27 +1,10 @@
 import styled from "styled-components";
-import { IJourney, destinationState, userState, tripState } from "../atoms";
+import { IJourney } from "../atoms";
 import { Droppable } from "react-beautiful-dnd";
 import DragJourneyCard from "./DragJourneyCard";
-import { useRecoilState } from "recoil";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEllipsis, faPen, faRoute, faTrashCan } from "@fortawesome/free-solid-svg-icons";
-import { useRef, useState } from "react";
-import { motion } from "framer-motion";
-import BigPath from "../Components/BigPath";
-import { useNavigate } from "react-router-dom";
 import { IPlaceDetail } from "../api";
 
-const BoardJourney = ({ journey, boardId, destination, index }: IJourneyBoardProps) => {
-  const [userInfo, setUserInfo] = useRecoilState(userState);
-  const [currentTrip, setCurrentTrip] = useRecoilState(tripState);
-
-  const calcDate = (year: number, month: number, day: number, daysToAdd: number): Date => {
-    const baseDate = new Date(year, month - 1, day);
-    const resultDate = new Date(baseDate);
-    resultDate.setDate(baseDate.getDate() + daysToAdd);
-    return resultDate;
-  };
-
+const BoardJourney = ({ journey, boardId, destination }: IJourneyBoardProps) => {
   return (
     <Wrapper>
       <Droppable droppableId={boardId}>
@@ -94,7 +77,6 @@ interface IJourneyBoardProps {
   boardId: string;
   journey: (IJourney | undefined)[];
   destination: IPlaceDetail | undefined;
-  index: number;
 }
 
 interface IDragging {

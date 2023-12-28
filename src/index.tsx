@@ -29,27 +29,30 @@ const GlobalStyle = createGlobalStyle`
     vertical-align: baseline;
     font-family: 'Apple SD Gothic Neo', Inter, sans-serif;
     color: black;
+    box-sizing: border-box;
+
     @media screen and (max-width: 1000px) {
       font-size: 12px;
     }
   }
-  /* HTML5 display-role reset for older browsers */
+
   article, aside, details, figcaption, figure,
   footer, header, hgroup, main, menu, nav, section {
     display: block;
   }
-  /* HTML5 hidden-attribute fix for newer browsers */
+
   *[hidden] {
     display: none;
   }
-  body {
-  }
+
   menu, ol, ul {
     list-style: none;
   }
+
   blockquote, q {
     quotes: none;
   }
+
   blockquote:before, blockquote:after,
   q:before, q:after {
     content: '';
@@ -59,14 +62,6 @@ const GlobalStyle = createGlobalStyle`
   table {
     border-collapse: collapse;
     border-spacing: 0;
-  }
-
-  * {
-    box-sizing: border-box;
-  }
-
-  body {
-    font-weight: 300;
   }
 
   a {

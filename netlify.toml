@@ -5,12 +5,6 @@ status = 200
 force = true
 
 [[redirects]]
-from = '/wiki_proxy/*'
-to = 'https://ko.wikipedia.org/:splat'
-status = 200
-force = true
-
-[[redirects]]
 from = "/*"
 to = "/index.html"
 status = 200

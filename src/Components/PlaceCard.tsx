@@ -5,17 +5,15 @@ import {
   IGetPlaceDetailResult,
   IPlaceDetail,
 } from "../api";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { destinationState, isClickedState, tripState, userState } from "../atoms";
+import { useRecoilState } from "recoil";
+import { isClickedState, tripState, userState } from "../atoms";
 import { makeImagePath } from "../utils";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
-import StarRate from "./StarRate";
 import BigPlaceCard from "./BigPlaceCard";
 import { AnimatePresence, motion } from "framer-motion";
 
 const PlaceCard = ({ place, isHotel, destination }: IPlaceCardProps) => {
-  const navigate = useNavigate();
   const [currentTrip, setCurrentTrip] = useRecoilState(tripState);
   const [isClicked, setIsClicked] = useRecoilState(isClickedState);
   const [userInfo, setUserInfo] = useRecoilState(userState);
@@ -219,7 +217,6 @@ const Address = styled.h2`
 
 const Rate = styled.div`
   display: flex;
-
   align-items: center;
 `;
 

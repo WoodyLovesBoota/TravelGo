@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { IJourney } from "../atoms";
 import { Droppable } from "react-beautiful-dnd";
-import DragJourneyCard from "./DragJourneyCard";
 import { IPlaceDetail } from "../api";
 import DragCardSmall from "./DragCardSmall";
 
@@ -28,7 +27,6 @@ const BoardNoName = ({ journey, boardId, destination }: IJourneyBoardProps) => {
                         index={index}
                         journeyId={place.timestamp + ""}
                         journeyName={place.name}
-                        journeyAddress={place.address}
                         destination={destination}
                         journeyPhoto={place.placeId}
                       />

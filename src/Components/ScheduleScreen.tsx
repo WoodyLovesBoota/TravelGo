@@ -1,26 +1,14 @@
 import styled from "styled-components";
-import { motion, AnimatePresence } from "framer-motion";
-import { Link, PathMatch, useMatch, useNavigate } from "react-router-dom";
-
+import { PathMatch, useMatch, useNavigate } from "react-router-dom";
 import { isCalendarState, tripState, userState } from "../atoms";
-import { useRecoilValue, useRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import { IPlaceDetail } from "../api";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { IGeAutoCompletePlacesResult, getAutoCompletePlacesResult } from "../api";
-import { useQuery } from "react-query";
-import PlaceCard from "./PlaceCard";
-import { ReactComponent as Search } from "../assets/search.svg";
-import JourneyCard from "./JourneyCard";
-import GoogleMapMarker from "./GoogleMapMarker";
-import SmallCalender from "./SmallCalendar";
 import BoardNoName from "./BoardNoName";
-import { DragDropContext, DropResult, Droppable } from "react-beautiful-dnd";
+import { DragDropContext, DropResult } from "react-beautiful-dnd";
 import JourneyBoard from "../Components/BoardJourney";
-import DragJourneyCard from "./DragJourneyCard";
 import GoogleRouteMap from "./GoogleRouteMap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import HotelCard from "./HotelCard";
 import {
   faAngleDown,
   faAngleLeft,
@@ -448,7 +436,6 @@ const ScheduleScreen = ({ destination }: IScheduleScreenProps) => {
                     )[stage]
                   }
                   destination={destination}
-                  index={stage}
                 />
               </SingleBoardColumn>
               <MapColumn>

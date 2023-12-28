@@ -51,10 +51,6 @@ const GoogleMapMarker = ({
                       fontWeight: "500",
                       fontSize: "14px",
                     }}
-                    // icon={{
-                    //   url: "/custom-marker.png",
-                    //   scaledSize: new window.google.maps.Size(40, 40),
-                    // }}
                   />
                 )
             )}

@@ -1,12 +1,10 @@
 import styled from "styled-components";
 import Header from "../Components/Header";
-import NavigationBar from "../Components/NavigationBar";
 import Calendar from "../Components/Calendar";
 import { useRecoilState } from "recoil";
 import { choiceState, startDateState, endDateState, userState, tripState } from "../atoms";
 import { ReactComponent as Arrow } from "../assets/arrow.svg";
 import { useNavigate } from "react-router-dom";
-import TravelOverview from "../Components/TravelOverview";
 
 const Date = () => {
   const [isChoice, setIsChoice] = useRecoilState(choiceState);
@@ -15,6 +13,7 @@ const Date = () => {
   const navigate = useNavigate();
   const [userInfo, setUserInfo] = useRecoilState(userState);
   const [currentTrip, setCurrentTrip] = useRecoilState(tripState);
+
   const onButtonClick = () => {
     if (startDate !== "출발 날짜" && endDate !== "도착 날짜") {
       navigate("/city");

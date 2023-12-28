@@ -1,28 +1,16 @@
 import styled from "styled-components";
 import { makeImagePath } from "../utils";
 import { motion, AnimatePresence } from "framer-motion";
-import { Link, PathMatch, useMatch, useNavigate } from "react-router-dom";
 import { IGetPlaceDetailResult, IPlaceDetail } from "../api";
-import StarRate from "./StarRate";
-import { destinationState, tripState, userState, isClickedState } from "../atoms";
-import { useRecoilValue, useRecoilState } from "recoil";
+import { tripState, userState, isClickedState } from "../atoms";
+import { useRecoilState } from "recoil";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLocationDot, faPhone, faX } from "@fortawesome/free-solid-svg-icons";
-import Overview from "../Routes/Overview";
-import Review from "../Routes/Review";
-import Map from "../Routes/Map";
-import { useEffect } from "react";
+import { faX } from "@fortawesome/free-solid-svg-icons";
 
 const BigPlaceCard = ({ place, placeId, isHotel, destination }: IBigPlaceProps) => {
-  const navigate = useNavigate();
   const [currentTrip, setCurrentTrip] = useRecoilState(tripState);
   const [userInfo, setUserInfo] = useRecoilState(userState);
   const [isClicked, setIsClicked] = useRecoilState(isClickedState);
-
-  const bigPlaceMatch: PathMatch<string> | null = useMatch("/place/:city/:placeid");
-  const overviewMatch: PathMatch<string> | null = useMatch("/place/:city/:placeid/overview");
-  const reviewMatch: PathMatch<string> | null = useMatch("/place/:city/:placeid/review");
-  const mapMatch: PathMatch<string> | null = useMatch("/place/:city/:placeid/map");
 
   const onOverlayClick = () => {
     setIsClicked("");

@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { AnimatePresence } from "framer-motion";
 import { PathMatch, useMatch, useNavigate } from "react-router-dom";
 
-import { ITripDetails, isCalendarState, isSecondPhaseState, tripState, userState } from "../atoms";
+import { ITripDetails, isCalendarState, tripState, userState } from "../atoms";
 import { useRecoilState } from "recoil";
 import { IPlaceDetail } from "../api";
 import { useEffect, useState } from "react";
@@ -181,7 +181,6 @@ const AttractionScreen = ({ destination }: IAttractionScreenProps) => {
                                       key={attraction.timestamp}
                                       name={attraction.name}
                                       placeId={attraction.placeId}
-                                      timestamp={attraction.timestamp}
                                       destination={destination}
                                     />
                                   </Card>
@@ -194,14 +193,13 @@ const AttractionScreen = ({ destination }: IAttractionScreenProps) => {
                               (e) => e.destination?.name === destination?.name
                             )
                           ].detail.hotels.map(
-                            (hotel, index) =>
+                            (hotel) =>
                               hotel && (
                                 <Card>
                                   <HotelCard
                                     key={hotel.timestamp}
                                     name={hotel.name}
                                     placeId={hotel.placeId}
-                                    timestamp={hotel.timestamp}
                                     destination={destination}
                                   />
                                 </Card>

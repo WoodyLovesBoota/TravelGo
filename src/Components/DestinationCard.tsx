@@ -1,16 +1,12 @@
 import styled from "styled-components";
 import { makeImagePath } from "../utils";
 import { IPlaceDetail } from "../api";
-import { AnimatePresence, motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import { useRecoilState } from "recoil";
-import { destinationState, tripState, userState } from "../atoms";
-import { useEffect, useState } from "react";
-import GoogleMap from "./GoogleMap";
-import DBHandler from "../firebase/DBHandler";
+import { tripState, userState } from "../atoms";
+import { useState } from "react";
 
-const DestinationCard = ({ title, destination }: IBigTripCardProps) => {
-  const navigate = useNavigate();
+const DestinationCard = ({ destination }: IBigTripCardProps) => {
   const [isCardClicked, setIsCardClicked] = useState(false);
   const [userInfo, setUserInfo] = useRecoilState(userState);
   const [currentTrip, setCurrentTrip] = useRecoilState(tripState);
@@ -49,60 +45,51 @@ const DestinationCard = ({ title, destination }: IBigTripCardProps) => {
     });
   };
 
-  // useEffect(() => {
-  //   DBHandler.addUserInfoPost("destination", "userDestination", userInfo);
-  // }, [userInfo]);
-
-  const deleteDestination = (destination: IPlaceDetail | undefined) => {};
-
   const onCardClick = () => {
     setIsCardClicked(true);
   };
 
   return (
     <>
-      <AnimatePresence>
-        <Wrapper onClick={onCardClick} layoutId={destination?.place_id} key={destination?.place_id}>
-          {destination && (
-            <Container>
-              <Destination
-                bgPhoto={`url(${makeImagePath(
-                  destination?.photos ? destination?.photos[0].photo_reference : "",
-                  500
-                )})`}
-              />
-              <Description>
-                <DestinationTitle>{destination?.name}</DestinationTitle>
-                <DestinationSubTitle>
-                  {destination?.formatted_address.split(" ")[0]}
-                </DestinationSubTitle>
-              </Description>
-            </Container>
-          )}
-        </Wrapper>
-      </AnimatePresence>
-      <AnimatePresence>
-        {isCardClicked && (
-          <BigDestination>
-            <BigOverlay onClick={() => setIsCardClicked(false)} />
-            <BigCard layoutId={destination?.place_id}>
-              <Card
-                bgPhoto={makeImagePath(
-                  destination?.photos ? destination.photos[0]?.photo_reference : "",
-                  800
-                )}
-              />
-              <Column>
-                <DestinationInfo>
-                  <CardTitle>{destination?.name}</CardTitle>
-                  <CardAddress>{destination?.formatted_address.split(" ")[0]}</CardAddress>
-                </DestinationInfo>
-                <CardButton onClick={onAddClick}>추가하기</CardButton>
-              </Column>
-            </BigCard>
-          </BigDestination>
+      <Wrapper onClick={onCardClick}>
+        {destination && (
+          <Container>
+            <Destination
+              bgPhoto={`url(${makeImagePath(
+                destination?.photos ? destination?.photos[0].photo_reference : "",
+                500
+              )})`}
+            />
+            <Description>
+              <DestinationTitle>{destination?.name}</DestinationTitle>
+              <DestinationSubTitle>
+                {destination?.formatted_address.split(" ")[0]}
+              </DestinationSubTitle>
+            </Description>
+          </Container>
         )}
-      </AnimatePresence>
+      </Wrapper>
+
+      {isCardClicked && (
+        <BigDestination>
+          <BigOverlay onClick={() => setIsCardClicked(false)} />
+          <BigCard>
+            <Card
+              bgPhoto={makeImagePath(
+                destination?.photos ? destination.photos[0]?.photo_reference : "",
+                800
+              )}
+            />
+            <Column>
+              <DestinationInfo>
+                <CardTitle>{destination?.name}</CardTitle>
+                <CardAddress>{destination?.formatted_address.split(" ")[0]}</CardAddress>
+              </DestinationInfo>
+              <CardButton onClick={onAddClick}>추가하기</CardButton>
+            </Column>
+          </BigCard>
+        </BigDestination>
+      )}
     </>
   );
 };
@@ -155,23 +142,6 @@ const DestinationSubTitle = styled.h2`
   font-size: 14px;
   font-weight: 300;
   color: ${(props) => props.theme.gray.normal};
-`;
-
-const Button = styled(motion.button)`
-  border: none;
-  width: 60px;
-  height: 80%;
-  cursor: pointer;
-  font-size: 14px;
-  border-radius: 5px;
-  font-weight: 500;
-  margin-top: auto;
-  z-index: 50;
-  color: black;
-  background-color: lightgray;
-  &:hover {
-    background-color: #e9e9e9;
-  }
 `;
 
 const BigDestination = styled(motion.div)`
@@ -257,6 +227,5 @@ const CardButton = styled.button`
 `;
 
 interface IBigTripCardProps {
-  title: string | undefined;
   destination: IPlaceDetail | undefined;
 }
