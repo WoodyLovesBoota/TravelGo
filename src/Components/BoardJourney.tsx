@@ -16,7 +16,7 @@ const BoardJourney = ({ journey, boardId, destination, index }: IJourneyBoardPro
   const [currentTrip, setCurrentTrip] = useRecoilState(tripState);
 
   const calcDate = (year: number, month: number, day: number, daysToAdd: number): Date => {
-    const baseDate = new Date(year, month - 1, day); // month는 0부터 시작하므로 -1 해줍니다.
+    const baseDate = new Date(year, month - 1, day);
     const resultDate = new Date(baseDate);
     resultDate.setDate(baseDate.getDate() + daysToAdd);
     return resultDate;
@@ -24,115 +24,6 @@ const BoardJourney = ({ journey, boardId, destination, index }: IJourneyBoardPro
 
   return (
     <Wrapper>
-      <Header>
-        <Title>{boardId}</Title>
-        <Subtitle>
-          {calcDate(
-            Number(
-              userInfo[currentTrip].trips[
-                userInfo[currentTrip].trips.findIndex(
-                  (e) => e.destination?.name === destination?.name
-                )
-              ].detail.date.split(".")[0]
-            ),
-            Number(
-              userInfo[currentTrip].trips[
-                userInfo[currentTrip].trips.findIndex(
-                  (e) => e.destination?.name === destination?.name
-                )
-              ].detail.date.split(".")[1]
-            ),
-            Number(
-              userInfo[currentTrip].trips[
-                userInfo[currentTrip].trips.findIndex(
-                  (e) => e.destination?.name === destination?.name
-                )
-              ].detail.date.split(".")[2]
-            ),
-            index - 1
-          ).getFullYear()}
-          .
-          {calcDate(
-            Number(
-              userInfo[currentTrip].trips[
-                userInfo[currentTrip].trips.findIndex(
-                  (e) => e.destination?.name === destination?.name
-                )
-              ].detail.date.split(".")[0]
-            ),
-            Number(
-              userInfo[currentTrip].trips[
-                userInfo[currentTrip].trips.findIndex(
-                  (e) => e.destination?.name === destination?.name
-                )
-              ].detail.date.split(".")[1]
-            ),
-            Number(
-              userInfo[currentTrip].trips[
-                userInfo[currentTrip].trips.findIndex(
-                  (e) => e.destination?.name === destination?.name
-                )
-              ].detail.date.split(".")[2]
-            ),
-            index - 1
-          ).getMonth() + 1}
-          .
-          {calcDate(
-            Number(
-              userInfo[currentTrip].trips[
-                userInfo[currentTrip].trips.findIndex(
-                  (e) => e.destination?.name === destination?.name
-                )
-              ].detail.date.split(".")[0]
-            ),
-            Number(
-              userInfo[currentTrip].trips[
-                userInfo[currentTrip].trips.findIndex(
-                  (e) => e.destination?.name === destination?.name
-                )
-              ].detail.date.split(".")[1]
-            ),
-            Number(
-              userInfo[currentTrip].trips[
-                userInfo[currentTrip].trips.findIndex(
-                  (e) => e.destination?.name === destination?.name
-                )
-              ].detail.date.split(".")[2]
-            ),
-            index - 1
-          ).getDate()}
-          (
-          {
-            ["일", "월", "화", "수", "목", "금", "토"][
-              calcDate(
-                Number(
-                  userInfo[currentTrip].trips[
-                    userInfo[currentTrip].trips.findIndex(
-                      (e) => e.destination?.name === destination?.name
-                    )
-                  ].detail.date.split(".")[0]
-                ),
-                Number(
-                  userInfo[currentTrip].trips[
-                    userInfo[currentTrip].trips.findIndex(
-                      (e) => e.destination?.name === destination?.name
-                    )
-                  ].detail.date.split(".")[1]
-                ),
-                Number(
-                  userInfo[currentTrip].trips[
-                    userInfo[currentTrip].trips.findIndex(
-                      (e) => e.destination?.name === destination?.name
-                    )
-                  ].detail.date.split(".")[2]
-                ),
-                index - 1
-              ).getDay()
-            ]
-          }
-          )
-        </Subtitle>
-      </Header>
       <Droppable droppableId={boardId}>
         {(provided, snapshot) => (
           <Area
@@ -141,7 +32,13 @@ const BoardJourney = ({ journey, boardId, destination, index }: IJourneyBoardPro
             ref={provided.innerRef}
             {...provided.droppableProps}
           >
-            {journey &&
+            {journey && journey.length === 0 ? (
+              <Empty>
+                좌측 사이드바에서 장소를 <br />
+                드래그 앤 드롭 해보세요
+              </Empty>
+            ) : (
+              journey &&
               journey.map(
                 (j, i) =>
                   j && (
@@ -155,12 +52,12 @@ const BoardJourney = ({ journey, boardId, destination, index }: IJourneyBoardPro
                       destination={destination}
                     />
                   )
-              )}
+              )
+            )}
             {provided.placeholder}
           </Area>
         )}
       </Droppable>
-      {/* <BigPath boardName={clickedCard} /> */}
     </Wrapper>
   );
 };
@@ -168,42 +65,29 @@ const BoardJourney = ({ journey, boardId, destination, index }: IJourneyBoardPro
 export default BoardJourney;
 
 const Wrapper = styled.div`
-  border-radius: 4px;
-  width: 330px;
+  width: 100%;
   height: 100%;
-  margin-right: 10px;
-  padding: 20px 25px;
   display: flex;
   flex-direction: column;
   position: relative;
-  color: ${(props) => props.theme.main.word};
-  background-color: white;
   flex: 0 0 auto;
-  box-shadow: 4px 12px 0 0 rgba(0, 0, 0, 0.1);
 `;
 
-const Header = styled.div`
+const Empty = styled.h2`
+  width: 100%;
+  height: 100%;
   display: flex;
-  margin-bottom: 20px;
+  justify-content: center;
   align-items: center;
-  justify-content: space-between;
-`;
-
-const Title = styled.h2`
-  font-weight: 600;
-  font-size: 18px;
-`;
-
-const Subtitle = styled.h2`
   font-size: 14px;
-  font-weight: 400;
-  color: ${(props) => props.theme.gray.blur};
+  font-weight: 300;
+  color: ${(props) => props.theme.gray.normal};
 `;
 
 const Area = styled.div<IDragging>`
-  background-color: transparent;
   flex-grow: 1;
   height: 100%;
+  width: 100%;
 `;
 
 interface IJourneyBoardProps {

@@ -57,7 +57,7 @@ const Calendar = () => {
       setIsChoice(0);
     } else if (isChoice === 0) {
       setStartDate(info);
-      setEndDate("도착 시간");
+      setEndDate("도착 날짜");
       setIsChoice(2);
     }
   };
@@ -128,9 +128,30 @@ const Calendar = () => {
                                 );
                               }}
                               isnow={
-                                startYear === new Date().getFullYear() &&
-                                startMonth === new Date().getMonth() + 1 &&
-                                secondMonday + (cnt - 2) * 7 + date === new Date().getDate()
+                                daysSinceSpecificDate(
+                                  [2023, 1, 1],
+                                  [startYear, startMonth, secondMonday + (cnt - 2) * 7 + date]
+                                ) ===
+                                  daysSinceSpecificDate(
+                                    [2023, 1, 1],
+                                    [
+                                      Number(endDate.split(".")[0]),
+                                      Number(endDate.split(".")[1]),
+                                      Number(endDate.split(".")[2]),
+                                    ]
+                                  ) ||
+                                daysSinceSpecificDate(
+                                  [2023, 1, 1],
+                                  [startYear, startMonth, secondMonday + (cnt - 2) * 7 + date]
+                                ) ===
+                                  daysSinceSpecificDate(
+                                    [2023, 1, 1],
+                                    [
+                                      Number(startDate.split(".")[0]),
+                                      Number(startDate.split(".")[1]),
+                                      Number(startDate.split(".")[2]),
+                                    ]
+                                  )
                               }
                               ispass={
                                 startYear > new Date().getFullYear()
@@ -226,11 +247,38 @@ const Calendar = () => {
                               );
                             }}
                             isnow={
-                              (startMonth === 12 ? startYear + 1 : startYear) ===
-                                new Date().getFullYear() &&
-                              (startMonth === 12 ? 1 : Number(startMonth) + 1) ===
-                                new Date().getMonth() + 1 &&
-                              secondMondayN + (cnt - 2) * 7 + date === new Date().getDate()
+                              daysSinceSpecificDate(
+                                [2023, 1, 1],
+                                [
+                                  startMonth === 12 ? startYear + 1 : startYear,
+                                  startMonth === 12 ? 1 : Number(startMonth) + 1,
+                                  secondMondayN + (cnt - 2) * 7 + date,
+                                ]
+                              ) ===
+                                daysSinceSpecificDate(
+                                  [2023, 1, 1],
+                                  [
+                                    Number(startDate.split(".")[0]),
+                                    Number(startDate.split(".")[1]),
+                                    Number(startDate.split(".")[2]),
+                                  ]
+                                ) ||
+                              daysSinceSpecificDate(
+                                [2023, 1, 1],
+                                [
+                                  startMonth === 12 ? startYear + 1 : startYear,
+                                  startMonth === 12 ? 1 : Number(startMonth) + 1,
+                                  secondMondayN + (cnt - 2) * 7 + date,
+                                ]
+                              ) ===
+                                daysSinceSpecificDate(
+                                  [2023, 1, 1],
+                                  [
+                                    Number(endDate.split(".")[0]),
+                                    Number(endDate.split(".")[1]),
+                                    Number(endDate.split(".")[2]),
+                                  ]
+                                )
                             }
                             ispass={
                               (startMonth === 12 ? startYear + 1 : startYear) >
@@ -343,7 +391,7 @@ const Column = styled.div`
   display: flex;
   flex-direction: column;
   &:first-child {
-    margin-right: 40px;
+    margin-right: 116px;
   }
 `;
 
@@ -354,14 +402,14 @@ const Container = styled.div`
 
 const Header = styled.div`
   display: flex;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   padding: 0 13px;
   align-items: center;
 `;
 
 const DateInfo = styled.h2`
-  font-size: 16px;
-  font-weight: 500;
+  font-size: 18px;
+  font-weight: 600;
   &:first-child {
     margin-left: auto;
   }
@@ -373,27 +421,27 @@ const DateInfo = styled.h2`
 const Week = styled.div`
   display: flex;
   width: 100%;
-  height: 70px;
+  height: 64px;
 `;
 
 const Days = styled.div`
   display: flex;
-  width: 100%;
-  height: 70px;
+  height: 64px;
 `;
 
 const DayBox = styled.div`
-  width: 70px;
+  width: 64px;
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 14px;
   font-weight: 400;
+  color: ${(props) => props.theme.gray.accent};
 `;
 
 const Day = styled.div`
-  width: 70px;
-  height: 70px;
+  width: 64px;
+  height: 64px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -401,16 +449,16 @@ const Day = styled.div`
 
 const DateBox = styled.h2<{ isnow: boolean; ispass: boolean; isInside: boolean }>`
   font-size: 16px;
-  font-weight: 400;
-  width: 35px;
-  height: 35px;
+  font-weight: ${(props) => (props.ispass ? "400" : "500")};
+  width: 48px;
+  height: 48px;
   display: flex;
   justify-content: center;
   align-items: center;
   color: ${(props) =>
-    props.isnow ? "white" : (props) => (props.ispass ? props.theme.gray.blur : "black")};
+    props.isnow ? "white" : (props) => (props.ispass ? props.theme.gray.semiblur : "black")};
   background-color: ${(props) =>
-    props.isnow ? props.theme.blue.accent : props.isInside ? "red" : "transparent"};
+    props.isnow ? props.theme.blue.accent : props.isInside ? props.theme.blue.mild : "transparent"};
   border-radius: 50px;
   cursor: pointer;
 `;
@@ -418,16 +466,14 @@ const DateBox = styled.h2<{ isnow: boolean; ispass: boolean; isInside: boolean }
 const Button = styled.button`
   background-color: transparent;
   border: none;
-  font-size: 14px;
-  color: ${(props) => props.theme.blue.accent + "60"};
-  width: 35px;
-  height: 35px;
+  font-size: 16px;
+  color: black;
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 32px;
+  height: 32px;
   cursor: pointer;
-  border-radius: 100px;
-  box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.1);
   &:hover {
     color: ${(props) => props.theme.blue.accent};
   }

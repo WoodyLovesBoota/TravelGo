@@ -3,6 +3,7 @@ import { IJourney } from "../atoms";
 import { Droppable } from "react-beautiful-dnd";
 import DragJourneyCard from "./DragJourneyCard";
 import { IPlaceDetail } from "../api";
+import DragCardSmall from "./DragCardSmall";
 
 const BoardNoName = ({ journey, boardId, destination }: IJourneyBoardProps) => {
   return (
@@ -22,14 +23,14 @@ const BoardNoName = ({ journey, boardId, destination }: IJourneyBoardProps) => {
                 journey.map(
                   (place, index) =>
                     place && (
-                      <DragJourneyCard
+                      <DragCardSmall
                         key={place.timestamp + ""}
                         index={index}
                         journeyId={place.timestamp + ""}
                         journeyName={place.name}
                         journeyAddress={place.address}
                         destination={destination}
-                        journeyPhoto={place.image[0]}
+                        journeyPhoto={place.placeId}
                       />
                     )
                 )
@@ -47,10 +48,15 @@ export default BoardNoName;
 
 const Wrapper = styled.div`
   width: 100%;
-  padding: 32px;
-  color: ${(props) => props.theme.main.word};
-  height: 100%;
-  box-shadow: -4px 0 12px 0 rgba(0, 0, 0, 0.1);
+  border-top: 1px solid #f2f2f2;
+  max-height: 320px;
+  overflow-y: auto;
+  &::-webkit-scrollbar {
+    background-color: transparent;
+    width: 5px;
+    height: 5px;
+    display: none;
+  }
 `;
 
 const Empty = styled.h2`

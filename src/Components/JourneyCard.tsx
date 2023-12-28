@@ -50,20 +50,7 @@ const JourneyCard = ({ name, placeId, timestamp, destination }: IJourneyCardProp
         <Loader>loading...</Loader>
       ) : (
         <Container>
-          <Photo
-            bgPhoto={`url(${makeImagePath(
-              data?.result.photos
-                ? data?.result.photos[0].photo_reference
-                : destination
-                ? destination.photos[0].photo_reference
-                : "",
-              500
-            )})`}
-          />
-          <Description>
-            <Title>{name}</Title>
-            <Subtitle>{data?.result.formatted_address}</Subtitle>
-          </Description>
+          <Title>{name}</Title>
           <Button onClick={deleteJourney}>
             <FontAwesomeIcon icon={faX} />
           </Button>
@@ -79,45 +66,28 @@ const Wrapper = styled.div`
   width: 100%;
 `;
 
-const Loader = styled.div``;
+const Loader = styled.div`
+  padding: 13px 0;
+  font-size: 14px;
+  color: ${(props) => props.theme.gray.blur};
+`;
 
 const Container = styled.div`
   width: 100%;
   cursor: pointer;
-  border-radius: 10px;
-  padding: 16px;
+  padding: 13px 0;
   display: flex;
-  box-shadow: 4px 4px 20px 0 rgba(0, 0, 0, 0.1);
-  margin-top: 10px;
   align-items: center;
 `;
 
-const Photo = styled.div<{ bgPhoto: string }>`
-  background-image: ${(props) => props.bgPhoto};
-  background-size: cover;
-  background-position: center center;
-  border-radius: 10px;
-  width: 50px;
-  height: 50px;
-  margin-right: 15px;
-`;
-
-const Description = styled.div``;
-
 const Title = styled.h2`
-  font-size: 16px;
-  font-weight: 500;
-`;
-
-const Subtitle = styled.h2`
-  color: ${(props) => props.theme.gray.semiblur};
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 400;
 `;
 
 const Button = styled.h2`
   margin-left: auto;
-  font-size: 12px;
+  font-size: 8px;
   color: ${(props) => props.theme.gray.blur};
 `;
 

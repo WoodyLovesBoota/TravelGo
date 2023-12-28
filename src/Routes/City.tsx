@@ -24,15 +24,19 @@ import { faX } from "@fortawesome/free-solid-svg-icons";
 import { daysSinceSpecificDate } from "../utils";
 
 const City = () => {
-  const [users, setUsers] = useRecoilState(userState);
+  const [userInfo, setUserInfo] = useRecoilState(userState);
   const navigate = useNavigate();
   const { register, handleSubmit, setValue } = useForm<IForm>();
+  const { register: nameRegister, handleSubmit: nameHadleSubmit } = useForm<INameForm>();
+
   const [currentTrip, setCurrentTrip] = useRecoilState(tripState);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [searchData, setSearchData] = useState("");
   const [isSecond, setIsSecond] = useRecoilState(isSecondPhaseState);
+  const [isInputOpen, setIsInputOpen] = useState(false);
 
   const { ref, ...rest } = register("destination");
+  const { ref: nameRef, ...nameRest } = nameRegister("name");
 
   const { data: destinationData, isLoading: isDestinationLoading } = useQuery<IGetPlaceResult>(
     ["getDestination", searchData],
@@ -50,7 +54,7 @@ const City = () => {
     const { destination, source } = info;
     if (!destination) return;
     else {
-      setUsers((current) => {
+      setUserInfo((current) => {
         const copy = [...current[currentTrip].trips];
         const target = copy[source.index];
         copy.splice(source.index, 1);
@@ -63,7 +67,7 @@ const City = () => {
   };
 
   const onDeleteClick = (name: string | undefined) => {
-    setUsers((current) => {
+    setUserInfo((current) => {
       let index = [...current[currentTrip].trips].findIndex((e) => e.destination?.name === name);
       let temp = [
         ...current[currentTrip].trips.slice(0, index),
@@ -75,40 +79,76 @@ const City = () => {
     });
   };
 
+  const onBackClick = () => {
+    navigate("/");
+  };
+
   const onNextClick = () => {
-    navigate("/place");
+    navigate(`/place/${userInfo[currentTrip].trips[0].destination?.name}`);
   };
 
   const onValid = (data: IForm) => {
     setSearchData(data.destination);
   };
 
+  const onNameValid = (data: INameForm) => {
+    setIsInputOpen(false);
+    const newName = data.name;
+    newName &&
+      setUserInfo((current) => {
+        const copy = { ...current[currentTrip] };
+        const temp = { ...current };
+        delete temp[currentTrip];
+        return { ...temp, [newName]: copy };
+      });
+    newName && setCurrentTrip(data.name);
+  };
+
   useEffect(() => {
-    setCurrentTrip(Object.keys(users)[0]);
+    setCurrentTrip(Object.keys(userInfo)[0]);
   }, []);
 
   return (
     <Wrapper>
       <Header now={1} />
       <Overview>
+        <TitleBox>
+          {isInputOpen ? (
+            <TitleForm onSubmit={nameHadleSubmit(onNameValid)}>
+              <TitleInput
+                {...nameRegister("name")}
+                autoComplete="off"
+                autoFocus
+                placeholder={currentTrip === "Trip1" ? "새로운 여행" : currentTrip}
+              />
+            </TitleForm>
+          ) : (
+            <Title>{currentTrip === "Trip1" ? "새로운 여행" : currentTrip}</Title>
+          )}
+          <PencilIcon
+            onClick={() => {
+              isInputOpen ? setIsInputOpen(false) : setIsInputOpen(true);
+            }}
+          />
+        </TitleBox>
         <OverviewDuration>
-          {users[currentTrip].date
+          {userInfo[currentTrip].date
             .split("|")[0]
-            .slice(0, users[currentTrip].date.split("|")[0].length - 2)}
+            .slice(0, userInfo[currentTrip].date.split("|")[0].length - 2)}
           (
           {
             ["일", "월", "화", "수", "목", "금", "토"][
-              Number(users[currentTrip].date.split("|")[0].split(".")[3])
+              Number(userInfo[currentTrip].date.split("|")[0].split(".")[3])
             ]
           }
           ){" ~ "}
-          {users[currentTrip].date
+          {userInfo[currentTrip].date
             .split("|")[1]
-            .slice(0, users[currentTrip].date.split("|")[1].length - 2)}
+            .slice(0, userInfo[currentTrip].date.split("|")[1].length - 2)}
           (
           {
             ["일", "월", "화", "수", "목", "금", "토"][
-              Number(users[currentTrip].date.split("|")[1].split(".")[3])
+              Number(userInfo[currentTrip].date.split("|")[1].split(".")[3])
             ]
           }
           )
@@ -116,33 +156,77 @@ const City = () => {
         <OverviewNight>
           {daysSinceSpecificDate(
             [
-              Number(users[currentTrip].date.split("|")[0].split(".")[0]),
-              Number(users[currentTrip].date.split("|")[0].split(".")[1]),
-              Number(users[currentTrip].date.split("|")[0].split(".")[2]),
+              Number(userInfo[currentTrip].date.split("|")[0].split(".")[0]),
+              Number(userInfo[currentTrip].date.split("|")[0].split(".")[1]),
+              Number(userInfo[currentTrip].date.split("|")[0].split(".")[2]),
             ],
             [
-              Number(users[currentTrip].date.split("|")[1].split(".")[0]),
-              Number(users[currentTrip].date.split("|")[1].split(".")[1]),
-              Number(users[currentTrip].date.split("|")[1].split(".")[2]),
+              Number(userInfo[currentTrip].date.split("|")[1].split(".")[0]),
+              Number(userInfo[currentTrip].date.split("|")[1].split(".")[1]),
+              Number(userInfo[currentTrip].date.split("|")[1].split(".")[2]),
             ]
           )}
           박{" "}
           {daysSinceSpecificDate(
             [
-              Number(users[currentTrip].date.split("|")[0].split(".")[0]),
-              Number(users[currentTrip].date.split("|")[0].split(".")[1]),
-              Number(users[currentTrip].date.split("|")[0].split(".")[2]),
+              Number(userInfo[currentTrip].date.split("|")[0].split(".")[0]),
+              Number(userInfo[currentTrip].date.split("|")[0].split(".")[1]),
+              Number(userInfo[currentTrip].date.split("|")[0].split(".")[2]),
             ],
             [
-              Number(users[currentTrip].date.split("|")[1].split(".")[0]),
-              Number(users[currentTrip].date.split("|")[1].split(".")[1]),
-              Number(users[currentTrip].date.split("|")[1].split(".")[2]),
+              Number(userInfo[currentTrip].date.split("|")[1].split(".")[0]),
+              Number(userInfo[currentTrip].date.split("|")[1].split(".")[1]),
+              Number(userInfo[currentTrip].date.split("|")[1].split(".")[2]),
             ]
           ) + 1}
           일
         </OverviewNight>
+        <OverviewCitys>
+          <DragDropContext onDragEnd={onDragEnd}>
+            <Droppable droppableId={"Destinations"}>
+              {(provided, snapshot) => (
+                <Area
+                  isDraggingOver={snapshot.isDraggingOver}
+                  isDraggingFromThis={Boolean(snapshot.draggingFromThisWith)}
+                  ref={provided.innerRef}
+                  {...provided.droppableProps}
+                >
+                  {userInfo[currentTrip].trips.map((card, index) => (
+                    <Draggable
+                      key={card.destination?.name}
+                      draggableId={card.destination?.name ? card.destination?.name : ""}
+                      index={index}
+                    >
+                      {(provided, snapshot) => (
+                        <OverviewCard
+                          isDragging={snapshot.isDragging}
+                          key={
+                            card.destination?.name && card.destination?.name + index + "overview"
+                          }
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                        >
+                          <OverviewCardName>{card.destination?.name}</OverviewCardName>
+                          <OverviewCardButton
+                            onClick={() => {
+                              onDeleteClick(card.destination?.name);
+                            }}
+                          >
+                            <FontAwesomeIcon icon={faX} />
+                          </OverviewCardButton>
+                        </OverviewCard>
+                      )}
+                    </Draggable>
+                  ))}
+                </Area>
+              )}
+            </Droppable>
+          </DragDropContext>
+        </OverviewCitys>
         <Buttons>
-          {users[currentTrip].trips.length > 0 ? (
+          <Goback onClick={onBackClick}>이전 단계로</Goback>
+          {userInfo[currentTrip].trips.length > 0 ? (
             <Button onClick={onNextClick}>완료</Button>
           ) : (
             <NoButton>완료</NoButton>
@@ -165,52 +249,23 @@ const City = () => {
             required
           />
           <Icon>
-            <Search width={23} />
+            <Search width={18} />
           </Icon>
-          {isDestinationLoading || isDetailLoading ? (
-            <Loader>Loading...</Loader>
-          ) : (
-            detailData && (
-              <Cards>
-                <DestinationCard
-                  key={detailData?.result.place_id}
-                  title={detailData?.result.name}
-                  destination={detailData?.result}
-                />
-              </Cards>
-            )
-          )}
         </Form>
+        {isDestinationLoading || isDetailLoading ? (
+          <Loader>Loading...</Loader>
+        ) : (
+          detailData && (
+            <Cards>
+              <DestinationCard
+                key={detailData?.result.place_id}
+                title={detailData?.result.name}
+                destination={detailData?.result}
+              />
+            </Cards>
+          )
+        )}
       </Container>
-      {users[currentTrip] && users[currentTrip].trips && users[currentTrip].trips.length > 0 && (
-        <Selected>
-          <DropArea>
-            <Area>
-              {users[currentTrip].trips.map((card) => (
-                <CityCard>
-                  <CardPhoto
-                    bgphoto={`url(${makeImagePath(
-                      card.destination?.photos ? card?.destination.photos[0].photo_reference : "",
-                      500
-                    )})`}
-                  />
-                  <CardContent>
-                    <CardTitle>{card.destination?.name}</CardTitle>
-                    <CardSubtitle>{card.destination?.formatted_address.split(" ")[0]}</CardSubtitle>
-                  </CardContent>
-                  <Delete
-                    onClick={() => {
-                      onDeleteClick(card.destination?.name);
-                    }}
-                  >
-                    <FontAwesomeIcon icon={faX} />
-                  </Delete>
-                </CityCard>
-              ))}
-            </Area>
-          </DropArea>
-        </Selected>
-      )}
     </Wrapper>
   );
 };
@@ -219,66 +274,19 @@ export default City;
 
 const Wrapper = styled(motion.div)`
   width: 100vw;
-  color: ${(props) => props.theme.main.word};
   display: flex;
   flex-direction: column;
   align-items: center;
   padding-top: 80px;
 `;
 
-const Overview = styled.div`
-  background-color: lightgray;
-  width: 300px;
-  height: 100vh;
-  padding: 50px 30px;
-  padding-top: 130px;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 0;
+const Container = styled(motion.div)`
+  width: 100%;
   display: flex;
   flex-direction: column;
-`;
-
-const OverviewDuration = styled.h2`
-  color: gray;
-  font-size: 14px;
-  font-weight: 400;
-`;
-
-const OverviewNight = styled.h2`
-  color: gray;
-  font-size: 14px;
-  font-weight: 400;
-`;
-
-const Buttons = styled.div`
-  margin-top: auto;
-  z-index: 2;
-`;
-
-const Button = styled.button`
-  width: 90%;
-  padding: 20px;
-  border-radius: 10px;
-  background-color: blue;
-  color: white;
-  font-size: 20px;
-  font-weight: 700;
-  cursor: pointer;
-  z-index: 2;
-`;
-
-const NoButton = styled.button`
-  width: 90%;
-  padding: 20px;
-  border-radius: 10px;
-  background-color: gray;
-  color: white;
-  font-size: 20px;
-  font-weight: 700;
-  cursor: pointer;
-  z-index: 2;
+  align-items: center;
+  padding: 50px 100px;
+  padding-left: 400px;
 `;
 
 const Selected = styled.div`
@@ -294,98 +302,15 @@ const DropArea = styled.div`
   flex-direction: column;
 `;
 
-const Area = styled.div`
+const Area = styled.div<IDragging>`
   background-color: transparent;
   flex-grow: 1;
-  width: 100%;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-gap: 24px;
-  justify-content: center;
-`;
-
-const CityCard = styled.div`
-  box-shadow: 0px 2px 12px 0px rgba(0, 0, 0, 0.1);
-  border-radius: 6px;
-  position: relative;
-  width: 100%;
-  height: 22vw;
-  border-radius: 8px;
-`;
-
-const Delete = styled.button`
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  width: 20px;
-  height: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: transparent;
-  font-size: 10px;
-  color: ${(props) => props.theme.gray.blur};
-  cursor: pointer;
-`;
-
-const CardPhoto = styled.div<{ bgphoto: string }>`
-  background-image: ${(props) => props.bgphoto};
-  background-size: cover;
-  background-position: center center;
-  width: 100%;
-  height: 75%;
-  border-top-right-radius: 8px;
-  border-top-left-radius: 8px;
-`;
-
-const CardTitle = styled.h2`
-  font-size: 16px;
-  font-weight: 400;
-`;
-
-const CardSubtitle = styled.h2`
-  font-size: 14px;
-  font-weight: 300;
-  color: ${(props) => props.theme.gray.semiblur};
-`;
-
-const CardContent = styled.div`
-  padding: 20px;
-  height: 25%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-`;
-
-const Container = styled(motion.div)`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 50px 100px;
-  padding-left: 400px;
-`;
-
-const Main = styled(motion.div)`
-  width: 100%;
-  padding: 0 72px;
-  padding-bottom: 50px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  min-height: 50vh;
 `;
 
 const Cards = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 500px;
-  padding: 10px 0;
-  border-top: 1px solid lightgray;
-  margin-bottom: 10px;
-  &:hover {
-    background-color: lightgray;
-  }
+  padding: 60px 0;
+  width: 100%;
 `;
 
 const Loader = styled.div`
@@ -403,7 +328,7 @@ const Form = styled(motion.form)`
   width: 500px;
   box-shadow: 0px 2px 12px 0px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
-  min-height: 50px;
+  height: 50px;
   position: relative;
 `;
 
@@ -421,6 +346,153 @@ const Input = styled(motion.input)`
   }
 `;
 
+const TitleBox = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+  padding: 0 28px;
+`;
+
+const Title = styled.h2`
+  font-size: 20px;
+  font-weight: 700;
+  min-width: 100px;
+`;
+
+const PencilIcon = styled.div`
+  background: url("./pencil.png");
+  background-position: center center;
+  background-size: cover;
+  width: 14px;
+  height: 14px;
+  margin-left: 20px;
+`;
+
+const TitleForm = styled.form`
+  min-width: 100px;
+  /* margin-bottom: 8px; */
+`;
+
+const TitleInput = styled.input`
+  width: 100px;
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: -2px;
+  border-bottom: 2px solid ${(props) => props.theme.gray.blur};
+  padding: 3px 5px;
+  background-color: transparent;
+  &:focus {
+    outline: none;
+    border-bottom: 2px solid black;
+  }
+`;
+
+const Overview = styled.div`
+  background-color: ${(props) => props.theme.gray.bg};
+  width: 300px;
+  height: 100vh;
+  padding-top: 130px;
+  padding-bottom: 28px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  display: flex;
+  flex-direction: column;
+`;
+
+const OverviewDuration = styled.h2`
+  color: ${(props) => props.theme.gray.accent};
+  font-size: 14px;
+  line-height: 24px;
+  font-weight: 400;
+  padding: 0 28px;
+`;
+
+const OverviewCitys = styled.div`
+  width: 100%;
+  height: 500px;
+  overflow-y: auto;
+  margin-top: 50px;
+`;
+
+const OverviewCard = styled.div<{ isDragging: boolean }>`
+  width: 100%;
+  padding: 16px 28px;
+  border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: ${(props) => (props.isDragging ? "white" : "transparent")};
+  &:hover {
+    background-color: white;
+  }
+`;
+
+const OverviewCardName = styled.h2`
+  font-size: 14px;
+  font-weight: 400;
+  color: black;
+`;
+
+const OverviewCardButton = styled.button`
+  font-size: 10px;
+  background-color: transparent;
+  color: ${(props) => props.theme.gray.semiblur};
+  cursor: pointer;
+  z-index: 4;
+`;
+
+const OverviewNight = styled.h2`
+  color: ${(props) => props.theme.gray.accent};
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 24px;
+  padding: 0 28px;
+`;
+
+const Buttons = styled.div`
+  margin-top: auto;
+  z-index: 2;
+  padding: 0 28px;
+`;
+
+const Goback = styled.button`
+  width: 100%;
+  padding: 20px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 400;
+  cursor: pointer;
+  z-index: 2;
+  background-color: transparent;
+  color: ${(props) => props.theme.gray.button};
+`;
+
+const Button = styled.button`
+  width: 100%;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: ${(props) => props.theme.blue.accent};
+  color: white;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  z-index: 2;
+`;
+
+const NoButton = styled.button`
+  width: 100%;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: ${(props) => props.theme.gray.button};
+  color: white;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  z-index: 2;
+`;
+
 const Icon = styled.div`
   position: absolute;
   top: 13px;
@@ -434,6 +506,10 @@ const inputVar = {
 
 interface IForm {
   destination: string;
+}
+
+interface INameForm {
+  name: string;
 }
 
 interface IDragging {

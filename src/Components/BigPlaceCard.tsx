@@ -7,7 +7,7 @@ import StarRate from "./StarRate";
 import { destinationState, tripState, userState, isClickedState } from "../atoms";
 import { useRecoilValue, useRecoilState } from "recoil";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLocationDot, faPhone } from "@fortawesome/free-solid-svg-icons";
+import { faLocationDot, faPhone, faX } from "@fortawesome/free-solid-svg-icons";
 import Overview from "../Routes/Overview";
 import Review from "../Routes/Review";
 import Map from "../Routes/Map";
@@ -115,7 +115,7 @@ const BigPlaceCard = ({ place, placeId, isHotel, destination }: IBigPlaceProps) 
         <BigContainer>
           <BigCover
             style={{
-              backgroundImage: `linear-gradient(to top, rgba(0,0,0,0), transparent), url(${
+              backgroundImage: `url(${
                 place?.result.photos
                   ? makeImagePath(place?.result.photos[0].photo_reference, 600)
                   : destination
@@ -124,83 +124,23 @@ const BigPlaceCard = ({ place, placeId, isHotel, destination }: IBigPlaceProps) 
               })`,
             }}
           />
-          <BigOverview
-            variants={bigOverviewVar}
-            initial="initial"
-            animate="animate"
-            whileHover="hover"
-          >
-            <BigTitle>
-              <p>{place?.result.name}</p>
-            </BigTitle>
+          <BigOverview>
+            <BigTitle>{place?.result.name}</BigTitle>
+            <Content>{place?.result.formatted_address}</Content>
             <Content>
-              <StarRate dataRating={place?.result.rating} size="14"></StarRate>
+              <Rate>
+                <Star />
+                <RateNumber>{place?.result.rating ? place?.result.rating : "0"}</RateNumber>{" "}
+              </Rate>
             </Content>
-            <Content>
-              <Icon>
-                <FontAwesomeIcon
-                  icon={faLocationDot}
-                  style={{
-                    color: "#0C0B31",
-                  }}
-                />{" "}
-              </Icon>
-              {place?.result.formatted_address}
-            </Content>
-            <Content>
-              <Icon>
-                <FontAwesomeIcon
-                  icon={faPhone}
-                  style={{
-                    color: "#0C0B31",
-                  }}
-                />
-              </Icon>
-              {place?.result.international_phone_number}
-            </Content>
-
-            <Tabs>
-              <Link
-                to={`/place/${destination}/${placeId}/overview`}
-                state={{
-                  overview: place?.result.editorial_summary
-                    ? place?.result.editorial_summary
-                    : {
-                        overview: "해당 장소에 대한 Overview가 존재하지 않습니다.",
-                      },
-                }}
-              >
-                <Tab isActive={overviewMatch !== null} isHotel={isHotel}>
-                  Overview
-                  {overviewMatch && <Circle isHotel={isHotel} layoutId="circle2" />}
-                </Tab>
-              </Link>
-              <Link
-                to={`/place/${destination}/${placeId}/review`}
-                state={{
-                  review: place?.result.reviews,
-                }}
-              >
-                <Tab isHotel={isHotel} isActive={reviewMatch !== null}>
-                  Review
-                  {reviewMatch && <Circle isHotel={isHotel} layoutId="circle2" />}
-                </Tab>
-              </Link>
-              <Link to={`/place/${destination}/${placeId}/map`} state={{ placeId: placeId }}>
-                <Tab isHotel={isHotel} isActive={mapMatch !== null}>
-                  Map
-                  {mapMatch && <Circle isHotel={isHotel} layoutId="circle2" />}
-                </Tab>
-              </Link>
-            </Tabs>
-            <Nested>
-              {overviewMatch ? <Overview /> : reviewMatch ? <Review /> : mapMatch ? <Map /> : null}
-            </Nested>
+            <OverviewContent>{place?.result.editorial_summary.overview}</OverviewContent>
+            <Button isHotel={isHotel} onClick={handleAddButtonClicked}>
+              추가하기
+            </Button>
           </BigOverview>
-
-          <Button isHotel={isHotel} onClick={handleAddButtonClicked}>
-            추가하기
-          </Button>
+          <GoBackButton onClick={onOverlayClick}>
+            <FontAwesomeIcon icon={faX} />
+          </GoBackButton>
         </BigContainer>
       </BigPlace>
     </AnimatePresence>
@@ -209,42 +149,24 @@ const BigPlaceCard = ({ place, placeId, isHotel, destination }: IBigPlaceProps) 
 
 export default BigPlaceCard;
 
-const BigContainer = styled.div`
-  position: relative;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  overflow: hidden;
-  cursor: default;
-  z-index: 200;
-  color: black;
-`;
-
 const BigPlace = styled(motion.div)`
   position: fixed;
   width: 800px;
-  height: 90vh;
-  top: 5vh;
-  left: 0;
-  right: 0;
-  margin: 0 auto;
-  background-color: ${(props) => props.theme.main.bg};
-  border-radius: 30px;
-  overflow: auto;
+  height: 500px;
+  border-radius: 20px;
+  z-index: 12;
+  background-color: white;
+  padding: 36px;
+  left: calc((100vw - 800px) / 2);
+  top: cale((100vh - 500px) / 2);
+  box-shadow: 0px 2px 12px 0px rgba(0, 0, 0, 0.1);
+`;
+
+const BigContainer = styled.div`
+  width: 100%;
+  height: 100%;
   display: flex;
-  flex-direction: column;
-  z-index: 131;
-  @media screen and (max-width: 1000px) {
-    width: 600px;
-  }
-  @media screen and (max-width: 800px) {
-    width: 450px;
-  }
-  @media screen and (max-width: 500px) {
-    width: 90%;
-  }
+  cursor: default;
 `;
 
 const Overlay = styled(motion.div)`
@@ -253,133 +175,95 @@ const Overlay = styled(motion.div)`
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.8);
-  z-index: 130;
+  background-color: rgba(0, 0, 0, 0.25);
+  z-index: 10;
   cursor: default;
 `;
 
-const Content = styled.h2`
-  margin-bottom: 7px;
-  font-weight: 600;
-  font-size: 14px;
-  color: black;
-`;
-
-const Nested = styled.div`
-  width: 100%;
-  min-height: 110px;
-  margin-bottom: 20px;
-`;
-
 const BigCover = styled.div`
-  width: 100%;
-  height: 55%;
+  width: 428px;
+  height: 428px;
   background-position: center center;
   background-size: cover;
-  display: flex;
-  justify-content: flex-start;
-  align-items: flex-end;
-`;
-
-const BigTitle = styled.div`
-  position: relative;
-  display: flex;
-  align-items: center;
-  width: 100%;
-  color: black;
-
-  p {
-    font-size: 21px;
-    font-weight: 600;
-    margin-right: 20px;
-    color: black;
-  }
+  border-radius: 8px;
 `;
 
 const BigOverview = styled(motion.div)`
-  padding: 30px;
-  font-size: 12px;
-  width: 100%;
-  height: 60%;
-  z-index: 103;
-  background-color: ${(props) => props.theme.main.bg};
-  color: ${(props) => props.theme.main.word};
-  border-radius: 30px;
-  position: absolute;
-  bottom: -10%;
-  box-sizing: border-box;
-  font-weight: 350;
-  overflow: auto;
+  padding-left: 36px;
+  padding-top: 44px;
+  width: 300px;
+  display: flex;
+  flex-direction: column;
 `;
 
-const Icon = styled.span`
-  margin-right: 10px;
+const Content = styled.h2`
+  font-weight: 400;
+  font-size: 18px;
+  color: ${(props) => props.theme.gray.normal};
+  margin-bottom: 16px;
+`;
+
+const OverviewContent = styled.h2`
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 1.5;
+  width: 100%;
+  color: #343434;
+`;
+
+const BigTitle = styled.div`
+  color: black;
+  font-size: 28px;
+  font-weight: 400;
+  margin-bottom: 16px;
 `;
 
 const Button = styled.div<{ isHotel: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 90%;
+  width: 100%;
   font-size: 16px;
   font-weight: 600;
-  background-color: ${(props) =>
-    props.isHotel ? props.theme.red.accent : props.theme.main.accent};
-  border-radius: 30px;
   height: 50px;
+  cursor: pointer;
+  margin-top: auto;
+  padding: 10px 103px;
+  background-color: ${(props) => props.theme.blue.accent};
+  box-shadow: 0px 2px 12px 0px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  color: white;
+`;
+
+const Rate = styled.div`
+  display: flex;
+
+  align-items: center;
+`;
+
+const RateNumber = styled.h2`
+  font-size: 14px;
+  font-weight: 300;
+  margin-top: 4px;
+`;
+
+const Star = styled.div`
+  background-image: url("/star.png");
+  width: 16px;
+  height: 16px;
+  background-size: cover;
+  background-position: center;
+  margin-right: 6px;
+`;
+
+const GoBackButton = styled.div`
   position: absolute;
-  bottom: 8px;
-  z-index: 104;
+  top: 36px;
+  right: 36px;
+  color: ${(props) => props.theme.gray.blur};
+  font-size: 16px;
   cursor: pointer;
 `;
-
-const Tabs = styled.div`
-  display: flex;
-  align-items: center;
-  margin: 30px 0;
-`;
-
-const Tab = styled.div<{ isActive: boolean; isHotel: boolean }>`
-  margin-right: 20px;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  position: relative;
-  color: ${(props) =>
-    props.isActive
-      ? props.isHotel
-        ? props.theme.red.accent
-        : props.theme.main.accent
-      : "lightgray"};
-  font-size: 16px;
-  transition: color 0.5s ease-in-out;
-  font-weight: 600;
-`;
-
-const Circle = styled(motion.span)<{ isHotel: boolean }>`
-  position: absolute;
-  width: 5px;
-  height: 5px;
-  background-color: ${(props) =>
-    props.isHotel ? props.theme.red.accent : props.theme.main.accent};
-  border-radius: 2.5008px;
-  bottom: -10px;
-  left: 0;
-  right: 0;
-  margin: 0 auto;
-`;
-
-const bigOverviewVar = {
-  initial: { y: 250 },
-  animate: {
-    y: 0,
-    transition: { delay: 0.1, duration: 0.5 },
-  },
-  hover: {
-    y: -150,
-    transition: { type: "tween" },
-  },
-};
 
 interface IBigPlaceProps {
   place: IGetPlaceDetailResult | undefined;

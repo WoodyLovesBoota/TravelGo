@@ -25,9 +25,9 @@ const GlobalStyle = createGlobalStyle`
     border: 0;
     font-size: 16px;
     font-weight: 300;
-    line-height: 1.5;
+    line-height: 1.2;
     vertical-align: baseline;
-    font-family: Inter, sans-serif;
+    font-family: 'Apple SD Gothic Neo', Inter, sans-serif;
     color: black;
     @media screen and (max-width: 1000px) {
       font-size: 12px;

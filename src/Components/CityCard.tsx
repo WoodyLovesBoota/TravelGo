@@ -47,23 +47,27 @@ export default CityCard;
 const Wrapper = styled.div`
   display: flex;
   cursor: pointer;
-  width: 200px;
-  border-radius: 16px;
   box-shadow: 0px 2px 12px 0px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  height: 22vw;
+  border-radius: 8px;
 `;
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
+  height: 100%;
 `;
 
 const Description = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 14px 11px;
-  border-bottom-right-radius: 16px;
-  border-bottom-left-radius: 16px;
+  justify-content: center;
+  padding: 20px;
+  height: 25%;
+  border-bottom-right-radius: 8px;
+  border-bottom-left-radius: 8px;
 `;
 
 const Destination = styled.div<{ bgPhoto: string }>`
@@ -71,9 +75,9 @@ const Destination = styled.div<{ bgPhoto: string }>`
   background-size: cover;
   background-position: center center;
   width: 100%;
-  height: 200px;
-  border-top-right-radius: 16px;
-  border-top-left-radius: 16px;
+  height: 75%;
+  border-top-right-radius: 8px;
+  border-top-left-radius: 8px;
   cursor: pointer;
 `;
 
@@ -84,8 +88,8 @@ const DestinationTitle = styled.h2`
 `;
 
 const DestinationSubTitle = styled.h2`
-  font-size: 16px;
-  font-weight: 400;
+  font-size: 14px;
+  font-weight: 300;
   color: gray;
 `;
 

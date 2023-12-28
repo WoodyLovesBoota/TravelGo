@@ -19,6 +19,15 @@ import { DragDropContext, DropResult, Droppable } from "react-beautiful-dnd";
 import JourneyBoard from "../Components/BoardJourney";
 import DragJourneyCard from "./DragJourneyCard";
 import GoogleRouteMap from "./GoogleRouteMap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import HotelCard from "./HotelCard";
+import {
+  faAngleDown,
+  faAngleLeft,
+  faAngleRight,
+  faAngleUp,
+} from "@fortawesome/free-solid-svg-icons";
+import { daysSinceSpecificDate } from "../utils";
 
 const ScheduleScreen = ({ destination }: IScheduleScreenProps) => {
   const navigate = useNavigate();
@@ -26,16 +35,21 @@ const ScheduleScreen = ({ destination }: IScheduleScreenProps) => {
   const [userInfo, setUserInfo] = useRecoilState(userState);
   const scheduleMatch: PathMatch<string> | null = useMatch("/schedule/:city");
   const [isCalendarOpen, setIsCalendarOpen] = useRecoilState(isCalendarState);
-  const [stage, setStage] = useState(0);
+  const [stage, setStage] = useState(1);
+  const [isToggleOpen, setIsToggleOpen] = useState(true);
 
   const onNextClick = () => {
     navigate(`/place`);
     setIsCalendarOpen(false);
   };
 
-  const onPrevClick = () => {
+  const onBackClick = () => {
     navigate(`/place/${destination?.name}`);
     setIsCalendarOpen(false);
+  };
+
+  const onCardClick = (name: string | undefined) => {
+    navigate(`/schedule/${name}`);
   };
 
   const calcDate = (year: number, month: number, day: number, daysToAdd: number): Date => {
@@ -108,409 +122,161 @@ const ScheduleScreen = ({ destination }: IScheduleScreenProps) => {
     }
   };
 
+  const onRightClick = () => {
+    stage <
+      Object.keys(
+        userInfo[currentTrip].trips[
+          userInfo[currentTrip].trips.findIndex((e) => e.destination?.name === destination?.name)
+        ].detail.attractions
+      ).length -
+        1 && setStage((current) => current + 1);
+  };
+
+  const onLeftClick = () => {
+    stage !== 1 && setStage((current) => current - 1);
+  };
+
   return (
     <>
       {scheduleMatch && scheduleMatch?.params.city === destination?.name && (
         <Wrapper>
-          <NavColumn>
-            <NavBox isnow={stage === 0} onClick={() => setStage(0)}>
-              <NavTitle>전체</NavTitle>
-            </NavBox>
-            {Object.keys(
-              userInfo[currentTrip].trips[
-                userInfo[currentTrip].trips.findIndex(
-                  (e) => e.destination?.name === destination?.name
+          <DragDropContext onDragEnd={onDragEnd}>
+            <Overview>
+              <TitleBox>
+                <Title>{currentTrip}</Title>
+              </TitleBox>
+              <OverviewDuration>
+                {userInfo[currentTrip].date
+                  .split("|")[0]
+                  .slice(0, userInfo[currentTrip].date.split("|")[0].length - 2)}
+                (
+                {
+                  ["일", "월", "화", "수", "목", "금", "토"][
+                    Number(userInfo[currentTrip].date.split("|")[0].split(".")[3])
+                  ]
+                }
+                ){" ~ "}
+                {userInfo[currentTrip].date
+                  .split("|")[1]
+                  .slice(0, userInfo[currentTrip].date.split("|")[1].length - 2)}
+                (
+                {
+                  ["일", "월", "화", "수", "목", "금", "토"][
+                    Number(userInfo[currentTrip].date.split("|")[1].split(".")[3])
+                  ]
+                }
                 )
-              ].detail.attractions
-            ).map(
-              (title, ind) =>
-                ind !== 0 && (
-                  <NavBox
-                    isnow={stage === ind}
+              </OverviewDuration>
+              <OverviewNight>
+                {daysSinceSpecificDate(
+                  [
+                    Number(userInfo[currentTrip].date.split("|")[0].split(".")[0]),
+                    Number(userInfo[currentTrip].date.split("|")[0].split(".")[1]),
+                    Number(userInfo[currentTrip].date.split("|")[0].split(".")[2]),
+                  ],
+                  [
+                    Number(userInfo[currentTrip].date.split("|")[1].split(".")[0]),
+                    Number(userInfo[currentTrip].date.split("|")[1].split(".")[1]),
+                    Number(userInfo[currentTrip].date.split("|")[1].split(".")[2]),
+                  ]
+                )}
+                박{" "}
+                {daysSinceSpecificDate(
+                  [
+                    Number(userInfo[currentTrip].date.split("|")[0].split(".")[0]),
+                    Number(userInfo[currentTrip].date.split("|")[0].split(".")[1]),
+                    Number(userInfo[currentTrip].date.split("|")[0].split(".")[2]),
+                  ],
+                  [
+                    Number(userInfo[currentTrip].date.split("|")[1].split(".")[0]),
+                    Number(userInfo[currentTrip].date.split("|")[1].split(".")[1]),
+                    Number(userInfo[currentTrip].date.split("|")[1].split(".")[2]),
+                  ]
+                ) + 1}
+                일
+              </OverviewNight>
+              <OverviewCitys>
+                {userInfo[currentTrip].trips.map((card, index) => (
+                  <OverviewCard
                     onClick={() => {
-                      setStage(ind);
+                      card.destination?.name !== destination?.name &&
+                        onCardClick(card.destination?.name);
                     }}
+                    isnow={card.destination?.name === destination?.name}
+                    key={card.destination?.name && card.destination?.name + index + "overview"}
                   >
-                    <NavTitle>{title}</NavTitle>
-                    <NavSubtitle>
-                      {calcDate(
-                        Number(
-                          userInfo[currentTrip].trips[
-                            userInfo[currentTrip].trips.findIndex(
-                              (e) => e.destination?.name === destination?.name
-                            )
-                          ].detail.date.split(".")[0]
-                        ),
-                        Number(
-                          userInfo[currentTrip].trips[
-                            userInfo[currentTrip].trips.findIndex(
-                              (e) => e.destination?.name === destination?.name
-                            )
-                          ].detail.date.split(".")[1]
-                        ),
-                        Number(
-                          userInfo[currentTrip].trips[
-                            userInfo[currentTrip].trips.findIndex(
-                              (e) => e.destination?.name === destination?.name
-                            )
-                          ].detail.date.split(".")[2]
-                        ),
-                        ind - 1
-                      ).getMonth() + 1}
-                      .
-                      {calcDate(
-                        Number(
-                          userInfo[currentTrip].trips[
-                            userInfo[currentTrip].trips.findIndex(
-                              (e) => e.destination?.name === destination?.name
-                            )
-                          ].detail.date.split(".")[0]
-                        ),
-                        Number(
-                          userInfo[currentTrip].trips[
-                            userInfo[currentTrip].trips.findIndex(
-                              (e) => e.destination?.name === destination?.name
-                            )
-                          ].detail.date.split(".")[1]
-                        ),
-                        Number(
-                          userInfo[currentTrip].trips[
-                            userInfo[currentTrip].trips.findIndex(
-                              (e) => e.destination?.name === destination?.name
-                            )
-                          ].detail.date.split(".")[2]
-                        ),
-                        ind - 1
-                      ).getDate()}
-                      (
-                      {
-                        ["일", "월", "화", "수", "목", "금", "토"][
-                          calcDate(
-                            Number(
-                              userInfo[currentTrip].trips[
-                                userInfo[currentTrip].trips.findIndex(
-                                  (e) => e.destination?.name === destination?.name
-                                )
-                              ].detail.date.split(".")[0]
-                            ),
-                            Number(
-                              userInfo[currentTrip].trips[
-                                userInfo[currentTrip].trips.findIndex(
-                                  (e) => e.destination?.name === destination?.name
-                                )
-                              ].detail.date.split(".")[1]
-                            ),
-                            Number(
-                              userInfo[currentTrip].trips[
-                                userInfo[currentTrip].trips.findIndex(
-                                  (e) => e.destination?.name === destination?.name
-                                )
-                              ].detail.date.split(".")[2]
-                            ),
-                            ind - 1
-                          ).getDay()
-                        ]
-                      }
-                      )
-                    </NavSubtitle>
-                  </NavBox>
-                )
-            )}
-            <NavButtons>
-              <NavPrevButton onClick={onPrevClick}>이전</NavPrevButton>
+                    <OverviewCardTitle
+                      onClick={() => {
+                        setIsToggleOpen((current) => !current);
+                      }}
+                    >
+                      <OverviewCardName>{card.destination?.name}</OverviewCardName>
+                      <OverviewCardIcon>
+                        {card.destination?.name === destination?.name ? (
+                          <FontAwesomeIcon icon={faAngleDown} />
+                        ) : (
+                          <FontAwesomeIcon icon={faAngleUp} />
+                        )}
+                      </OverviewCardIcon>{" "}
+                    </OverviewCardTitle>
+                    {card.destination?.name === destination?.name &&
+                      Object.values(
+                        userInfo[currentTrip].trips[
+                          userInfo[currentTrip].trips.findIndex(
+                            (e) => e.destination?.name === destination?.name
+                          )
+                        ].detail.attractions
+                      ).flat().length > 0 &&
+                      isToggleOpen && (
+                        <BoardNoName
+                          journey={Object.values(
+                            userInfo[currentTrip].trips[
+                              userInfo[currentTrip].trips.findIndex(
+                                (e) => e.destination?.name === destination?.name
+                              )
+                            ].detail.attractions
+                          ).flat()}
+                          boardId={"NoName"}
+                          key={"NoName"}
+                          destination={destination}
+                        />
+                      )}
+                  </OverviewCard>
+                ))}
+              </OverviewCitys>
+              <Buttons>
+                <Goback onClick={onBackClick}>이전 단계로</Goback>
+                {userInfo[currentTrip].trips.length > 0 ? (
+                  <Button onClick={onNextClick}>완료</Button>
+                ) : (
+                  <NoButton>완료</NoButton>
+                )}
+              </Buttons>
+            </Overview>
 
-              <NavButton onClick={onNextClick}>다음</NavButton>
-            </NavButtons>
-          </NavColumn>
-          {stage === 0 ? (
-            <BoardColumn>
-              <DragDropContext onDragEnd={onDragEnd}>
-                <NamedJourney>
-                  <Title>{destination?.name}</Title>
-                  <Duration>
-                    {userInfo[currentTrip].trips[
-                      userInfo[currentTrip].trips.findIndex(
-                        (e) => e.destination?.name === destination?.name
-                      )
-                    ].detail.date === "0|0" ? (
-                      "날짜를 선택해 주세요."
-                    ) : (
-                      <>
-                        {userInfo[currentTrip].trips[
-                          userInfo[currentTrip].trips.findIndex(
-                            (e) => e.destination?.name === destination?.name
-                          )
-                        ].detail.date
-                          .split("|")[0]
-                          .slice(
-                            0,
-                            userInfo[currentTrip].trips[
-                              userInfo[currentTrip].trips.findIndex(
-                                (e) => e.destination?.name === destination?.name
-                              )
-                            ].detail.date.split("|")[0].length - 2
-                          )}
-                        (
-                        {
-                          ["일", "월", "화", "수", "목", "금", "토"][
-                            Number(
-                              userInfo[currentTrip].trips[
-                                userInfo[currentTrip].trips.findIndex(
-                                  (e) => e.destination?.name === destination?.name
-                                )
-                              ].detail.date
-                                .split("|")[0]
-                                .split(".")[3]
-                            )
-                          ]
-                        }
-                        ){" ~ "}
-                        {userInfo[currentTrip].trips[
-                          userInfo[currentTrip].trips.findIndex(
-                            (e) => e.destination?.name === destination?.name
-                          )
-                        ].detail.date
-                          .split("|")[1]
-                          .slice(
-                            0,
-                            userInfo[currentTrip].trips[
-                              userInfo[currentTrip].trips.findIndex(
-                                (e) => e.destination?.name === destination?.name
-                              )
-                            ].detail.date.split("|")[1].length - 2
-                          )}
-                        (
-                        {
-                          ["일", "월", "화", "수", "목", "금", "토"][
-                            Number(
-                              userInfo[currentTrip].trips[
-                                userInfo[currentTrip].trips.findIndex(
-                                  (e) => e.destination?.name === destination?.name
-                                )
-                              ].detail.date
-                                .split("|")[1]
-                                .split(".")[3]
-                            )
-                          ]
-                        }
-                        )
-                      </>
-                    )}
-                  </Duration>
-                  <Boards>
-                    <DroppableBoards>
-                      {Object.keys(
-                        userInfo[currentTrip].trips[
-                          userInfo[currentTrip].trips.findIndex(
-                            (e) => e.destination?.name === destination?.name
-                          )
-                        ].detail.attractions
-                      ).map((boardName, index) => {
-                        return (
-                          boardName !== "NoName" && (
-                            <JourneyBoard
-                              journey={
-                                userInfo[currentTrip].trips[
-                                  userInfo[currentTrip].trips.findIndex(
-                                    (e) => e.destination?.name === destination?.name
-                                  )
-                                ].detail.attractions[boardName]
-                              }
-                              key={boardName}
-                              boardId={boardName}
-                              destination={destination}
-                              index={index}
-                            />
-                          )
-                        );
-                      })}
-                    </DroppableBoards>
-                  </Boards>
-                </NamedJourney>
-                <NoName>
-                  <NoNameBoard>
-                    <BoardNoName
-                      journey={
-                        userInfo[currentTrip].trips[
-                          userInfo[currentTrip].trips.findIndex(
-                            (e) => e.destination?.name === destination?.name
-                          )
-                        ].detail.attractions["NoName"]
-                      }
-                      boardId={"NoName"}
-                      key={"NoName"}
-                      destination={destination}
-                    />
-                  </NoNameBoard>
-                </NoName>
-              </DragDropContext>
-            </BoardColumn>
-          ) : (
-            <BigColumn>
+            <Container>
               <SingleBoardColumn>
-                <Header>
-                  <HeaderTitle>{destination?.name}</HeaderTitle>
-                  <HeaderDuration>
-                    {userInfo[currentTrip].trips[
-                      userInfo[currentTrip].trips.findIndex(
-                        (e) => e.destination?.name === destination?.name
-                      )
-                    ].detail.date === "" ? (
-                      "날짜를 선택해 주세요."
-                    ) : (
-                      <>
-                        {userInfo[currentTrip].trips[
-                          userInfo[currentTrip].trips.findIndex(
-                            (e) => e.destination?.name === destination?.name
-                          )
-                        ].detail.date
-                          .split("|")[0]
-                          .slice(
-                            0,
-                            userInfo[currentTrip].trips[
-                              userInfo[currentTrip].trips.findIndex(
-                                (e) => e.destination?.name === destination?.name
-                              )
-                            ].detail.date.split("|")[0].length - 2
-                          )}
-                        (
-                        {
-                          ["일", "월", "화", "수", "목", "금", "토"][
-                            Number(
-                              userInfo[currentTrip].trips[
-                                userInfo[currentTrip].trips.findIndex(
-                                  (e) => e.destination?.name === destination?.name
-                                )
-                              ].detail.date
-                                .split("|")[0]
-                                .split(".")[3]
-                            )
-                          ]
-                        }
-                        ){" ~ "}
-                        {userInfo[currentTrip].trips[
-                          userInfo[currentTrip].trips.findIndex(
-                            (e) => e.destination?.name === destination?.name
-                          )
-                        ].detail.date
-                          .split("|")[1]
-                          .slice(
-                            0,
-                            userInfo[currentTrip].trips[
-                              userInfo[currentTrip].trips.findIndex(
-                                (e) => e.destination?.name === destination?.name
-                              )
-                            ].detail.date.split("|")[0].length - 2
-                          )}
-                        (
-                        {
-                          ["일", "월", "화", "수", "목", "금", "토"][
-                            Number(
-                              userInfo[currentTrip].trips[
-                                userInfo[currentTrip].trips.findIndex(
-                                  (e) => e.destination?.name === destination?.name
-                                )
-                              ].detail.date
-                                .split("|")[1]
-                                .split(".")[3]
-                            )
-                          ]
-                        }
-                        )
-                      </>
-                    )}
-                  </HeaderDuration>
-                </Header>
                 <BoardHeader>
-                  <BoardTitle>
-                    {
-                      Object.keys(
-                        userInfo[currentTrip].trips[
-                          userInfo[currentTrip].trips.findIndex(
-                            (e) => e.destination?.name === destination?.name
-                          )
-                        ].detail.attractions
-                      )[stage]
-                    }
-                  </BoardTitle>
-                  <BoardDate>
-                    {calcDate(
-                      Number(
-                        userInfo[currentTrip].trips[
-                          userInfo[currentTrip].trips.findIndex(
-                            (e) => e.destination?.name === destination?.name
-                          )
-                        ].detail.date.split(".")[0]
-                      ),
-                      Number(
-                        userInfo[currentTrip].trips[
-                          userInfo[currentTrip].trips.findIndex(
-                            (e) => e.destination?.name === destination?.name
-                          )
-                        ].detail.date.split(".")[1]
-                      ),
-                      Number(
-                        userInfo[currentTrip].trips[
-                          userInfo[currentTrip].trips.findIndex(
-                            (e) => e.destination?.name === destination?.name
-                          )
-                        ].detail.date.split(".")[2]
-                      ),
-                      stage - 1
-                    ).getFullYear()}
-                    .
-                    {calcDate(
-                      Number(
-                        userInfo[currentTrip].trips[
-                          userInfo[currentTrip].trips.findIndex(
-                            (e) => e.destination?.name === destination?.name
-                          )
-                        ].detail.date.split(".")[0]
-                      ),
-                      Number(
-                        userInfo[currentTrip].trips[
-                          userInfo[currentTrip].trips.findIndex(
-                            (e) => e.destination?.name === destination?.name
-                          )
-                        ].detail.date.split(".")[1]
-                      ),
-                      Number(
-                        userInfo[currentTrip].trips[
-                          userInfo[currentTrip].trips.findIndex(
-                            (e) => e.destination?.name === destination?.name
-                          )
-                        ].detail.date.split(".")[2]
-                      ),
-                      stage - 1
-                    ).getMonth() + 1}
-                    .
-                    {calcDate(
-                      Number(
-                        userInfo[currentTrip].trips[
-                          userInfo[currentTrip].trips.findIndex(
-                            (e) => e.destination?.name === destination?.name
-                          )
-                        ].detail.date.split(".")[0]
-                      ),
-                      Number(
-                        userInfo[currentTrip].trips[
-                          userInfo[currentTrip].trips.findIndex(
-                            (e) => e.destination?.name === destination?.name
-                          )
-                        ].detail.date.split(".")[1]
-                      ),
-                      Number(
-                        userInfo[currentTrip].trips[
-                          userInfo[currentTrip].trips.findIndex(
-                            (e) => e.destination?.name === destination?.name
-                          )
-                        ].detail.date.split(".")[2]
-                      ),
-                      stage - 1
-                    ).getDate()}
-                    (
-                    {
-                      ["일", "월", "화", "수", "목", "금", "토"][
+                  <BoardContents>
+                    <BoardTitle>
+                      {
+                        Object.keys(
+                          userInfo[currentTrip].trips[
+                            userInfo[currentTrip].trips.findIndex(
+                              (e) => e.destination?.name === destination?.name
+                            )
+                          ].detail.attractions
+                        )[stage]
+                      }
+                    </BoardTitle>
+                    <BoardDate>
+                      {userInfo[currentTrip].trips[
+                        userInfo[currentTrip].trips.findIndex(
+                          (e) => e.destination?.name === destination?.name
+                        )
+                      ].detail.date === "0|0" ? (
+                        <EmptyDate>이전 화면으로 돌아가 날짜를 선택해주세요</EmptyDate>
+                      ) : (
                         calcDate(
                           Number(
                             userInfo[currentTrip].trips[
@@ -534,16 +300,126 @@ const ScheduleScreen = ({ destination }: IScheduleScreenProps) => {
                             ].detail.date.split(".")[2]
                           ),
                           stage - 1
-                        ).getDay()
-                      ]
-                    }
-                    )
-                  </BoardDate>
+                        ).getFullYear() +
+                        "." +
+                        calcDate(
+                          Number(
+                            userInfo[currentTrip].trips[
+                              userInfo[currentTrip].trips.findIndex(
+                                (e) => e.destination?.name === destination?.name
+                              )
+                            ].detail.date.split(".")[0]
+                          ),
+                          Number(
+                            userInfo[currentTrip].trips[
+                              userInfo[currentTrip].trips.findIndex(
+                                (e) => e.destination?.name === destination?.name
+                              )
+                            ].detail.date.split(".")[1]
+                          ),
+                          Number(
+                            userInfo[currentTrip].trips[
+                              userInfo[currentTrip].trips.findIndex(
+                                (e) => e.destination?.name === destination?.name
+                              )
+                            ].detail.date.split(".")[2]
+                          ),
+                          stage - 1
+                        ).getMonth() +
+                        1 +
+                        "." +
+                        calcDate(
+                          Number(
+                            userInfo[currentTrip].trips[
+                              userInfo[currentTrip].trips.findIndex(
+                                (e) => e.destination?.name === destination?.name
+                              )
+                            ].detail.date.split(".")[0]
+                          ),
+                          Number(
+                            userInfo[currentTrip].trips[
+                              userInfo[currentTrip].trips.findIndex(
+                                (e) => e.destination?.name === destination?.name
+                              )
+                            ].detail.date.split(".")[1]
+                          ),
+                          Number(
+                            userInfo[currentTrip].trips[
+                              userInfo[currentTrip].trips.findIndex(
+                                (e) => e.destination?.name === destination?.name
+                              )
+                            ].detail.date.split(".")[2]
+                          ),
+                          stage - 1
+                        ).getDate() +
+                        " (" +
+                        ["일", "월", "화", "수", "목", "금", "토"][
+                          calcDate(
+                            Number(
+                              userInfo[currentTrip].trips[
+                                userInfo[currentTrip].trips.findIndex(
+                                  (e) => e.destination?.name === destination?.name
+                                )
+                              ].detail.date.split(".")[0]
+                            ),
+                            Number(
+                              userInfo[currentTrip].trips[
+                                userInfo[currentTrip].trips.findIndex(
+                                  (e) => e.destination?.name === destination?.name
+                                )
+                              ].detail.date.split(".")[1]
+                            ),
+                            Number(
+                              userInfo[currentTrip].trips[
+                                userInfo[currentTrip].trips.findIndex(
+                                  (e) => e.destination?.name === destination?.name
+                                )
+                              ].detail.date.split(".")[2]
+                            ),
+                            stage - 1
+                          ).getDay()
+                        ] +
+                        ")"
+                      )}
+                    </BoardDate>
+                  </BoardContents>
+                  <BoardPages>
+                    {stage === 1 ? (
+                      <NoIcon>
+                        {" "}
+                        <FontAwesomeIcon icon={faAngleLeft} />
+                      </NoIcon>
+                    ) : (
+                      <BoardIcon onClick={onLeftClick}>
+                        <FontAwesomeIcon icon={faAngleLeft} />
+                      </BoardIcon>
+                    )}
+                    {stage ===
+                    Object.keys(
+                      userInfo[currentTrip].trips[
+                        userInfo[currentTrip].trips.findIndex(
+                          (e) => e.destination?.name === destination?.name
+                        )
+                      ].detail.attractions
+                    ).length -
+                      1 ? (
+                      <NoIcon>
+                        <FontAwesomeIcon icon={faAngleRight} />
+                      </NoIcon>
+                    ) : (
+                      <BoardIcon onClick={onRightClick}>
+                        <FontAwesomeIcon icon={faAngleRight} />
+                      </BoardIcon>
+                    )}
+                  </BoardPages>
                 </BoardHeader>
-
-                <DragDropContext onDragEnd={onDragEnd}>
-                  <Droppable
-                    droppableId={
+                <JourneyBoard
+                  journey={
+                    userInfo[currentTrip].trips[
+                      userInfo[currentTrip].trips.findIndex(
+                        (e) => e.destination?.name === destination?.name
+                      )
+                    ].detail.attractions[
                       Object.keys(
                         userInfo[currentTrip].trips[
                           userInfo[currentTrip].trips.findIndex(
@@ -551,40 +427,29 @@ const ScheduleScreen = ({ destination }: IScheduleScreenProps) => {
                           )
                         ].detail.attractions
                       )[stage]
-                    }
-                  >
-                    {(provided, snapshot) => (
-                      <Area
-                        isDraggingOver={snapshot.isDraggingOver}
-                        isDraggingFromThis={Boolean(snapshot.draggingFromThisWith)}
-                        ref={provided.innerRef}
-                        {...provided.droppableProps}
-                      >
-                        {Object.values(
-                          userInfo[currentTrip].trips[
-                            userInfo[currentTrip].trips.findIndex(
-                              (e) => e.destination?.name === destination?.name
-                            )
-                          ].detail.attractions
-                        )[stage].map(
-                          (j, i) =>
-                            j && (
-                              <DragJourneyCard
-                                key={j.timestamp + ""}
-                                index={i}
-                                journeyId={j.timestamp + ""}
-                                journeyName={j.name}
-                                journeyAddress={j.address}
-                                journeyPhoto={j.image[0]}
-                                destination={destination}
-                              />
-                            )
-                        )}
-                        {provided.placeholder}
-                      </Area>
-                    )}
-                  </Droppable>
-                </DragDropContext>
+                    ]
+                  }
+                  key={
+                    Object.keys(
+                      userInfo[currentTrip].trips[
+                        userInfo[currentTrip].trips.findIndex(
+                          (e) => e.destination?.name === destination?.name
+                        )
+                      ].detail.attractions
+                    )[stage]
+                  }
+                  boardId={
+                    Object.keys(
+                      userInfo[currentTrip].trips[
+                        userInfo[currentTrip].trips.findIndex(
+                          (e) => e.destination?.name === destination?.name
+                        )
+                      ].detail.attractions
+                    )[stage]
+                  }
+                  destination={destination}
+                  index={stage}
+                />
               </SingleBoardColumn>
               <MapColumn>
                 {Object.values(
@@ -593,75 +458,116 @@ const ScheduleScreen = ({ destination }: IScheduleScreenProps) => {
                       (e) => e.destination?.name === destination?.name
                     )
                   ].detail.attractions
-                )[stage].length > 0 ? (
+                )[stage] ? (
                   Object.values(
                     userInfo[currentTrip].trips[
                       userInfo[currentTrip].trips.findIndex(
                         (e) => e.destination?.name === destination?.name
                       )
                     ].detail.attractions
-                  )[stage].length > 1 ? (
+                  )[stage].length > 0 ? (
                     Object.values(
                       userInfo[currentTrip].trips[
                         userInfo[currentTrip].trips.findIndex(
                           (e) => e.destination?.name === destination?.name
                         )
                       ].detail.attractions
-                    )[stage].length > 2 ? (
-                      <GoogleRouteMap
-                        origin={`place_id:${
-                          Object.values(
-                            userInfo[currentTrip].trips[
-                              userInfo[currentTrip].trips.findIndex(
-                                (e) => e.destination?.name === destination?.name
-                              )
-                            ].detail.attractions
-                          )[stage][0]?.placeId
-                        }`}
-                        destination={`place_id:${
-                          Object.values(
-                            userInfo[currentTrip].trips[
-                              userInfo[currentTrip].trips.findIndex(
-                                (e) => e.destination?.name === destination?.name
-                              )
-                            ].detail.attractions
-                          )[stage][
+                    )[stage].length > 1 ? (
+                      Object.values(
+                        userInfo[currentTrip].trips[
+                          userInfo[currentTrip].trips.findIndex(
+                            (e) => e.destination?.name === destination?.name
+                          )
+                        ].detail.attractions
+                      )[stage].length > 2 ? (
+                        <GoogleRouteMap
+                          origin={`place_id:${
                             Object.values(
                               userInfo[currentTrip].trips[
                                 userInfo[currentTrip].trips.findIndex(
                                   (e) => e.destination?.name === destination?.name
                                 )
                               ].detail.attractions
-                            )[stage].length - 1
-                          ]?.placeId
-                        }`}
-                        waypoints={Object.values(
-                          userInfo[currentTrip].trips[
-                            userInfo[currentTrip].trips.findIndex(
-                              (e) => e.destination?.name === destination?.name
-                            )
-                          ].detail.attractions
-                        )[stage].map((e, i) => {
-                          if (
-                            e &&
-                            i > 0 &&
-                            i <
+                            )[stage][0]?.placeId
+                          }`}
+                          destination={`place_id:${
+                            Object.values(
+                              userInfo[currentTrip].trips[
+                                userInfo[currentTrip].trips.findIndex(
+                                  (e) => e.destination?.name === destination?.name
+                                )
+                              ].detail.attractions
+                            )[stage][
                               Object.values(
                                 userInfo[currentTrip].trips[
                                   userInfo[currentTrip].trips.findIndex(
                                     (e) => e.destination?.name === destination?.name
                                   )
                                 ].detail.attractions
-                              )[stage].length -
-                                1
-                          )
-                            return e.placeId;
-                          else return;
-                        })}
-                        width="100%"
-                        height="100%"
-                        zoom={13}
-                      />
+                              )[stage].length - 1
+                            ]?.placeId
+                          }`}
+                          waypoints={Object.values(
+                            userInfo[currentTrip].trips[
+                              userInfo[currentTrip].trips.findIndex(
+                                (e) => e.destination?.name === destination?.name
+                              )
+                            ].detail.attractions
+                          )[stage].map((e, i) => {
+                            if (
+                              e &&
+                              i > 0 &&
+                              i <
+                                Object.values(
+                                  userInfo[currentTrip].trips[
+                                    userInfo[currentTrip].trips.findIndex(
+                                      (e) => e.destination?.name === destination?.name
+                                    )
+                                  ].detail.attractions
+                                )[stage].length -
+                                  1
+                            )
+                              return e.placeId;
+                            else return;
+                          })}
+                          width="100%"
+                          height="100%"
+                          zoom={13}
+                        />
+                      ) : (
+                        <GoogleRouteMap
+                          origin={`place_id:${
+                            Object.values(
+                              userInfo[currentTrip].trips[
+                                userInfo[currentTrip].trips.findIndex(
+                                  (e) => e.destination?.name === destination?.name
+                                )
+                              ].detail.attractions
+                            )[stage][0]?.placeId
+                          }`}
+                          destination={`place_id:${
+                            Object.values(
+                              userInfo[currentTrip].trips[
+                                userInfo[currentTrip].trips.findIndex(
+                                  (e) => e.destination?.name === destination?.name
+                                )
+                              ].detail.attractions
+                            )[stage][
+                              Object.values(
+                                userInfo[currentTrip].trips[
+                                  userInfo[currentTrip].trips.findIndex(
+                                    (e) => e.destination?.name === destination?.name
+                                  )
+                                ].detail.attractions
+                              )[stage].length - 1
+                            ]?.placeId
+                          }`}
+                          waypoints={[]}
+                          width="100%"
+                          height="100%"
+                          zoom={13}
+                        />
+                      )
                     ) : (
                       <GoogleRouteMap
                         origin={`place_id:${
@@ -673,53 +579,22 @@ const ScheduleScreen = ({ destination }: IScheduleScreenProps) => {
                             ].detail.attractions
                           )[stage][0]?.placeId
                         }`}
-                        destination={`place_id:${
-                          Object.values(
-                            userInfo[currentTrip].trips[
-                              userInfo[currentTrip].trips.findIndex(
-                                (e) => e.destination?.name === destination?.name
-                              )
-                            ].detail.attractions
-                          )[stage][
-                            Object.values(
-                              userInfo[currentTrip].trips[
-                                userInfo[currentTrip].trips.findIndex(
-                                  (e) => e.destination?.name === destination?.name
-                                )
-                              ].detail.attractions
-                            )[stage].length - 1
-                          ]?.placeId
-                        }`}
+                        destination={""}
                         waypoints={[]}
                         width="100%"
                         height="100%"
-                        zoom={13}
+                        zoom={14}
                       />
                     )
                   ) : (
-                    <GoogleRouteMap
-                      origin={`place_id:${
-                        Object.values(
-                          userInfo[currentTrip].trips[
-                            userInfo[currentTrip].trips.findIndex(
-                              (e) => e.destination?.name === destination?.name
-                            )
-                          ].detail.attractions
-                        )[stage][0]?.placeId
-                      }`}
-                      destination={""}
-                      waypoints={[]}
-                      width="100%"
-                      height="100%"
-                      zoom={14}
-                    />
+                    <Loader>경로를 표시할 장소가 존재하지 않습니다.</Loader>
                   )
                 ) : (
-                  <Loader>경로를 표시할 장소가 존재하지 않습니다.</Loader>
+                  <></>
                 )}
               </MapColumn>
-            </BigColumn>
-          )}
+            </Container>
+          </DragDropContext>
         </Wrapper>
       )}
     </>
@@ -738,138 +613,31 @@ const Wrapper = styled.div`
   display: flex;
 `;
 
-const Loader = styled.h2``;
-
-const NavColumn = styled.div`
-  width: 150px;
-  height: 100%;
-  padding: 32px 16px 16px 16px;
+const Container = styled.div`
+  padding-left: 300px;
+  padding-top: 80px;
   display: flex;
-  flex-direction: column;
+`;
+
+const Loader = styled.h2`
+  display: flex;
+  justify-content: center;
   align-items: center;
-  border-right: 1px solid ${(props) => props.theme.gray.blur};
-  overflow-y: auto;
-`;
-
-const BoardColumn = styled.div`
-  width: 92%;
+  font-size: 14px;
+  font-weight: 300;
   height: 100%;
-  display: flex;
-  overflow: auto;
-`;
-
-const BigColumn = styled.div`
-  width: 92%;
-  height: 100%;
-  display: flex;
+  color: ${(props) => props.theme.gray.normal};
 `;
 
 const SingleBoardColumn = styled.div`
-  width: 500px;
-  padding: 16px 32px;
+  width: 400px;
+  padding: 28px;
+  padding-top: 50px;
 `;
 
 const MapColumn = styled.div`
-  width: calc(100vw - 400px);
+  width: calc(100vw - 700px);
   height: 100vh;
-`;
-
-const NoName = styled.div`
-  width: 330px;
-  height: 100%;
-  position: fixed;
-  top: 0;
-  right: 0;
-  background-color: white;
-  z-index: 3;
-`;
-
-const NoNameBoard = styled.div`
-  width: 100%;
-  height: 100%;
-`;
-
-const NamedJourney = styled.div`
-  height: 100%;
-  padding: 32px;
-  width: calc(100vw - 500px);
-`;
-
-const Boards = styled.div`
-  flex-wrap: nowrap;
-  overflow-x: auto;
-  height: calc(100% - 50px);
-  width: 100%;
-`;
-
-const DroppableBoards = styled.div`
-  display: flex;
-  flex-wrap: nowrap;
-  overflow-x: auto;
-  height: 100%;
-`;
-
-const NavBox = styled.div<{ isnow: boolean }>`
-  padding: 25px;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.2);
-  border-radius: 14px;
-  margin-bottom: 25px;
-  cursor: pointer;
-  background-color: ${(props) => (props.isnow ? props.theme.blue.accent : "transparent")};
-  h2 {
-    color: ${(props) => props.isnow && "white"};
-  }
-`;
-
-const NavTitle = styled.h2`
-  font-size: 16px;
-  font-weight: 600;
-`;
-
-const NavSubtitle = styled.h2`
-  font-size: 14px;
-  font-weight: 500;
-  color: ${(props) => props.theme.gray.blur};
-`;
-
-const NavButtons = styled.div`
-  margin-top: auto;
-  width: 100%;
-`;
-
-const NavPrevButton = styled.button`
-  padding: 25px;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.2);
-  border-radius: 14px;
-  margin-bottom: 25px;
-  cursor: pointer;
-  font-size: 16px;
-  font-weight: 600;
-`;
-
-const NavButton = styled.button`
-  padding: 25px;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.2);
-  border-radius: 14px;
-  margin-bottom: 25px;
-  cursor: pointer;
-  font-size: 16px;
-  font-weight: 600;
-  background-color: black;
-  color: white;
 `;
 
 const Title = styled.h2`
@@ -877,62 +645,172 @@ const Title = styled.h2`
   font-weight: 600;
 `;
 
-const Duration = styled.h2`
-  font-size: 16px;
-  font-weight: 500;
-  color: ${(props) => props.theme.gray.blur};
-  margin-bottom: 15px;
-  cursor: pointer;
-`;
-
-const HeaderTitle = styled.h2`
-  font-size: 21px;
-  font-weight: 500;
-  margin-right: 15px;
-`;
-
-const HeaderDuration = styled.h2`
-  font-size: 14px;
-  font-weight: 500;
-  color: ${(props) => props.theme.gray.blur};
-  cursor: pointer;
-`;
-
-const Header = styled.div`
-  display: flex;
-  align-items: center;
-  margin-bottom: 20px;
-`;
-
 const BoardHeader = styled.div`
+  margin-bottom: 30px;
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
 `;
+
+const BoardContents = styled.div``;
 
 const BoardTitle = styled.h2`
-  font-size: 16px;
+  font-size: 20px;
   font-weight: 500;
+  margin-bottom: 16px;
+`;
+
+const BoardPages = styled.div`
+  display: flex;
+`;
+
+const BoardIcon = styled.h2`
+  font-size: 16px;
+  color: ${(props) => props.theme.gray.normal};
+  cursor: pointer;
+  margin: 0 6px;
+`;
+
+const NoIcon = styled.h2`
+  font-size: 16px;
+  color: ${(props) => props.theme.gray.blur};
+  margin: 0 6px;
 `;
 
 const BoardDate = styled.h2`
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 400;
-  color: ${(props) => props.theme.gray.blur};
+  color: ${(props) => props.theme.gray.normal};
 `;
 
-const Area = styled.div<IDragging>`
+const Overview = styled.div`
+  background-color: ${(props) => props.theme.gray.bg};
+  width: 300px;
+  height: 100vh;
+  padding-top: 130px;
+  padding-bottom: 28px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  display: flex;
+  flex-direction: column;
+`;
+
+const OverviewDuration = styled.h2`
+  color: ${(props) => props.theme.gray.accent};
+  font-size: 14px;
+  line-height: 24px;
+  font-weight: 400;
+  padding: 0 28px;
+`;
+
+const OverviewNight = styled.h2`
+  color: ${(props) => props.theme.gray.accent};
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 24px;
+  padding: 0 28px;
+`;
+
+const OverviewCitys = styled.div`
+  width: 100%;
+  height: 500px;
+  overflow-y: auto;
+  margin-top: 50px;
+`;
+
+const OverviewCard = styled.div<{ isnow: boolean }>`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: ${(props) => props.isnow && "white"};
+  &:hover {
+    background-color: white;
+  }
+`;
+
+const OverviewCardTitle = styled.div`
+  width: 100%;
+  padding: 0 28px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+`;
+
+const OverviewCardName = styled.h2`
+  font-size: 14px;
+  font-weight: 400;
+  padding: 16px 0;
+  display: flex;
+  align-items: center;
+`;
+
+const OverviewCardIcon = styled.h2`
+  font-size: 12px;
+  color: ${(props) => props.theme.gray.normal};
+`;
+
+const Buttons = styled.div`
+  margin-top: auto;
+  z-index: 2;
+  padding: 0 28px;
+`;
+
+const Goback = styled.button`
+  width: 100%;
+  padding: 20px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 400;
+  cursor: pointer;
+  z-index: 2;
   background-color: transparent;
-  flex-grow: 1;
-  height: 100%;
+  color: ${(props) => props.theme.gray.button};
+`;
+
+const Button = styled.button`
+  width: 100%;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: ${(props) => props.theme.blue.accent};
+  color: white;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  z-index: 2;
+`;
+
+const NoButton = styled.button`
+  width: 100%;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: ${(props) => props.theme.gray.button};
+  color: white;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  z-index: 2;
+`;
+
+const TitleBox = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+  padding: 0 28px;
+`;
+
+const EmptyDate = styled.h2`
+  font-size: 14px;
+  font-weight: 300;
+  color: ${(props) => props.theme.gray.normal};
+  display: flex;
+  align-items: center;
 `;
 
 interface IScheduleScreenProps {
   destination: IPlaceDetail | undefined;
-}
-
-interface IForm {
-  keyword: string;
 }
 
 interface IDragging {

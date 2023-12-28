@@ -15,7 +15,7 @@ const NavigationBar = ({ now }: { now: number }) => {
   return (
     <Wrapper>
       {["기간 설정", "여행지 설정", "장소 선택", "일정 관리", "최종 여행 계획"].map((e, i) => (
-        <Vortex>
+        <Vortex key={e + i}>
           <Title
             variants={circleVar}
             initial="initial"
@@ -80,15 +80,26 @@ const Circle = styled(motion.div)<{ ispass: boolean; isnow: boolean }>`
   width: 10px;
   height: 10px;
   border-radius: 100px;
-  background-color: ${(props) => (props.ispass ? "skyblue" : props.isnow ? "blue" : "lightgray")};
+  background-color: ${(props) =>
+    props.ispass
+      ? props.theme.blue.mild
+      : props.isnow
+      ? props.theme.blue.accent
+      : props.theme.gray.blur};
 `;
 
 const Title = styled(motion.h2)<{ ispass: boolean; isnow: boolean }>`
-  color: ${(props) => (props.ispass ? "skyblue" : props.isnow ? "blue" : "lightgray")};
+  color: ${(props) =>
+    props.ispass
+      ? props.theme.blue.mild
+      : props.isnow
+      ? props.theme.blue.accent
+      : props.theme.gray.normal};
   font-size: ${(props) => (props.isnow ? "14px" : "12px")};
-  font-weight: ${(props) => (props.isnow ? "500" : "300")};
+  font-weight: ${(props) => (props.isnow ? "400" : "300")};
   margin-left: -22px;
-  margin-bottom: 11px;
+  margin-bottom: 8px;
+  line-height: 14px;
 `;
 
 const circleVar = {

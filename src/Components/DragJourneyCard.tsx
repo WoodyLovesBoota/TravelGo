@@ -23,20 +23,23 @@ const DragJourneyCard = ({
                 {...provided.draggableProps}
                 {...provided.dragHandleProps}
               >
-                <Photo
-                  bgPhoto={`url(${makeImagePath(
-                    journeyPhoto
-                      ? journeyPhoto
-                      : destination
-                      ? destination.photos[0].photo_reference
-                      : "",
-                    500
-                  )})`}
-                />
-                <Description>
-                  <Title>{journeyName}</Title>
-                  <Subtitle>{journeyAddress}</Subtitle>
-                </Description>
+                <Num>{index}</Num>
+                <Container>
+                  <Photo
+                    bgPhoto={`url(${makeImagePath(
+                      journeyPhoto
+                        ? journeyPhoto
+                        : destination
+                        ? destination.photos[0].photo_reference
+                        : "",
+                      500
+                    )})`}
+                  />
+                  <Description>
+                    <Title>{journeyName}</Title>
+                    <Subtitle>{journeyAddress}</Subtitle>
+                  </Description>
+                </Container>
               </Card>
             )}
           </Draggable>
@@ -49,37 +52,61 @@ const DragJourneyCard = ({
 export default DragJourneyCard;
 
 const Card = styled.div`
-  width: 100%;
   cursor: pointer;
-  border-radius: 10px;
-  padding: 16px;
   display: flex;
-  box-shadow: 4px 4px 20px 0 rgba(0, 0, 0, 0.1);
-  margin-top: 10px;
   align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  height: 80px;
+`;
+
+const Num = styled.h2`
+  width: 20px;
+  height: 20px;
+  background-color: ${(props) => props.theme.blue.light};
+  color: ${(props) => props.theme.blue.accent};
+  font-size: 14px;
+  font-weight: 500;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 100px;
+`;
+
+const Container = styled.div`
+  display: flex;
+  box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  width: 308px;
 `;
 
 const Photo = styled.div<{ bgPhoto: string }>`
   background-image: ${(props) => props.bgPhoto};
   background-size: cover;
   background-position: center center;
-  border-radius: 10px;
-  width: 50px;
-  height: 50px;
-  margin-right: 15px;
+  width: 80px;
+  height: 80px;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  box-shadow: 0px 2px 12px 0px rgba(0, 0, 0, 0.1);
 `;
 
-const Description = styled.div``;
+const Description = styled.div`
+  padding: 12px;
+  height: 100%;
+  width: 228px;
+`;
 
 const Title = styled.h2`
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 500;
+  margin-bottom: 7px;
 `;
 
 const Subtitle = styled.h2`
-  color: ${(props) => props.theme.gray.semiblur};
+  color: ${(props) => props.theme.gray.normal};
   font-size: 12px;
-  font-weight: 400;
+  font-weight: 300;
 `;
 
 interface IDragJourneyCardProps {

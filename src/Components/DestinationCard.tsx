@@ -65,10 +65,18 @@ const DestinationCard = ({ title, destination }: IBigTripCardProps) => {
         <Wrapper onClick={onCardClick} layoutId={destination?.place_id} key={destination?.place_id}>
           {destination && (
             <Container>
-              <DestinationTitle>{destination?.name}</DestinationTitle>
-              <DestinationSubTitle>
-                {destination?.formatted_address.split(" ")[0]}
-              </DestinationSubTitle>
+              <Destination
+                bgPhoto={`url(${makeImagePath(
+                  destination?.photos ? destination?.photos[0].photo_reference : "",
+                  500
+                )})`}
+              />
+              <Description>
+                <DestinationTitle>{destination?.name}</DestinationTitle>
+                <DestinationSubTitle>
+                  {destination?.formatted_address.split(" ")[0]}
+                </DestinationSubTitle>
+              </Description>
             </Container>
           )}
         </Wrapper>
@@ -88,9 +96,7 @@ const DestinationCard = ({ title, destination }: IBigTripCardProps) => {
                 <DestinationInfo>
                   <CardTitle>{destination?.name}</CardTitle>
                   <CardAddress>{destination?.formatted_address.split(" ")[0]}</CardAddress>
-                  <CardDescription>{destination?.editorial_summary?.overview}</CardDescription>
                 </DestinationInfo>
-
                 <CardButton onClick={onAddClick}>추가하기</CardButton>
               </Column>
             </BigCard>
@@ -104,31 +110,51 @@ const DestinationCard = ({ title, destination }: IBigTripCardProps) => {
 export default DestinationCard;
 
 const Wrapper = styled(motion.div)`
-  display: flex;
-  cursor: pointer;
-  width: 100%;
-  /* border-radius: 16px; */
-  /* box-shadow: 0px 2px 12px 0px rgba(0, 0, 0, 0.1); */
+  box-shadow: 0px 2px 12px 0px rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+  position: relative;
+  width: 321px;
+  height: 321px;
+  border-radius: 8px;
 `;
 
 const Container = styled.div`
   display: flex;
+  flex-direction: column;
   width: 100%;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 60px;
+`;
+
+const Description = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 20px;
+  border-bottom-right-radius: 8px;
+  border-bottom-left-radius: 8px;
+`;
+
+const Destination = styled.div<{ bgPhoto: string }>`
+  background-image: ${(props) => props.bgPhoto};
+  background-size: cover;
+  background-position: center center;
+  width: 100%;
+  height: 241px;
+  border-top-right-radius: 8px;
+  border-top-left-radius: 8px;
+  cursor: pointer;
 `;
 
 const DestinationTitle = styled.h2`
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 400;
+  margin-bottom: 4px;
   color: black;
 `;
 
 const DestinationSubTitle = styled.h2`
-  font-size: 16px;
-  font-weight: 400;
-  color: gray;
+  font-size: 14px;
+  font-weight: 300;
+  color: ${(props) => props.theme.gray.normal};
 `;
 
 const Button = styled(motion.button)`
@@ -166,18 +192,18 @@ const BigOverlay = styled.div`
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.25);
+  background-color: rgba(0, 0, 0, 0.4);
 `;
 
 const BigCard = styled(motion.div)`
   width: 800px;
   height: 500px;
   z-index: 2;
+  border-radius: 20px;
   background-color: white;
   display: flex;
   padding: 36px;
   box-shadow: 0px 2px 12px 0px rgba(0, 0, 0, 0.1);
-  border-radius: 20px;
 `;
 
 const Card = styled(motion.div)<{ bgPhoto: string }>`
@@ -191,19 +217,15 @@ const Card = styled(motion.div)<{ bgPhoto: string }>`
 
 const CardTitle = styled(motion.h2)`
   font-size: 28px;
-  font-weight: 500;
-`;
-
-const CardDescription = styled.h2`
-  font-size: 14px;
-  font-weight: 300;
-  margin-top: 30px;
+  font-weight: 400;
+  padding-top: 44px;
+  margin-bottom: 10px;
 `;
 
 const CardAddress = styled.h2`
   font-size: 18px;
   font-weight: 400;
-  color: lightgray;
+  color: ${(props) => props.theme.gray.normal};
 `;
 
 const DestinationInfo = styled.div`
@@ -215,33 +237,24 @@ const DestinationInfo = styled.div`
 const Column = styled.div`
   display: flex;
   flex-direction: column;
-  padding-top: 44px;
   padding-left: 36px;
 `;
 
 const CardButton = styled.button`
   margin-top: auto;
-  padding: 16px;
-  background-color: blue;
+  height: 50px;
+  width: 264px;
+  background-color: ${(props) => props.theme.blue.accent};
+  display: flex;
+  justify-content: center;
+  align-items: center;
   color: white;
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 500;
   border-radius: 8px;
-  width: 264px;
   cursor: pointer;
-  &:hover {
-    background-color: #8eb1f9dd;
-  }
-  &:active {
-    background-color: #8eb1f9bb;
-    box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 0.25) inset;
-  }
+  box-shadow: 0px 2px 12px 0px rgba(0, 0, 0, 0.1);
 `;
-
-const hoverVar = {
-  initial: { y: 0 },
-  hover: { y: -16, boxShadow: "12px 16px 0 0 rgba(0,0,0,0.1)" },
-};
 
 interface IBigTripCardProps {
   title: string | undefined;
