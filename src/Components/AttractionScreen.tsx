@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { AnimatePresence } from "framer-motion";
 import { PathMatch, useMatch, useNavigate } from "react-router-dom";
-
 import { ITripDetails, isCalendarState, tripState, userState } from "../atoms";
 import { useRecoilState } from "recoil";
 import { IPlaceDetail } from "../api";
@@ -213,7 +212,19 @@ const AttractionScreen = ({ destination }: IAttractionScreenProps) => {
             </OverviewCitys>
             <Buttons>
               <Goback onClick={onBackClick}>이전 단계로</Goback>
-              {userInfo[currentTrip].trips.length > 0 ? (
+              {userInfo[currentTrip].trips.length > 0 &&
+              userInfo[currentTrip].trips[
+                userInfo[currentTrip].trips.findIndex(
+                  (e) => e.destination?.name === destination?.name
+                )
+              ].detail.hotels.length > 0 &&
+              Object.values(
+                userInfo[currentTrip].trips[
+                  userInfo[currentTrip].trips.findIndex(
+                    (e) => e.destination?.name === destination?.name
+                  )
+                ].detail.attractions
+              ).flat().length > 0 ? (
                 <Button onClick={onNextClick}>완료</Button>
               ) : (
                 <NoButton>완료</NoButton>
@@ -536,8 +547,8 @@ const SearchResult = styled.div`
 
 const Loader = styled.h2`
   font-size: 16px;
-  font-weight: 500;
-  color: ${(props) => props.theme.gray.blur};
+  font-weight: 400;
+  color: ${(props) => props.theme.gray.normal};
   display: flex;
   justify-content: center;
   align-items: center;

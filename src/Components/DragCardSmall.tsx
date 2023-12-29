@@ -53,6 +53,7 @@ export default DragCardSmall;
 const Card = styled.div`
   width: 100%;
   padding: 0 44px;
+  background-color: white;
 `;
 
 const Description = styled.div``;

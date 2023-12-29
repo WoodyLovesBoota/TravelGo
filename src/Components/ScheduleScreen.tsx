@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { PathMatch, useMatch, useNavigate } from "react-router-dom";
+
 import { isCalendarState, tripState, userState } from "../atoms";
 import { useRecoilState } from "recoil";
 import { IPlaceDetail } from "../api";
@@ -27,7 +28,7 @@ const ScheduleScreen = ({ destination }: IScheduleScreenProps) => {
   const [isToggleOpen, setIsToggleOpen] = useState(true);
 
   const onNextClick = () => {
-    navigate(`/place`);
+    navigate(`/summary`);
     setIsCalendarOpen(false);
   };
 
@@ -453,126 +454,35 @@ const ScheduleScreen = ({ destination }: IScheduleScreenProps) => {
                       )
                     ].detail.attractions
                   )[stage].length > 0 ? (
-                    Object.values(
-                      userInfo[currentTrip].trips[
-                        userInfo[currentTrip].trips.findIndex(
-                          (e) => e.destination?.name === destination?.name
-                        )
-                      ].detail.attractions
-                    )[stage].length > 1 ? (
-                      Object.values(
+                    <GoogleRouteMap
+                      origin={`place_id:${
+                        userInfo[currentTrip].trips[
+                          userInfo[currentTrip].trips.findIndex(
+                            (e) => e.destination?.name === destination?.name
+                          )
+                        ].detail.hotels[0]?.placeId
+                      }`}
+                      destination={`place_id:${
+                        userInfo[currentTrip].trips[
+                          userInfo[currentTrip].trips.findIndex(
+                            (e) => e.destination?.name === destination?.name
+                          )
+                        ].detail.hotels[0]?.placeId
+                      }`}
+                      waypoints={Object.values(
                         userInfo[currentTrip].trips[
                           userInfo[currentTrip].trips.findIndex(
                             (e) => e.destination?.name === destination?.name
                           )
                         ].detail.attractions
-                      )[stage].length > 2 ? (
-                        <GoogleRouteMap
-                          origin={`place_id:${
-                            Object.values(
-                              userInfo[currentTrip].trips[
-                                userInfo[currentTrip].trips.findIndex(
-                                  (e) => e.destination?.name === destination?.name
-                                )
-                              ].detail.attractions
-                            )[stage][0]?.placeId
-                          }`}
-                          destination={`place_id:${
-                            Object.values(
-                              userInfo[currentTrip].trips[
-                                userInfo[currentTrip].trips.findIndex(
-                                  (e) => e.destination?.name === destination?.name
-                                )
-                              ].detail.attractions
-                            )[stage][
-                              Object.values(
-                                userInfo[currentTrip].trips[
-                                  userInfo[currentTrip].trips.findIndex(
-                                    (e) => e.destination?.name === destination?.name
-                                  )
-                                ].detail.attractions
-                              )[stage].length - 1
-                            ]?.placeId
-                          }`}
-                          waypoints={Object.values(
-                            userInfo[currentTrip].trips[
-                              userInfo[currentTrip].trips.findIndex(
-                                (e) => e.destination?.name === destination?.name
-                              )
-                            ].detail.attractions
-                          )[stage].map((e, i) => {
-                            if (
-                              e &&
-                              i > 0 &&
-                              i <
-                                Object.values(
-                                  userInfo[currentTrip].trips[
-                                    userInfo[currentTrip].trips.findIndex(
-                                      (e) => e.destination?.name === destination?.name
-                                    )
-                                  ].detail.attractions
-                                )[stage].length -
-                                  1
-                            )
-                              return e.placeId;
-                            else return;
-                          })}
-                          width="100%"
-                          height="100%"
-                          zoom={13}
-                        />
-                      ) : (
-                        <GoogleRouteMap
-                          origin={`place_id:${
-                            Object.values(
-                              userInfo[currentTrip].trips[
-                                userInfo[currentTrip].trips.findIndex(
-                                  (e) => e.destination?.name === destination?.name
-                                )
-                              ].detail.attractions
-                            )[stage][0]?.placeId
-                          }`}
-                          destination={`place_id:${
-                            Object.values(
-                              userInfo[currentTrip].trips[
-                                userInfo[currentTrip].trips.findIndex(
-                                  (e) => e.destination?.name === destination?.name
-                                )
-                              ].detail.attractions
-                            )[stage][
-                              Object.values(
-                                userInfo[currentTrip].trips[
-                                  userInfo[currentTrip].trips.findIndex(
-                                    (e) => e.destination?.name === destination?.name
-                                  )
-                                ].detail.attractions
-                              )[stage].length - 1
-                            ]?.placeId
-                          }`}
-                          waypoints={[]}
-                          width="100%"
-                          height="100%"
-                          zoom={13}
-                        />
-                      )
-                    ) : (
-                      <GoogleRouteMap
-                        origin={`place_id:${
-                          Object.values(
-                            userInfo[currentTrip].trips[
-                              userInfo[currentTrip].trips.findIndex(
-                                (e) => e.destination?.name === destination?.name
-                              )
-                            ].detail.attractions
-                          )[stage][0]?.placeId
-                        }`}
-                        destination={""}
-                        waypoints={[]}
-                        width="100%"
-                        height="100%"
-                        zoom={14}
-                      />
-                    )
+                      )[stage].map((e, i) => {
+                        if (e) return e.placeId;
+                        else return;
+                      })}
+                      width="100%"
+                      height="100%"
+                      zoom={13}
+                    />
                   ) : (
                     <Loader>경로를 표시할 장소가 존재하지 않습니다.</Loader>
                   )
@@ -624,7 +534,7 @@ const SingleBoardColumn = styled.div`
 
 const MapColumn = styled.div`
   width: calc(100vw - 700px);
-  height: 100vh;
+  height: 100%;
 `;
 
 const Title = styled.h2`

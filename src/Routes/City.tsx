@@ -75,7 +75,7 @@ const City = () => {
   };
 
   const onBackClick = () => {
-    navigate("/");
+    navigate("/date");
   };
 
   const onNextClick = () => {
@@ -280,19 +280,6 @@ const Container = styled(motion.div)`
   padding-left: 400px;
 `;
 
-const Selected = styled.div`
-  width: 100%;
-  padding: 50px 100px;
-  padding-left: 400px;
-`;
-
-const DropArea = styled.div`
-  width: 100%;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-`;
-
 const Area = styled.div<IDragging>`
   background-color: transparent;
   flex-grow: 1;
@@ -341,13 +328,12 @@ const TitleBox = styled.div`
   display: flex;
   align-items: center;
   margin-bottom: 16px;
-  padding: 0 28px;
 `;
 
 const Title = styled.h2`
   font-size: 20px;
   font-weight: 700;
-  min-width: 100px;
+  padding: 3px 28px;
 `;
 
 const PencilIcon = styled.div`
@@ -359,21 +345,18 @@ const PencilIcon = styled.div`
   margin-left: 20px;
 `;
 
-const TitleForm = styled.form`
-  min-width: 100px;
-`;
+const TitleForm = styled.form``;
 
 const TitleInput = styled.input`
-  width: 100px;
+  width: 210px;
   font-size: 20px;
   font-weight: 700;
-  margin-bottom: -2px;
-  border-bottom: 2px solid ${(props) => props.theme.gray.blur};
+  border-bottom: 1px solid black;
   padding: 3px 5px;
+  margin-left: 23px;
   background-color: transparent;
   &:focus {
     outline: none;
-    border-bottom: 2px solid black;
   }
 `;
 
@@ -381,8 +364,8 @@ const Overview = styled.div`
   background-color: ${(props) => props.theme.gray.bg};
   width: 300px;
   height: 100vh;
-  padding-top: 130px;
   padding-bottom: 28px;
+  padding-top: 130px;
   position: fixed;
   top: 0;
   left: 0;

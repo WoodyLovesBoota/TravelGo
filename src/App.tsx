@@ -7,6 +7,7 @@ import Date from "./Routes/Date";
 
 import { collection, onSnapshot } from "firebase/firestore";
 import { firebaseDB } from "./firebase/firebase";
+import Home from "./Routes/Home";
 
 const App = () => {
   // useEffect(() => {
@@ -37,7 +38,8 @@ const App = () => {
             <Route path="/place/:city" element={<Place />}></Route>
           </Route>
           <Route path="/city" element={<City />}></Route>
-          <Route path="/" element={<Date />} />
+          <Route path="/date" element={<Date />} />
+          <Route path="/" element={<Home />} />
         </Routes>
       </Router>
     </>

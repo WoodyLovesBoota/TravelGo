@@ -11,8 +11,6 @@ const GoogleRouteMap = ({
   const API_KEY = process.env.REACT_APP_GOOGLE_MAP_API_KEY;
 
   let waypoint = "";
-  waypoints.pop();
-  waypoints.shift();
   for (let i = 0; i < waypoints.length; i++) {
     waypoint += `place_id:${waypoints[i]}`;
     if (i !== waypoints.length - 1) waypoint += "|";

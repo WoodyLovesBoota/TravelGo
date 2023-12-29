@@ -32,6 +32,7 @@ const BoardJourney = ({ journey, boardId, destination }: IJourneyBoardProps) => 
                       journeyName={j.name}
                       journeyAddress={j.address}
                       journeyPhoto={j.image[0]}
+                      placeId={j.placeId}
                       destination={destination}
                     />
                   )

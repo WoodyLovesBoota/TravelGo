@@ -9,7 +9,6 @@ import { useRecoilState } from "recoil";
 import { isClickedState, tripState, userState } from "../atoms";
 import { makeImagePath } from "../utils";
 import { useQuery } from "react-query";
-import { useNavigate } from "react-router-dom";
 import BigPlaceCard from "./BigPlaceCard";
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -141,7 +140,12 @@ const PlaceCard = ({ place, isHotel, destination }: IPlaceCardProps) => {
                   ].detail.attractions
                 )
                   .flat()
-                  .some((e) => e?.placeId === place.place_id) ? (
+                  .some((e) => e?.placeId === place.place_id) ||
+                userInfo[currentTrip].trips[
+                  userInfo[currentTrip].trips.findIndex(
+                    (e) => e.destination?.name === destination?.name
+                  )
+                ].detail.hotels.some((e) => e?.placeId === place.place_id) ? (
                   <Checked />
                 ) : (
                   <Plus onClick={handleAddButtonClicked} />
