@@ -34,7 +34,7 @@ export const tripState = atom<string>({
 
 export const userState = atom<IUsers>({
   key: "user",
-  default: { Trip1: { date: "", trips: [] } },
+  default: {},
   effects: [
     ({ setSelf, onSet }: any) => {
       const savedValue = localStorage.getItem("users");

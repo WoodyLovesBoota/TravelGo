@@ -3,25 +3,98 @@ import styled from "styled-components";
 import { tripState, userState } from "../atoms";
 import NavigationBar from "./NavigationBar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars } from "@fortawesome/free-solid-svg-icons";
+import { faBars, faX } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import { ReactComponent as Logo } from "../assets/logo.svg";
+import { useState } from "react";
 
 const Header = ({ now }: { now: number }) => {
   const navigate = useNavigate();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [userInfo, setUserInfo] = useRecoilState(userState);
+  const [currentTrip, setCurrentTrip] = useRecoilState(tripState);
+
+  const onTripCardClick = (name: string) => {
+    setCurrentTrip(name);
+    userInfo[name].date.split("|")[0] ? navigate("/city") : navigate("/date");
+    setIsMenuOpen(false);
+  };
+
+  const onDeleteClick = (name: string) => {
+    if (currentTrip === name) navigate("/");
+    setUserInfo((current) => {
+      let copy = { ...current };
+      delete copy[name];
+      return copy;
+    });
+  };
+
   return (
-    <Wrapper isnow={now === -1}>
+    <Wrapper
+      isnow={now === -1}
+      onClick={() => {
+        isMenuOpen && setIsMenuOpen(false);
+      }}
+    >
       <Title
         onClick={() => {
           navigate("/");
+          setCurrentTrip("");
         }}
       >
         <Logo />
       </Title>
       {now !== -1 && <NavigationBar now={now} />}
-      <Menu>
+      <Menu
+        onClick={() => {
+          setIsMenuOpen(true);
+        }}
+      >
         <FontAwesomeIcon icon={faBars} />
       </Menu>
+      {isMenuOpen && (
+        <Trips>
+          <TripsTitle>내 여행</TripsTitle>
+          {Object.entries(userInfo).map((trip) => (
+            <TripCard>
+              <TripContainer
+                onClick={() => {
+                  onTripCardClick(trip[0]);
+                }}
+              >
+                <TripCardTitle>{trip[0] === "Trip1" ? "새로운 여행" : trip[0]}</TripCardTitle>
+                {trip[1].date.split("|")[0] ? (
+                  <TripCardDuration>
+                    {trip[1].date.split("|")[0].slice(0, trip[1].date.split("|")[0].length - 2)}(
+                    {
+                      ["일", "월", "화", "수", "목", "금", "토"][
+                        Number(trip[1].date.split("|")[0].split(".")[3])
+                      ]
+                    }
+                    ){" ~ "}
+                    {trip[1].date.split("|")[1].slice(0, trip[1].date.split("|")[1].length - 2)}(
+                    {
+                      ["일", "월", "화", "수", "목", "금", "토"][
+                        Number(trip[1].date.split("|")[1].split(".")[3])
+                      ]
+                    }
+                    )
+                  </TripCardDuration>
+                ) : (
+                  <TripCardDuration>날짜 미정</TripCardDuration>
+                )}
+              </TripContainer>
+              <DeleteButton
+                onClick={() => {
+                  onDeleteClick(trip[0]);
+                }}
+              >
+                <FontAwesomeIcon icon={faX} />
+              </DeleteButton>
+            </TripCard>
+          ))}
+        </Trips>
+      )}
     </Wrapper>
   );
 };
@@ -50,5 +123,71 @@ const Title = styled.h2`
 `;
 
 const Menu = styled.div`
-  color: ${(props) => props.theme.gray.semiblur};
+  font-size: 20px;
+  color: ${(props) => props.theme.gray.accent};
+  cursor: pointer;
+`;
+
+const Trips = styled.div`
+  background-color: white;
+  width: 328px;
+  position: absolute;
+  right: 28px;
+  top: 60px;
+  padding: 26px 0;
+  border-radius: 8px;
+  border-top-right-radius: 0;
+  box-shadow: 0px 2px 12px rgba(0, 0, 0, 0.1);
+`;
+
+const TripsTitle = styled.h2`
+  padding: 0 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f2f2f2;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1;
+`;
+
+const TripCard = styled.div`
+  padding: 16px 20px;
+  padding-right: 0;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  &:hover {
+    background-color: ${(props) => props.theme.gray.bg};
+  }
+`;
+
+const TripContainer = styled.div`
+  width: 90%;
+  height: 100%;
+`;
+
+const DeleteButton = styled.button`
+  display: flex;
+  align-items: flex-start;
+  height: 20px;
+  width: 20px;
+  background-color: transparent;
+  font-size: 10px;
+  color: ${(props) => props.theme.gray.blur};
+  cursor: pointer;
+  &:hover {
+    color: ${(props) => props.theme.gray.accent};
+  }
+`;
+
+const TripCardTitle = styled.h2`
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 10px;
+  line-height: 1;
+`;
+
+const TripCardDuration = styled.h2`
+  font-weight: 400;
+  font-size: 14px;
+  color: ${(props) => props.theme.gray.accent};
 `;

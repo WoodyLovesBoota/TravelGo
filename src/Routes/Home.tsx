@@ -2,8 +2,13 @@ import styled from "styled-components";
 import Header from "../Components/Header";
 import City from "./City";
 import { useNavigate } from "react-router-dom";
+import { useRecoilState } from "recoil";
+import { tripState, userState } from "../atoms";
 
 const Home = () => {
+  const [currentTrip, setCurrentTrip] = useRecoilState(tripState);
+  const [userInfo, setUserInfo] = useRecoilState(userState);
+
   const cities = [
     "런던 영국",
     "다낭 베트남",
@@ -34,6 +39,11 @@ const Home = () => {
           </Contents>
           <Button
             onClick={() => {
+              let target = "Trip" + Math.floor(Math.random() * 10000);
+              setCurrentTrip(target);
+              setUserInfo((current) => {
+                return { ...current, [target]: { date: "", trips: [] } };
+              });
               navigate("/date");
             }}
           >
@@ -149,7 +159,7 @@ const Button = styled.button`
   justify-content: center;
   align-items: center;
   box-shadow: 0px 2px 12px 0px rgba(0, 0, 0, 0.1);
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 700;
   border-radius: 8px;
   cursor: pointer;
@@ -183,6 +193,7 @@ const CityCard = styled.div`
   border-radius: 8px;
   box-shadow: 0px 2px 12px rgba(0, 0, 0, 0.1);
   margin: 20px;
+  cursor: pointer;
 `;
 
 const CityPhoto = styled.div<{ bgphoto: string }>`

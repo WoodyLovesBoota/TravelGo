@@ -4,17 +4,11 @@ import { PathMatch, useMatch, useNavigate } from "react-router-dom";
 import { isCalendarState, tripState, userState } from "../atoms";
 import { useRecoilState } from "recoil";
 import { IPlaceDetail } from "../api";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faAngleDown,
-  faAngleLeft,
-  faAngleRight,
-  faAngleUp,
-} from "@fortawesome/free-solid-svg-icons";
+import { faAngleDown, faAngleUp } from "@fortawesome/free-solid-svg-icons";
 import { daysSinceSpecificDate, makeImagePath } from "../utils";
 import Header from "../Components/Header";
-import MultiRouteMap from "../Components/MultiRouteMap";
 import GoogleMapMarker from "../Components/GoogleMapMarker";
 
 const Summary = () => {

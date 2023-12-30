@@ -99,10 +99,6 @@ const City = () => {
     newName && setCurrentTrip(data.name);
   };
 
-  useEffect(() => {
-    setCurrentTrip(Object.keys(userInfo)[0]);
-  }, []);
-
   return (
     <Wrapper>
       <Header now={1} />

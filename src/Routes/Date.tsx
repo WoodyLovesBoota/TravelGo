@@ -5,6 +5,7 @@ import { useRecoilState } from "recoil";
 import { choiceState, startDateState, endDateState, userState, tripState } from "../atoms";
 import { ReactComponent as Arrow } from "../assets/arrow.svg";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 const Date = () => {
   const [isChoice, setIsChoice] = useRecoilState(choiceState);
@@ -25,6 +26,16 @@ const Date = () => {
       alert("여행을 떠나실 날짜를 선택해주세요.");
     }
   };
+
+  useEffect(() => {
+    if (userInfo[currentTrip].date === "") {
+      setStartDate("출발 날짜");
+      setEndDate("도착 날짜");
+    } else {
+      setStartDate(userInfo[currentTrip].date.split("|")[0]);
+      setEndDate(userInfo[currentTrip].date.split("|")[1]);
+    }
+  }, [currentTrip]);
 
   return (
     <Wrapper>
