@@ -1,9 +1,7 @@
 import styled from "styled-components";
-import { PathMatch, useMatch, useNavigate } from "react-router-dom";
-
-import { isCalendarState, tripState, userState } from "../atoms";
+import { useNavigate } from "react-router-dom";
+import { tripState, userState } from "../atoms";
 import { useRecoilState } from "recoil";
-import { IPlaceDetail } from "../api";
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown, faAngleUp } from "@fortawesome/free-solid-svg-icons";
@@ -64,10 +62,11 @@ const Summary = () => {
 
   const onNextClick = () => {
     navigate("/");
+    setCurrentTrip("");
   };
 
   const onBackClick = () => {
-    navigate("/");
+    navigate(`/schedule/${userInfo[currentTrip].trips[0].destination?.name}`);
   };
 
   const calcDate = (year: number, month: number, day: number, daysToAdd: number): Date => {

@@ -73,6 +73,7 @@ const GlobalStyle = createGlobalStyle`
     background-color: transparent;
     width: 5px;
     height: 5px;     
+    display: none;
   }
 
   &::-webkit-scrollbar-track {
