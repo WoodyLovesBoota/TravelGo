@@ -8,6 +8,11 @@ const Home = () => {
   const [currentTrip, setCurrentTrip] = useRecoilState(tripState);
   const [userInfo, setUserInfo] = useRecoilState(userState);
 
+  const mainBgs = [
+    "https://firebasestorage.googleapis.com/v0/b/travelgo-6fa6a.appspot.com/o/TravelGo_Bg%2FDubai.webp?alt=media&token=2b2b88ec-ed94-4b29-9bbc-4a21854ef1ac",
+    "https://firebasestorage.googleapis.com/v0/b/travelgo-6fa6a.appspot.com/o/TravelGo_Bg%2FTokyo.webp?alt=media&token=641d1be6-5b42-4a16-80c2-c57fe97eacd3",
+    "https://firebasestorage.googleapis.com/v0/b/travelgo-6fa6a.appspot.com/o/TravelGo_Bg%2FNewYork.webp?alt=media&token=74f37d99-cb27-434f-96ed-dd8de6976e0c",
+  ];
   const cities = [
     "런던 영국",
     "다낭 베트남",
@@ -17,12 +22,12 @@ const Home = () => {
     "홍콩 홍콩",
   ];
   const images = [
-    "/background/London.jpg",
-    "/background/Danang.jpg",
-    "/background/Dubai.jpg",
-    "/background/Jeju.jpg",
-    "/background/Rome.jpg",
-    "/background/HongKong.jpg",
+    "https://firebasestorage.googleapis.com/v0/b/travelgo-6fa6a.appspot.com/o/TravelGo_Bg%2FLondon.webp?alt=media&token=3aad4752-8ae3-4a63-94af-dcf5513e4e11",
+    "https://firebasestorage.googleapis.com/v0/b/travelgo-6fa6a.appspot.com/o/TravelGo_Bg%2FDanang.webp?alt=media&token=66d882ce-9357-4b09-a6a8-36ed146f4eda",
+    "https://firebasestorage.googleapis.com/v0/b/travelgo-6fa6a.appspot.com/o/TravelGo_Bg%2FDubai.webp?alt=media&token=2b2b88ec-ed94-4b29-9bbc-4a21854ef1ac",
+    "https://firebasestorage.googleapis.com/v0/b/travelgo-6fa6a.appspot.com/o/TravelGo_Bg%2FJeju.webp?alt=media&token=feb86304-6bb3-4cb7-8341-97de33bf23d0",
+    "https://firebasestorage.googleapis.com/v0/b/travelgo-6fa6a.appspot.com/o/TravelGo_Bg%2FRome.webp?alt=media&token=17fcac6d-acb2-497b-8e73-a471510eff0d",
+    "https://firebasestorage.googleapis.com/v0/b/travelgo-6fa6a.appspot.com/o/TravelGo_Bg%2FHongKong.webp?alt=media&token=bc613731-2c04-435a-853d-d4ce505a1433",
   ];
 
   const cityData = [
@@ -354,7 +359,7 @@ const Home = () => {
 export default Home;
 
 const Wrapper = styled.div`
-  background: url("/background/NewYork.jpg");
+  background: url("https://firebasestorage.googleapis.com/v0/b/travelgo-6fa6a.appspot.com/o/TravelGo_Bg%2FNewYork.webp?alt=media&token=74f37d99-cb27-434f-96ed-dd8de6976e0c");
   width: 100vw;
   height: 100vh;
   background-size: cover;

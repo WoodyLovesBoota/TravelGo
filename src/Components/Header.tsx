@@ -55,44 +55,48 @@ const Header = ({ now }: { now: number }) => {
       {isMenuOpen && (
         <Trips>
           <TripsTitle>내 여행</TripsTitle>
-          {Object.entries(userInfo).map((trip) => (
-            <TripCard>
-              <TripContainer
-                onClick={() => {
-                  onTripCardClick(trip[0]);
-                }}
-              >
-                <TripCardTitle>{trip[0] === "Trip1" ? "새로운 여행" : trip[0]}</TripCardTitle>
-                {trip[1] && trip[1].date && trip[1].date.split("|")[0] ? (
-                  <TripCardDuration>
-                    {trip[1].date.split("|")[0].slice(0, trip[1].date.split("|")[0].length - 2)}(
-                    {
-                      ["일", "월", "화", "수", "목", "금", "토"][
-                        Number(trip[1].date.split("|")[0].split(".")[3])
-                      ]
-                    }
-                    ){" ~ "}
-                    {trip[1].date.split("|")[1].slice(0, trip[1].date.split("|")[1].length - 2)}(
-                    {
-                      ["일", "월", "화", "수", "목", "금", "토"][
-                        Number(trip[1].date.split("|")[1].split(".")[3])
-                      ]
-                    }
-                    )
-                  </TripCardDuration>
-                ) : (
-                  <TripCardDuration>날짜 미정</TripCardDuration>
-                )}
-              </TripContainer>
-              <DeleteButton
-                onClick={() => {
-                  onDeleteClick(trip[0]);
-                }}
-              >
-                <FontAwesomeIcon icon={faX} />
-              </DeleteButton>
-            </TripCard>
-          ))}
+          {Object.entries(userInfo).length === 0 ? (
+            <Empty>여행을 만들어주세요.</Empty>
+          ) : (
+            Object.entries(userInfo).map((trip) => (
+              <TripCard>
+                <TripContainer
+                  onClick={() => {
+                    onTripCardClick(trip[0]);
+                  }}
+                >
+                  <TripCardTitle>{trip[0] === "Trip1" ? "새로운 여행" : trip[0]}</TripCardTitle>
+                  {trip[1] && trip[1].date && trip[1].date.split("|")[0] ? (
+                    <TripCardDuration>
+                      {trip[1].date.split("|")[0].slice(0, trip[1].date.split("|")[0].length - 2)}(
+                      {
+                        ["일", "월", "화", "수", "목", "금", "토"][
+                          Number(trip[1].date.split("|")[0].split(".")[3])
+                        ]
+                      }
+                      ){" ~ "}
+                      {trip[1].date.split("|")[1].slice(0, trip[1].date.split("|")[1].length - 2)}(
+                      {
+                        ["일", "월", "화", "수", "목", "금", "토"][
+                          Number(trip[1].date.split("|")[1].split(".")[3])
+                        ]
+                      }
+                      )
+                    </TripCardDuration>
+                  ) : (
+                    <TripCardDuration>날짜 미정</TripCardDuration>
+                  )}
+                </TripContainer>
+                <DeleteButton
+                  onClick={() => {
+                    onDeleteClick(trip[0]);
+                  }}
+                >
+                  <FontAwesomeIcon icon={faX} />
+                </DeleteButton>
+              </TripCard>
+            ))
+          )}
         </Trips>
       )}
     </Wrapper>
@@ -147,6 +151,13 @@ const TripsTitle = styled.h2`
   font-size: 20px;
   font-weight: 500;
   line-height: 1;
+`;
+
+const Empty = styled.h1`
+  font-size: 14px;
+  font-weight: 400;
+  color: ${(props) => props.theme.gray.blur};
+  padding: 16px 20px;
 `;
 
 const TripCard = styled.div`
