@@ -298,10 +298,13 @@ export default Summary;
 
 const Wrapper = styled.div`
   display: flex;
+  overflow-x: auto;
+  min-height: 100vh;
   &::-webkit-scrollbar {
     background-color: transparent;
     width: 5px;
     height: 5px;
+    display: block;
     /* margin-bottom: 10px; */
   }
 `;

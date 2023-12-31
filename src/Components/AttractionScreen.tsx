@@ -329,7 +329,7 @@ const AttractionScreen = ({ destination }: IAttractionScreenProps) => {
               </Form>
               <SearchResult>
                 {isLoading ? (
-                  <Loader>loading</Loader>
+                  <Loader>loading...</Loader>
                 ) : (
                   data &&
                   data.predictions.map((place) => (
@@ -554,6 +554,7 @@ const Loader = styled.h2`
   align-items: center;
   width: 100%;
   height: 100%;
+  padding-top: 20px;
 `;
 
 const Attractions = styled.div`

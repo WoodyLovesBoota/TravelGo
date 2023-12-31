@@ -97,6 +97,6 @@ root.render(
         <App />
       </ThemeProvider>
     </RecoilRoot>
-    <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
+    {/* <ReactQueryDevtools initialIsOpen={false} position="bottom-right" /> */}
   </QueryClientProvider>
 );

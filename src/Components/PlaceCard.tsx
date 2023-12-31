@@ -129,7 +129,7 @@ const PlaceCard = ({ place, isHotel, destination }: IPlaceCardProps) => {
                   <Address> {data.result ? data?.result.formatted_address : ""}</Address>
                   <Rate>
                     <Star />
-                    <RateNumber>{data.result ? data.result.rating : ""}</RateNumber>{" "}
+                    <RateNumber>{data.result ? data.result.rating : "0"}</RateNumber>{" "}
                   </Rate>
                 </Contents>
                 {Object.values(

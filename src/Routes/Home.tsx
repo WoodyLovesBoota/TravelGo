@@ -383,13 +383,13 @@ const Contents = styled.div``;
 const Title = styled.div`
   color: white;
   font-size: 40px;
-  font-weight: 700;
+  font-weight: 500;
   margin-bottom: 36px;
 `;
 
 const SubTitle = styled.div`
-  font-size: 16px;
-  font-weight: 600;
+  font-size: 18px;
+  font-weight: 400;
   color: white;
 `;
 

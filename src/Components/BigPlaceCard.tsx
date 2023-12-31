@@ -121,7 +121,7 @@ const BigPlaceCard = ({ place, placeId, isHotel, destination }: IBigPlaceProps) 
                 <RateNumber>{place?.result.rating ? place?.result.rating : "0"}</RateNumber>{" "}
               </Rate>
             </Content>
-            <OverviewContent>{place?.result.editorial_summary.overview}</OverviewContent>
+            <OverviewContent>{place?.result.editorial_summary?.overview}</OverviewContent>
             <Button isHotel={isHotel} onClick={handleAddButtonClicked}>
               추가하기
             </Button>
