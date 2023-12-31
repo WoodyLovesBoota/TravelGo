@@ -63,7 +63,7 @@ const Header = ({ now }: { now: number }) => {
                 }}
               >
                 <TripCardTitle>{trip[0] === "Trip1" ? "새로운 여행" : trip[0]}</TripCardTitle>
-                {trip[1].date.split("|")[0] ? (
+                {trip[1] && trip[1].date && trip[1].date.split("|")[0] ? (
                   <TripCardDuration>
                     {trip[1].date.split("|")[0].slice(0, trip[1].date.split("|")[0].length - 2)}(
                     {
