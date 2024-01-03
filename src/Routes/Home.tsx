@@ -3,6 +3,7 @@ import Header from "../Components/Header";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { tripState, userState } from "../atoms";
+import { motion } from "framer-motion";
 
 const Home = () => {
   const [currentTrip, setCurrentTrip] = useRecoilState(tripState);
@@ -277,6 +278,9 @@ const Home = () => {
             <SubTitle>고민만 하던 여행 계획, 트래블고로 손쉽게 짜보세요.</SubTitle>
           </Contents>
           <Button
+            variants={buttonVar}
+            animate="animate"
+            whileHover={"hover"}
             onClick={() => {
               let target = "Trip" + Math.floor(Math.random() * 10000);
               setCurrentTrip(target);
@@ -309,48 +313,53 @@ const Home = () => {
         </CityList>
       </Main>
       <Footer>
-        <FooterTitleRow>
-          <Logo>YTW.</Logo>
-          <RestTitleContent>ABOUT</RestTitleContent>
-          <RestTitleContent>WORK</RestTitleContent>
-          <RestTitleContent>LINK</RestTitleContent>
-        </FooterTitleRow>
-        <FooterMainRow>
-          <FirstContent>woodylovesboota@gmail.com</FirstContent>
-          <RestContent href="https://github.com/WoodyLovesBoota/TravelGo" target="_blank">
-            View Code
-          </RestContent>
-          <RestContent href="https://woodylovesboota.xyz/" target="_blank">
-            Portfolio
-          </RestContent>
-          <RestContent target="_blank" href="https://www.instagram.com/tttaeook/">
-            Instagram
-          </RestContent>
-        </FooterMainRow>
-        <FooterMainRow>
-          <FirstContent>010-2363-7164</FirstContent>
-          <RestContent></RestContent>
-          <RestContent target="_blank" href="https://github.com/WoodyLovesBoota">
-            Github
-          </RestContent>
-          <RestContent target="_blank" href="https://www.linkedin.com/in/tae-wook-yang-6762092a2/">
-            LinkedIn
-          </RestContent>
-        </FooterMainRow>
-        <FooterMainRow>
-          <FirstContent></FirstContent>
-          <RestContent></RestContent>
-          <RestContent target="_blank" href="https://velog.io/@woodylovescoding">
-            Personal Blog
-          </RestContent>
-          <RestContent></RestContent>
-        </FooterMainRow>
-        <FooterMainRow>
-          <FirstContent>@ 2023 YangTaeWook All Rights Reserved.</FirstContent>
-          <RestContent></RestContent>
-          <RestContent></RestContent>
-          <RestContent></RestContent>
-        </FooterMainRow>
+        <FooterContainer>
+          <FooterTitleRow>
+            <Logo>YTW.</Logo>
+            <RestTitleContent>ABOUT</RestTitleContent>
+            <RestTitleContent>WORK</RestTitleContent>
+            <RestTitleContent>LINK</RestTitleContent>
+          </FooterTitleRow>
+          <FooterMainRow>
+            <FirstContent>woodylovesboota@gmail.com</FirstContent>
+            <RestContent href="https://github.com/WoodyLovesBoota/TravelGo" target="_blank">
+              View Code
+            </RestContent>
+            <RestContent href="https://woodylovesboota.xyz/" target="_blank">
+              Portfolio
+            </RestContent>
+            <RestContent target="_blank" href="https://www.instagram.com/tttaeook/">
+              Instagram
+            </RestContent>
+          </FooterMainRow>
+          <FooterMainRow>
+            <FirstContent>010-2363-7164</FirstContent>
+            <RestContent></RestContent>
+            <RestContent target="_blank" href="https://github.com/WoodyLovesBoota">
+              Github
+            </RestContent>
+            <RestContent
+              target="_blank"
+              href="https://www.linkedin.com/in/tae-wook-yang-6762092a2/"
+            >
+              LinkedIn
+            </RestContent>
+          </FooterMainRow>
+          <FooterMainRow>
+            <FirstContent></FirstContent>
+            <RestContent></RestContent>
+            <RestContent target="_blank" href="https://velog.io/@woodylovescoding">
+              Personal Blog
+            </RestContent>
+            <RestContent></RestContent>
+          </FooterMainRow>
+          <FooterMainRow>
+            <FirstContent>@ 2023 YangTaeWook All Rights Reserved.</FirstContent>
+            <RestContent></RestContent>
+            <RestContent></RestContent>
+            <RestContent></RestContent>
+          </FooterMainRow>
+        </FooterContainer>
       </Footer>
     </>
   );
@@ -376,6 +385,12 @@ const Container = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  @media screen and (max-width: 1130px) {
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 100px 30px;
+  }
 `;
 
 const Contents = styled.div``;
@@ -393,7 +408,7 @@ const SubTitle = styled.div`
   color: white;
 `;
 
-const Button = styled.button`
+const Button = styled(motion.button)`
   background-color: white;
   color: ${(props) => props.theme.blue.accent};
   width: 244px;
@@ -406,6 +421,10 @@ const Button = styled.button`
   font-weight: 700;
   border-radius: 8px;
   cursor: pointer;
+  @media screen and (max-width: 1130px) {
+    margin-top: 36px;
+    width: 400px;
+  }
 `;
 
 const Main = styled.div`
@@ -418,16 +437,24 @@ const Main = styled.div`
 `;
 
 const MainTitle = styled.h2`
-  margin-bottom: 20px;
   font-size: 32px;
   font-weight: 500;
 `;
 
 const CityList = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 20px;
   justify-content: center;
+  width: 1080px;
+  padding-top: 60px;
+  @media screen and (max-width: 1130px) {
+    width: 100%;
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media screen and (max-width: 745px) {
+    grid-template-columns: repeat(1, 1fr);
+  }
 `;
 
 const CityCard = styled.div`
@@ -435,7 +462,6 @@ const CityCard = styled.div`
   height: 344px;
   border-radius: 8px;
   box-shadow: 0px 2px 12px rgba(0, 0, 0, 0.1);
-  margin: 20px;
   cursor: pointer;
 `;
 
@@ -472,7 +498,21 @@ const CitySubTitle = styled.h2`
 
 const Footer = styled.div`
   background-color: ${(props) => props.theme.gray.bg};
-  padding: 50px 216px;
+  padding: 50px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const FooterContainer = styled.div`
+  width: 1080px;
+  @media screen and (max-width: 1130px) {
+    width: 100%;
+    padding: 0 30px;
+  }
+  @media screen and (max-width: 745px) {
+    padding: 0 20px;
+  }
 `;
 
 const FooterTitleRow = styled.div`
@@ -482,7 +522,7 @@ const FooterTitleRow = styled.div`
 `;
 
 const FirstContent = styled.h1`
-  width: 375px;
+  width: 40%;
   font-size: 14px;
   font-weight: 400;
   line-height: 22px;
@@ -490,14 +530,14 @@ const FirstContent = styled.h1`
 `;
 
 const Logo = styled.h1`
-  width: 375px;
+  width: 40%;
   font-size: 24px;
   font-weight: 400;
   font-family: "Archivo Black";
 `;
 
 const RestTitleContent = styled.h2`
-  width: 216px;
+  width: 20%;
   text-align: left;
   font-size: 14px;
   font-weight: 600;
@@ -506,7 +546,7 @@ const RestTitleContent = styled.h2`
 `;
 
 const RestContent = styled.a`
-  width: 216px;
+  width: 20%;
   text-align: left;
   font-size: 14px;
   font-weight: 400;
@@ -519,3 +559,8 @@ const FooterMainRow = styled.div`
   display: flex;
   justify-content: space-between;
 `;
+
+const buttonVar = {
+  animate: { scale: 1 },
+  hover: { scale: 1.1 },
+};

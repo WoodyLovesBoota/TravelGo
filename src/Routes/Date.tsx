@@ -119,6 +119,7 @@ const Wrapper = styled.div`
 
 const Container = styled.div`
   display: flex;
+  align-items: center;
   height: 100%;
 `;
 
@@ -126,6 +127,7 @@ const Main = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   width: 100%;
 `;
 
@@ -133,6 +135,8 @@ const Calendarbox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  margin: auto 0;
 `;
 
 const Title = styled.div`
@@ -165,7 +169,7 @@ const Button = styled.button`
   background-color: ${(props) => props.theme.blue.accent};
   color: white;
   cursor: pointer;
-  margin-top: auto;
+  margin-top: 50px;
 `;
 
 const NoButton = styled.button`
@@ -176,7 +180,7 @@ const NoButton = styled.button`
   background-color: ${(props) => props.theme.gray.button};
   color: white;
   cursor: pointer;
-  margin-top: auto;
+  margin-top: 50px;
 `;
 
 const Start = styled.h2<{ isnow: boolean }>`

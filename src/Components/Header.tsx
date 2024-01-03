@@ -46,6 +46,7 @@ const Header = ({ now }: { now: number }) => {
       </Title>
       {now !== -1 && <NavigationBar now={now} />}
       <Menu
+        ishome={now === -1}
         onClick={() => {
           setIsMenuOpen(true);
         }}
@@ -126,9 +127,9 @@ const Title = styled.h2`
   width: 100px;
 `;
 
-const Menu = styled.div`
+const Menu = styled.div<{ ishome: boolean }>`
   font-size: 20px;
-  color: ${(props) => props.theme.gray.accent};
+  color: ${(props) => (props.ishome ? props.theme.gray.accent : props.theme.gray.blur)};
   cursor: pointer;
 `;
 

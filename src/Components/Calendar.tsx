@@ -461,6 +461,9 @@ const DateBox = styled.h2<{ isnow: boolean; ispass: boolean; isInside: boolean }
     props.isnow ? props.theme.blue.accent : props.isInside ? props.theme.blue.mild : "transparent"};
   border-radius: 50px;
   cursor: pointer;
+  &:hover {
+    background-color: ${(props) => props.theme.blue.mild};
+  }
 `;
 
 const Button = styled.button`
