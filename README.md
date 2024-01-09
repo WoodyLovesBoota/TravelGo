@@ -40,7 +40,7 @@
 - React Query와 Google Maps API를 이용하여 실시간 지도, 경로, 장소 검색 기능을 구현하였습니다.
 - Beautiful Dnd를 이용하여 드래그 앤 드롭 기능을 구현하였습니다.
   
-<br><br>
+<br>
 
 ### 핵심 기능
 
