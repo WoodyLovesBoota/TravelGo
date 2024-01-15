@@ -1,4 +1,4 @@
-# TravelGo
+# TRAVELGO
 
 ![Project ScreenShot0](https://firebasestorage.googleapis.com/v0/b/travelgo-6fa6a.appspot.com/o/Travelgo%2Ftravelgo%2001.webp?alt=media&token=f892f767-8833-4c2b-95be-048db9324ed8)
 <br>
